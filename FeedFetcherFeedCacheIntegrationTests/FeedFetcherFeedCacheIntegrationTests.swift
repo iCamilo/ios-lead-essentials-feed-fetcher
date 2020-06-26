@@ -34,6 +34,32 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         wait(for: [expec], timeout: 1.0)
     }
     
+    func test_noEmptyCache_load_completesWithCachedFeed() {
+        let saveSUT = makeSUT()
+        let loadSUT = makeSUT()
+        let imageFeed = uniqueImageFeed().model
+               
+        let saveExp = expectation(description: "Waiting for save to complete")
+        saveSUT.save(feed: imageFeed) { saveError in
+            XCTAssertNil(saveError, "Expecting save to succeed")
+            saveExp.fulfill()
+        }
+        wait(for: [saveExp], timeout: 1.0)
+        
+        let loadExp = expectation(description: "Waiting load to complete")
+        loadSUT.load { result in
+            switch result {
+            case let .success(resultImageFeed):
+                XCTAssertEqual(imageFeed, resultImageFeed, "Expected to retrieve cached feed BUT GOT \(result) instead")
+            default:
+                XCTFail("Expected to retrieve cached feed BUT GOT \(result) instead")
+            }
+            
+            loadExp.fulfill()
+        }
+        wait(for: [loadExp], timeout: 1.0)        
+    }
+        
     // MARK:- Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
         let store = try! CoreDataFeedStore(bundle: coreDataFeedStoreBundle, storeURL: testSpecificStoreURL)
