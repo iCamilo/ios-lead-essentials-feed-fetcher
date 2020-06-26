@@ -5,6 +5,16 @@ import XCTest
 import FeedFetcher
 
 class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
+    
+    override func setUp() {
+        super.setUp()
+        cleanStore()
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        cleanStore()
+    }
 
     func test_emptyCache_load_completesWithEmptyResult() {
         let sut = makeSUT()
@@ -47,6 +57,8 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         Bundle(for: CoreDataFeedStore.self)
     }
     
-    
+    private func cleanStore() {
+        try? FileManager.default.removeItem(at: testSpecificStoreURL)
+    }
 
 }
