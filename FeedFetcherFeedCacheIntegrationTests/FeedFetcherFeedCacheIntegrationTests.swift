@@ -7,12 +7,9 @@ import FeedFetcher
 class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
 
     func test_emptyCache_load_completesWithEmptyResult() {
-        let storeBundle = Bundle(for: CoreDataFeedStore.self)
-        let storeURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store")
-        let store: FeedStore = try! CoreDataFeedStore(bundle: storeBundle, storeURL: storeURL)
-        let sut = LocalFeedLoader(store: store, currentDate: Date.init)
-        
+        let sut = makeSUT()
         let expec = expectation(description: "Waiting for load to complete")
+        
         sut.load { result in
             switch result {
             case let .success(imageFeed):
@@ -26,5 +23,27 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         
         wait(for: [expec], timeout: 1.0)
     }
+    
+    // MARK:- Helpers
+    private func makeSUT() -> LocalFeedLoader {
+        let store: FeedStore = try! CoreDataFeedStore(bundle: coreDataFeedStoreBundle, storeURL: testSpecificStoreURL)
+        let sut = LocalFeedLoader(store: store, currentDate: Date.init)
+        
+        return sut
+    }
+    
+    private var userDomainCacheURL: URL {
+        FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+    }
+    
+    private var testSpecificStoreURL: URL {
+        userDomainCacheURL.appendingPathComponent("\(type(of: self)).store")
+    }
+    
+    private var coreDataFeedStoreBundle: Bundle {
+        Bundle(for: CoreDataFeedStore.self)
+    }
+    
+    
 
 }
