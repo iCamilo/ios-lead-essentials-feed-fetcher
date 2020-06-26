@@ -25,9 +25,12 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
     }
     
     // MARK:- Helpers
-    private func makeSUT() -> LocalFeedLoader {
-        let store: FeedStore = try! CoreDataFeedStore(bundle: coreDataFeedStoreBundle, storeURL: testSpecificStoreURL)
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
+        let store = try! CoreDataFeedStore(bundle: coreDataFeedStoreBundle, storeURL: testSpecificStoreURL)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
+        
+        trackForMemoryLeak(instance: store, file: file, line: line)
+        trackForMemoryLeak(instance: sut, file: file, line: line)
         
         return sut
     }
