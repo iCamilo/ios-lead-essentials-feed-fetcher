@@ -48,12 +48,12 @@ public final class CoreDataFeedStore: FeedStore {
             do {
                 let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
                 guard let managedCache = try context.fetch(request).first else {
-                    return completion(.empty)
+                    return completion(.success(.empty))
                 }
                 
                 let retrieveResult = managedCache.mapTo()
                 
-                completion(.success(feed: retrieveResult.feed, timestamp: retrieveResult.timestamp))
+                completion(.success(.found(feed: retrieveResult.feed, timestamp: retrieveResult.timestamp)))
             } catch {
                 completion(.failure(error))
             }

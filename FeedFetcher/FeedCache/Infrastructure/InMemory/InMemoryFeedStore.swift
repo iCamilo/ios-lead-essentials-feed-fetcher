@@ -34,10 +34,10 @@ public final class InMemoryFeedStore: FeedStore {
             guard let self = self else { return }
             
             guard let cache = self.cache else {
-                return completion(.empty)
+                return completion(.success(.empty))
             }
             
-            completion(.success(feed: cache.feed, timestamp: cache.timestamp))
+            completion(.success(.found(feed: cache.feed, timestamp: cache.timestamp)))
         }
     }
 }
