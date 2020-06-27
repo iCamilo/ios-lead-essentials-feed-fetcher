@@ -57,15 +57,15 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         return sut
     }
     
-    private func assertLoad(_ sut: LocalFeedLoader, completeWith expected: [FeedImage]) {
+    private func assertLoad(_ sut: LocalFeedLoader, completeWith expected: [FeedImage], file: StaticString = #file, line: UInt = #line) {
         let expec = expectation(description: "Waiting for load to complete")
         
         sut.load { result in
             switch result {
             case let .success(resultFeed):
-                XCTAssertEqual(expected, resultFeed, "Expected \(expected) BUT GOT \(resultFeed)")
+                XCTAssertEqual(expected, resultFeed, "Expected \(expected) BUT GOT \(resultFeed)", file: file, line: line)
             default:
-                XCTFail("Expected success with feed \(expected) BUT GOT \(result)")
+                XCTFail("Expected success with feed \(expected) BUT GOT \(result)", file: file, line: line)
             }
             
             expec.fulfill()
