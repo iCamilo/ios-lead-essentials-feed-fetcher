@@ -25,7 +25,7 @@ public final class InMemoryFeedStore: FeedStore {
             guard let self = self else { return }
             
             self.cache = (feed, timestamp)
-            completion(nil)
+            completion(.success(()))
         }
     }
     

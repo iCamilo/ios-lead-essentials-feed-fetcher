@@ -14,14 +14,14 @@ final public class LocalFeedLoader {
 }
 
 extension LocalFeedLoader {
-    public typealias SaveResult = Error?
+    public typealias SaveResult = Result<Void, Error>
     
     public func save(feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
         store.deleteCachedFeed {[weak self] cacheDeletionError in
             guard let self = self else { return }
             
-            guard cacheDeletionError == nil else {
-                completion(cacheDeletionError)
+            if let cacheDeletionError = cacheDeletionError {
+                completion(.failure(cacheDeletionError))
                 return
             }
                                         
@@ -29,11 +29,17 @@ extension LocalFeedLoader {
         }
     }
     
-    private func cache(feed: [FeedImage], with completion: @escaping (Error?) -> Void) {
-        store.insert(feed.mapToLocal(), timestamp: currentDate()) { [weak self] error in
+    private func cache(feed: [FeedImage], with completion: @escaping (SaveResult) -> Void) {
+        store.insert(feed.mapToLocal(), timestamp: currentDate()) { [weak self] insertionResult in
             guard self != nil else {return}
             
-            completion(error)
+            switch insertionResult {
+            case .success:
+                completion(.success(()))
+            case let .failure(error):
+                completion(.failure(error))
+            }
+            
         }
     }
 }

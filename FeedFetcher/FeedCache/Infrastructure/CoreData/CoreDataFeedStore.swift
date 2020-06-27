@@ -36,9 +36,9 @@ public final class CoreDataFeedStore: FeedStore {
                 ManagedCache.mapFrom((timestamp: timestamp, images: feed), in: context)
                 try context.saveIfHasPendingChanges()
                 
-                completion(nil)
+                completion(.success(()))
             } catch {
-                completion(error)
+                completion(.failure(error))
             }
         }
     }
