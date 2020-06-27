@@ -26,13 +26,8 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         let saveSUT = makeSUT()
         let loadSUT = makeSUT()
         let feed = uniqueImageFeed().model
-               
-        let saveExp = expectation(description: "Waiting for save to complete")
-        saveSUT.save(feed: feed) { saveError in
-            XCTAssertNil(saveError, "Expecting save to succeed")
-            saveExp.fulfill()
-        }
-        wait(for: [saveExp], timeout: 1.0)
+                       
+        save(saveSUT, feed: feed)
         
         assertLoad(loadSUT, completeWith: feed)
     }
@@ -40,27 +35,14 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
     func test_noEmptyCache_saveRecentFeed_overridesOldFeedWithNewFeed() {
         let saveOldFeedSUT = makeSUT()
         let oldFeed = uniqueImageFeed().model
-        
         let saveRecentFeedSUT = makeSUT()
-        let recentFeed = uniqueImageFeed().model
-        
+        let recentFeed = uniqueImageFeed().model        
         let loadSUT = makeSUT()
         
-        let saveOldFeedExp = expectation(description: "Waiting for old feed save to complete")
-        saveOldFeedSUT.save(feed: oldFeed) { saveError in
-            XCTAssertNil(saveError, "Expecting save to succeed")
-            saveOldFeedExp.fulfill()
-        }
-        wait(for: [saveOldFeedExp], timeout: 1.0)
+        save(saveOldFeedSUT, feed: oldFeed)
+        save(saveRecentFeedSUT, feed: recentFeed)
         
-        let saveRecentExp = expectation(description: "Waiting for recent feed save to complete")
-        saveRecentFeedSUT.save(feed: recentFeed) { saveError in
-            XCTAssertNil(saveError, "Expecting save to succeed")
-            saveRecentExp.fulfill()
-        }
-        wait(for: [saveRecentExp], timeout: 1.0)
-        
-        assertLoad(loadSUT, completeWith: recentFeed)                
+        assertLoad(loadSUT, completeWith: recentFeed)
     }
         
     // MARK:- Helpers
@@ -90,6 +72,17 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         }
         
         wait(for: [expec], timeout: 1.0)
+    }
+    
+    private func save(_ sut: LocalFeedLoader, feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
+        let saveExp = expectation(description: "Waiting for save to complete")
+        
+        sut.save(feed: feed) { saveError in
+            XCTAssertNil(saveError, "Expecting save to succeed", file: file, line: line)
+            saveExp.fulfill()
+        }
+        
+        wait(for: [saveExp], timeout: 1.0)
     }
     
     private var userDomainCacheURL: URL {
