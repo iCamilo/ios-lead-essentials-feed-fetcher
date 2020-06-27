@@ -19,7 +19,7 @@ public final class RemoteFeedLoader: FeedLoader {
         self.url = url
     }
     
-    public func load(completion: @escaping (LoadResult) -> Void) {
+    public func load(completion: @escaping (LoadFeedResult) -> Void) {
         client.get(from: url) { [weak self] result in
             guard let self = self else { return }
             
@@ -34,7 +34,7 @@ public final class RemoteFeedLoader: FeedLoader {
         }
     }
     
-    private func map(response: HTTPURLResponse, data: Data) -> LoadResult {
+    private func map(response: HTTPURLResponse, data: Data) -> LoadFeedResult {
         do {
             let remoteItems = try FeedItemsMapper.map(data: data, from: response)
             

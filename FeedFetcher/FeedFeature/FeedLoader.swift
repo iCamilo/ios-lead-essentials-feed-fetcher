@@ -3,8 +3,8 @@
 
 import Foundation
 
-public typealias LoadResult = Result<[FeedImage], Error>
+public typealias LoadFeedResult = Result<[FeedImage], Error>
 
-public protocol FeedLoader {        
-    func load(completion: @escaping (LoadResult) -> Void)
+public protocol FeedLoader {
+    func load(completion: @escaping (LoadFeedResult) -> Void)
 }

@@ -23,7 +23,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_retrievalFails_load_failsWithError() {
         let (store, sut) = makeSUT()
         let retrievalError = anyNSError()
-        let expectedResult: LoadResult = .failure(retrievalError)
+        let expectedResult: LoadFeedResult = .failure(retrievalError)
         
         expect(sut, toCompleteWith: expectedResult, when: {
             store.completeRetrieval(with: retrievalError)
@@ -32,7 +32,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     
     func test_emptyCache_load_deliversNoFeedImages() {
         let (store, sut) = makeSUT()
-        let expectedResult: LoadResult = .success([])
+        let expectedResult: LoadFeedResult = .success([])
         
         expect(sut, toCompleteWith: expectedResult, when: {
             store.completeRetrievalWithEmptyCache()
@@ -45,7 +45,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         let (store, sut) = makeSUT(currentDate: { currentDate })
 
         let expectedImages = uniqueImageFeed()
-        let expectedResult: LoadResult = .success(expectedImages.model)
+        let expectedResult: LoadFeedResult = .success(expectedImages.model)
 
         expect(sut, toCompleteWith: expectedResult, when: {
             store.completeRetrieval(with: expectedImages.local, timestamp: nonExpiredCacheTimestamp)
@@ -58,7 +58,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         let (store, sut) = makeSUT(currentDate: { currentDate })
 
         let expectedImages = uniqueImageFeed()
-        let expectedResult: LoadResult = .success([FeedImage]())
+        let expectedResult: LoadFeedResult = .success([FeedImage]())
 
         expect(sut, toCompleteWith: expectedResult, when: {
             store.completeRetrieval(with: expectedImages.local, timestamp: expiredCacheTimestamp)
@@ -71,7 +71,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         let (store, sut) = makeSUT(currentDate: { currentDate })
 
         let expectedImages = uniqueImageFeed()
-        let expectedResult: LoadResult = .success([])
+        let expectedResult: LoadFeedResult = .success([])
 
         expect(sut, toCompleteWith: expectedResult, when: {
             store.completeRetrieval(with: expectedImages.local, timestamp: pastExpiredCacheTimestamp)
@@ -134,7 +134,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         let store = FeedStoreSpy()
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
         
-        var receivedResults = [LoadResult]()
+        var receivedResults = [LoadFeedResult]()
         sut?.load { result in
             receivedResults.append(result)
         }
@@ -158,7 +158,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         return (store, sut)
     }
     
-    private func expect(_ sut: LocalFeedLoader, toCompleteWith expectedResult: LoadResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: LocalFeedLoader, toCompleteWith expectedResult: LoadFeedResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Waiting for load to complete")
         
         sut.load() { receivedResult in
