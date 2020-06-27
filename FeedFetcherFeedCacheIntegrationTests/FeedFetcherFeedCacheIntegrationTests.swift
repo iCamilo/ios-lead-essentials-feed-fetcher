@@ -16,7 +16,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         cleanStore()
     }
 
-    func test_emptyCache_load_completesWithEmptyResult() {
+    func test_emptyCache_load_completesWithEmptyFeed() {
         let sut = makeSUT()
                 
         assertLoad(sut, completeWith: [])
