@@ -24,11 +24,11 @@ class FeedStoreSpy: FeedStore {
     }
     
     func completeDeletion(with error: Error, at index: Int = 0) {
-        deletionCompletions[index](error)
+        deletionCompletions[index](.failure(error))
     }
     
     func completeDeletionSuccessfully(at index: Int = 0) {
-        deletionCompletions[index](nil)
+        deletionCompletions[index](.success(()))
     }
     
     func insert(_ imageFeed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {

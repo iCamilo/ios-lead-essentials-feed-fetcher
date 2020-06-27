@@ -21,9 +21,9 @@ public final class CoreDataFeedStore: FeedStore {
                 try CoreDataFeedStore.deleteAllManagedCache(in: context)
                 try context.saveIfHasPendingChanges()
                 
-                completion(nil)
+                completion(.success(()))
             } catch {
-                completion(error)
+                completion(.failure(error))
             }
         }
     }
