@@ -18,49 +18,27 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
 
     func test_emptyCache_load_completesWithEmptyResult() {
         let sut = makeSUT()
-        let expec = expectation(description: "Waiting for load to complete")
-        
-        sut.load { result in
-            switch result {
-            case let .success(imageFeed):
-                XCTAssertEqual(imageFeed, [], "Expected empty feed")
-            default:
-                XCTFail("Expecting empty feed BUT GOT \(result) instead")
-            }
-            
-            expec.fulfill()
-        }
-        
-        wait(for: [expec], timeout: 1.0)
+                
+        assertLoad(sut, completeWith: [])
     }
     
     func test_noEmptyCache_load_completesWithCachedFeed() {
         let saveSUT = makeSUT()
         let loadSUT = makeSUT()
-        let imageFeed = uniqueImageFeed().model
+        let feed = uniqueImageFeed().model
                
         let saveExp = expectation(description: "Waiting for save to complete")
-        saveSUT.save(feed: imageFeed) { saveError in
+        saveSUT.save(feed: feed) { saveError in
             XCTAssertNil(saveError, "Expecting save to succeed")
             saveExp.fulfill()
         }
         wait(for: [saveExp], timeout: 1.0)
         
-        let loadExp = expectation(description: "Waiting load to complete")
-        loadSUT.load { result in
-            switch result {
-            case let .success(resultImageFeed):
-                XCTAssertEqual(imageFeed, resultImageFeed, "Expected to retrieve cached feed BUT GOT \(result) instead")
-            default:
-                XCTFail("Expected to retrieve cached feed BUT GOT \(result) instead")
-            }
-            
-            loadExp.fulfill()
-        }
-        wait(for: [loadExp], timeout: 1.0)        
+        assertLoad(loadSUT, completeWith: feed)
     }
         
     // MARK:- Helpers
+    
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
         let store = try! CoreDataFeedStore(bundle: coreDataFeedStoreBundle, storeURL: testSpecificStoreURL)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
@@ -69,6 +47,23 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         trackForMemoryLeak(instance: sut, file: file, line: line)
         
         return sut
+    }
+    
+    private func assertLoad(_ sut: LocalFeedLoader, completeWith expected: [FeedImage]) {
+        let expec = expectation(description: "Waiting for load to complete")
+        
+        sut.load { result in
+            switch result {
+            case let .success(resultFeed):
+                XCTAssertEqual(expected, resultFeed, "Expected \(expected) BUT GOT \(resultFeed)")
+            default:
+                XCTFail("Expected success with feed \(expected) BUT GOT \(result)")
+            }
+            
+            expec.fulfill()
+        }
+        
+        wait(for: [expec], timeout: 1.0)
     }
     
     private var userDomainCacheURL: URL {
