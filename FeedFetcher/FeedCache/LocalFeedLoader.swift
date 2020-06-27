@@ -39,7 +39,6 @@ extension LocalFeedLoader {
 }
 
 extension LocalFeedLoader: FeedLoader {
-    public typealias LoadResult = Result<[FeedImage], Error>
     
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieveCachedFeed {[weak self] result in
