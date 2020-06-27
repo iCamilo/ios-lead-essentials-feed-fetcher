@@ -36,6 +36,32 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         
         assertLoad(loadSUT, completeWith: feed)
     }
+    
+    func test_noEmptyCache_saveRecentFeed_overridesOldFeedWithNewFeed() {
+        let saveOldFeedSUT = makeSUT()
+        let oldFeed = uniqueImageFeed().model
+        
+        let saveRecentFeedSUT = makeSUT()
+        let recentFeed = uniqueImageFeed().model
+        
+        let loadSUT = makeSUT()
+        
+        let saveOldFeedExp = expectation(description: "Waiting for old feed save to complete")
+        saveOldFeedSUT.save(feed: oldFeed) { saveError in
+            XCTAssertNil(saveError, "Expecting save to succeed")
+            saveOldFeedExp.fulfill()
+        }
+        wait(for: [saveOldFeedExp], timeout: 1.0)
+        
+        let saveRecentExp = expectation(description: "Waiting for recent feed save to complete")
+        saveRecentFeedSUT.save(feed: recentFeed) { saveError in
+            XCTAssertNil(saveError, "Expecting save to succeed")
+            saveRecentExp.fulfill()
+        }
+        wait(for: [saveRecentExp], timeout: 1.0)
+        
+        assertLoad(loadSUT, completeWith: recentFeed)                
+    }
         
     // MARK:- Helpers
     
