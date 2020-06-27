@@ -1,4 +1,4 @@
 os: osx
 osx_image: xcode11.5
 language: swift
-script: xcodebuild clean build test -project FeedFetcher.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+script: xcodebuild clean build test -project ./FeedFetcher/FeedFetcher.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
