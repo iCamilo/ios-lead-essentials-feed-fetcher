@@ -12,6 +12,7 @@
 		5B38574724A80A9D005B9F7E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B38574524A80A9D005B9F7E /* Main.storyboard */; };
 		5B38574924A80A9F005B9F7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B38574824A80A9F005B9F7E /* Assets.xcassets */; };
 		5B38574C24A80A9F005B9F7E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B38574A24A80A9F005B9F7E /* LaunchScreen.storyboard */; };
+		5B38575424A81FD9005B9F7E /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B38575324A81FD9005B9F7E /* FeedViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		5B38574824A80A9F005B9F7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B38574B24A80A9F005B9F7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5B38574D24A80A9F005B9F7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5B38575324A81FD9005B9F7E /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				5B38573F24A80A9D005B9F7E /* AppDelegate.swift */,
 				5B38574124A80A9D005B9F7E /* SceneDelegate.swift */,
 				5B38574524A80A9D005B9F7E /* Main.storyboard */,
+				5B38575324A81FD9005B9F7E /* FeedViewController.swift */,
 				5B38574824A80A9F005B9F7E /* Assets.xcassets */,
 				5B38574A24A80A9F005B9F7E /* LaunchScreen.storyboard */,
 				5B38574D24A80A9F005B9F7E /* Info.plist */,
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B38574024A80A9D005B9F7E /* AppDelegate.swift in Sources */,
+				5B38575424A81FD9005B9F7E /* FeedViewController.swift in Sources */,
 				5B38574224A80A9D005B9F7E /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,7 +284,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J7FJ227YZA;
 				INFOPLIST_FILE = Prototype/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -288,6 +294,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.iCamilo.FeedFetcher.Prototype;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -297,7 +304,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J7FJ227YZA;
 				INFOPLIST_FILE = Prototype/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -305,6 +314,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.iCamilo.FeedFetcher.Prototype;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
