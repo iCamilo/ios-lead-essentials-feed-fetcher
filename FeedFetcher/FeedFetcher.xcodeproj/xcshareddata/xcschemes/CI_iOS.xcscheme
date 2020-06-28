@@ -58,11 +58,6 @@
                BlueprintName = "FeedFetcherTests"
                ReferencedContainer = "container:FeedFetcher.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "CodableFeedStoreTests">
-               </Test>
-            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO"
