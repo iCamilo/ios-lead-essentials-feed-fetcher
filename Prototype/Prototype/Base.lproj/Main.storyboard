@@ -68,17 +68,14 @@ Location</string>
                                                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kgo-ic-A1i" userLabel="feedImageContainer">
                                                     <rect key="frame" x="0.0" y="53.333333333333314" width="374" height="374"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="F32-IB-AFR" userLabel="feedImage">
-                                                            <rect key="frame" x="8" y="8" width="358" height="358"/>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F32-IB-AFR" userLabel="feedImage">
+                                                            <rect key="frame" x="0.0" y="0.0" width="374" height="374"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.8901960784313725" green="0.8901960784313725" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailingMargin" secondItem="F32-IB-AFR" secondAttribute="trailing" id="6Eu-s2-MmT"/>
-                                                        <constraint firstAttribute="bottomMargin" secondItem="F32-IB-AFR" secondAttribute="bottom" id="6Oi-Tu-MVK"/>
                                                         <constraint firstAttribute="width" secondItem="kgo-ic-A1i" secondAttribute="height" multiplier="1:1" id="PJr-je-bPz"/>
-                                                        <constraint firstItem="F32-IB-AFR" firstAttribute="top" secondItem="kgo-ic-A1i" secondAttribute="topMargin" id="SvY-xF-7wK"/>
-                                                        <constraint firstItem="F32-IB-AFR" firstAttribute="leading" secondItem="kgo-ic-A1i" secondAttribute="leadingMargin" id="rsT-Y0-gSO"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
