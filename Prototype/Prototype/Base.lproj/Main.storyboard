@@ -25,7 +25,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="584" id="F7Z-Z7-MUL">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="584" id="F7Z-Z7-MUL" customClass="FeedImageCell" customModule="Prototype" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="584"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="F7Z-Z7-MUL" id="36P-r1-BPV">
@@ -35,7 +35,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="98s-30-gU6" userLabel="ContentStackView">
                                             <rect key="frame" x="20" y="17" width="374" height="550"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="3hY-CX-nUO" userLabel="LocationStackView">
+                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="3hY-CX-nUO" userLabel="locationStackView">
                                                     <rect key="frame" x="0.0" y="0.0" width="374" height="45.333333333333336"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jef-oA-0S6" userLabel="pinIconContainer">
@@ -108,6 +108,12 @@ Location</string>
                                         <constraint firstItem="98s-30-gU6" firstAttribute="trailing" secondItem="36P-r1-BPV" secondAttribute="trailingMargin" id="tKc-IP-KYW"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="3Fb-9a-Lb5" id="8ih-b2-Qt8"/>
+                                    <outlet property="feedImage" destination="F32-IB-AFR" id="Xst-zs-S6h"/>
+                                    <outlet property="locationLabel" destination="Pg2-nv-hBr" id="HRO-Xl-ZEh"/>
+                                    <outlet property="locationStackView" destination="3hY-CX-nUO" id="Qn5-VL-ifQ"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
