@@ -11,11 +11,30 @@ final class FeedImageCell: UITableViewCell {
     
     static let reuseIdentifier = "FeedImageCell"
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        feedImage.alpha = 0
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        feedImage.alpha = 0
+    }
+    
     func configure(with model: FeedImageViewModel) {
         locationStackView.isHidden = model.location == .none
         locationLabel.text = model.location
         descriptionLabel.text = model.description
-        feedImage.image = UIImage(named: model.imageName)
+        fadeIn(UIImage(named: model.imageName))
     }
     
+    func fadeIn(_ image: UIImage?) {
+        feedImage.image = image
+        
+        UIView.animate(withDuration: 0.3, delay: 0.3, options: [], animations: {
+            self.feedImage.alpha = 1
+        })
+    }
 }
