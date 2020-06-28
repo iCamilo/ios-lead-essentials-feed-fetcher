@@ -9,23 +9,6 @@ struct FeedImageViewModel {
     let imageName: String
 }
 
-class FeedImageCell: UITableViewCell {
-    @IBOutlet private weak var locationStackView: UIStackView!
-    @IBOutlet private weak var locationLabel: UILabel!
-    @IBOutlet private weak var feedImage: UIImageView!
-    @IBOutlet private weak var descriptionLabel: UILabel!
-    
-    static let reuseIdentifier = "FeedImageCell"
-    
-    func configure(with model: FeedImageViewModel) {
-        locationStackView.isHidden = model.location == .none
-        locationLabel.text = model.location
-        descriptionLabel.text = model.description
-        feedImage.image = UIImage(named: model.imageName)
-    }
-    
-}
-
 final class FeedViewController: UITableViewController {
     
     private var feedImagesViewModels = FeedImageViewModel.prototypeFeed
