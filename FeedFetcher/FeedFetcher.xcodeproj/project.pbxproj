@@ -52,8 +52,6 @@
 		5B9C4F30249AA09F000BCA18 /* LoadFeedFromCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9C4F2F249AA09F000BCA18 /* LoadFeedFromCacheUseCaseTests.swift */; };
 		5B9C4F35249AA575000BCA18 /* FeedStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9C4F34249AA575000BCA18 /* FeedStoreSpy.swift */; };
 		5BE639AA24A85D8A007ABC9F /* FeedFetcheriOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE639A124A85D8A007ABC9F /* FeedFetcheriOS.framework */; };
-		5BE639AF24A85D8A007ABC9F /* FeedFetcheriOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639AE24A85D8A007ABC9F /* FeedFetcheriOSTests.swift */; };
-		5BE639B124A85D8A007ABC9F /* FeedFetcheriOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BE639A324A85D8A007ABC9F /* FeedFetcheriOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,10 +132,8 @@
 		5B9C4F2F249AA09F000BCA18 /* LoadFeedFromCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFeedFromCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		5B9C4F34249AA575000BCA18 /* FeedStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreSpy.swift; sourceTree = "<group>"; };
 		5BE639A124A85D8A007ABC9F /* FeedFetcheriOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FeedFetcheriOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5BE639A324A85D8A007ABC9F /* FeedFetcheriOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedFetcheriOS.h; sourceTree = "<group>"; };
 		5BE639A424A85D8A007ABC9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5BE639A924A85D8A007ABC9F /* FeedFetcheriOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedFetcheriOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5BE639AE24A85D8A007ABC9F /* FeedFetcheriOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFetcheriOSTests.swift; sourceTree = "<group>"; };
 		5BE639B024A85D8A007ABC9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -385,7 +381,6 @@
 		5BE639A224A85D8A007ABC9F /* FeedFetcheriOS */ = {
 			isa = PBXGroup;
 			children = (
-				5BE639A324A85D8A007ABC9F /* FeedFetcheriOS.h */,
 				5BE639A424A85D8A007ABC9F /* Info.plist */,
 			);
 			path = FeedFetcheriOS;
@@ -394,7 +389,6 @@
 		5BE639AD24A85D8A007ABC9F /* FeedFetcheriOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				5BE639AE24A85D8A007ABC9F /* FeedFetcheriOSTests.swift */,
 				5BE639B024A85D8A007ABC9F /* Info.plist */,
 			);
 			path = FeedFetcheriOSTests;
@@ -414,7 +408,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BE639B124A85D8A007ABC9F /* FeedFetcheriOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -710,7 +703,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BE639AF24A85D8A007ABC9F /* FeedFetcheriOSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
