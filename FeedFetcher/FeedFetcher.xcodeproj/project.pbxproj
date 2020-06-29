@@ -58,6 +58,7 @@
 		5BE639C224A9A0CE007ABC9F /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1018662486D7CF003EB0A9 /* XCTestCase+MemoryLeakTracking.swift */; };
 		5BE639C324A9A762007ABC9F /* FeedCacheTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B790D33249D19DE00D9C756 /* FeedCacheTestHelpers.swift */; };
 		5BE639C424A9A7E3007ABC9F /* SharedTestsHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B790D35249D1B7200D9C756 /* SharedTestsHelpers.swift */; };
+		5BE639C624A9B087007ABC9F /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639C524A9B087007ABC9F /* FeedViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +164,7 @@
 		5BE639A924A85D8A007ABC9F /* FeedFetcheriOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedFetcheriOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BE639B024A85D8A007ABC9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5BE639BA24A96A60007ABC9F /* FeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTests.swift; sourceTree = "<group>"; };
+		5BE639C524A9B087007ABC9F /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -412,6 +414,7 @@
 			isa = PBXGroup;
 			children = (
 				5BE639A424A85D8A007ABC9F /* Info.plist */,
+				5BE639C524A9B087007ABC9F /* FeedViewController.swift */,
 			);
 			path = FeedFetcheriOS;
 			sourceTree = "<group>";
@@ -588,6 +591,7 @@
 					};
 					5BE639A024A85D8A007ABC9F = {
 						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
 					};
 					5BE639A824A85D8A007ABC9F = {
 						CreatedOnToolsVersion = 11.5;
@@ -737,6 +741,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BE639C624A9B087007ABC9F /* FeedViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1068,6 +1073,7 @@
 		5BE639B324A85D8A007ABC9F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1086,6 +1092,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1094,6 +1101,7 @@
 		5BE639B424A85D8A007ABC9F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1121,6 +1129,7 @@
 		5BE639B624A85D8A007ABC9F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = FeedFetcheriOSTests/Info.plist;
@@ -1142,6 +1151,7 @@
 		5BE639B724A85D8A007ABC9F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = FeedFetcheriOSTests/Info.plist;
