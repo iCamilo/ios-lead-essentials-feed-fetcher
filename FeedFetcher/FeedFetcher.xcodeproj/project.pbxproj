@@ -53,6 +53,8 @@
 		5B9C4F35249AA575000BCA18 /* FeedStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9C4F34249AA575000BCA18 /* FeedStoreSpy.swift */; };
 		5BE639AA24A85D8A007ABC9F /* FeedFetcheriOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE639A124A85D8A007ABC9F /* FeedFetcheriOS.framework */; };
 		5BE639BB24A96A60007ABC9F /* FeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639BA24A96A60007ABC9F /* FeedViewControllerTests.swift */; };
+		5BE639BD24A9A05D007ABC9F /* FeedFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1198EE247EF16A00010566 /* FeedFetcher.framework */; };
+		5BE639BE24A9A05D007ABC9F /* FeedFetcher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1198EE247EF16A00010566 /* FeedFetcher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,7 +86,28 @@
 			remoteGlobalIDString = 5BE639A024A85D8A007ABC9F;
 			remoteInfo = FeedFetcheriOS;
 		};
+		5BE639BF24A9A05D007ABC9F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B1198E5247EF16A00010566 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B1198ED247EF16A00010566;
+			remoteInfo = FeedFetcher;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5BE639C124A9A05D007ABC9F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5BE639BE24A9A05D007ABC9F /* FeedFetcher.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5B1018632485D03E003EB0A9 /* URLSessionHttpClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHttpClientTests.swift; sourceTree = "<group>"; };
@@ -175,6 +198,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BE639BD24A9A05D007ABC9F /* FeedFetcher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,6 +232,7 @@
 				5BE639A224A85D8A007ABC9F /* FeedFetcheriOS */,
 				5BE639AD24A85D8A007ABC9F /* FeedFetcheriOSTests */,
 				5B1198EF247EF16A00010566 /* Products */,
+				5BE639BC24A9A05D007ABC9F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -397,6 +422,13 @@
 			path = FeedFetcheriOSTests;
 			sourceTree = "<group>";
 		};
+		5BE639BC24A9A05D007ABC9F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -497,10 +529,12 @@
 				5BE6399D24A85D8A007ABC9F /* Sources */,
 				5BE6399E24A85D8A007ABC9F /* Frameworks */,
 				5BE6399F24A85D8A007ABC9F /* Resources */,
+				5BE639C124A9A05D007ABC9F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				5BE639C024A9A05D007ABC9F /* PBXTargetDependency */,
 			);
 			name = FeedFetcheriOS;
 			productName = FeedFetcheriOS;
@@ -733,6 +767,11 @@
 			isa = PBXTargetDependency;
 			target = 5BE639A024A85D8A007ABC9F /* FeedFetcheriOS */;
 			targetProxy = 5BE639AB24A85D8A007ABC9F /* PBXContainerItemProxy */;
+		};
+		5BE639C024A9A05D007ABC9F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5B1198ED247EF16A00010566 /* FeedFetcher */;
+			targetProxy = 5BE639BF24A9A05D007ABC9F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
