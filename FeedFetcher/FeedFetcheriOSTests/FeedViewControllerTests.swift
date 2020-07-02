@@ -177,6 +177,21 @@ class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(view1?.isShowingRetryButton, true, "Expected retry button for second view as loading second image completed with an error")
     }
     
+    func test_feedImageViewRetryButton_isVisibleOnInvalidImageData() {
+        let image0 = makeImage(url: URL(string: "http://image0-url.com")!)
+        let (sut, loader) = makeSUT()
+                
+        sut.loadViewIfNeeded()
+        loader.completeLoad(with: [image0], at: 0)
+        
+        let view0 = sut.simulateFeedImageViewVisible(at: 0)
+        XCTAssertEqual(view0?.isShowingRetryButton, false, "Expected no retry button for first view while loading first image")
+                
+        let invalidData = "Invalid Data".data(using: .utf8)!
+        loader.completeImageLoading(withImageData: invalidData, at: 0)
+        XCTAssertEqual(view0?.isShowingRetryButton, true, "Expected retry button as loading first image completed successfully BUT with invalid data")
+    }
+    
     // MARK:- Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
