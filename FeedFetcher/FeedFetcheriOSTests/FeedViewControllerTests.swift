@@ -97,10 +97,10 @@ class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.cancelledImagesURLs, [], "Expected no image URL requests cancelled until view becomes visible")
         
         sut.simulateFeedImageViewNotVisible(at: 0)
-        XCTAssertEqual(loader.cancelledImagesURLs, [image0.url], "Expected one image request as one cell has become visible")
+        XCTAssertEqual(loader.cancelledImagesURLs, [image0.url], "Expected one image request cancelled as one cell has become not visible")
         
         sut.simulateFeedImageViewNotVisible(at: 1)
-        XCTAssertEqual(loader.cancelledImagesURLs, [image0.url, image1.url], "Expected two image requests as two cells have become visible")
+        XCTAssertEqual(loader.cancelledImagesURLs, [image0.url, image1.url], "Expected two image requests cancelled as both cells have become not visible")
     }
     
     
@@ -165,17 +165,25 @@ class FeedViewControllerTests: XCTestCase {
         }
         
         // MARK: FeedImageDataLoader
+        private struct DataTaskSpy: FeedImageDataTask {
+            let cancelCallback: () -> Void
+            
+            func cancel() {
+                cancelCallback()
+            }
+        }
         
         private(set) var loadedImagesURLs = [URL]()
         private(set) var cancelledImagesURLs = [URL]()
         
-        func loadImageData(from url: URL) {
+        func loadImageData(from url: URL) -> FeedImageDataTask {
             loadedImagesURLs.append(url)
+            return DataTaskSpy { [weak self] in
+                self?.cancelledImagesURLs.append(url)
+            }
         }
         
-        func cancelImageDataLoad(from url: URL) {
-            cancelledImagesURLs.append(url)
-        }
+        
         
     }
 }
