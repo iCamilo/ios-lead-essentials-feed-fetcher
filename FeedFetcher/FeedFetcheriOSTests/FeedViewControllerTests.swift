@@ -29,13 +29,13 @@ class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.isShowingLoadingIndicator(), true, "Loading indicator expected to be shown at controller view did load")
     
         loader.completeLoad(at: 0)
-        XCTAssertEqual(sut.isShowingLoadingIndicator(), false, "Loading indicator expected to be hidden at view did load feed load completion")
+        XCTAssertEqual(sut.isShowingLoadingIndicator(), false, "Loading indicator expected to be hidden once feed load completes successfully")
    
         sut.simulateUserInitiatedFeedReload()
         XCTAssertEqual(sut.isShowingLoadingIndicator(), true, "Loading indicator expected to be shown at user initiated feed reload")
     
-        loader.completeLoad(at: 1)
-        XCTAssertEqual(sut.isShowingLoadingIndicator(), false, "Loading indicator expected to be hidden at user initiated feed reload completion")
+        loader.completeLoadWithError(at: 1)
+        XCTAssertEqual(sut.isShowingLoadingIndicator(), false, "Loading indicator expected to be hidden once feed load completes with error")
     }
     
     func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {
