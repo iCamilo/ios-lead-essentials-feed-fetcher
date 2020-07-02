@@ -38,6 +38,23 @@ class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.isShowingLoadingIndicator(), false, "Loading indicator expected to be hidden at user initiated feed reload completion")
     }
     
+    func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {
+        let image0 = FeedImage(id: UUID(), url: URL(string: "http://any-url.com")!, description: "a description", location: "a location")
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeLoad(with:[image0], at: 0)
+        
+        XCTAssertEqual(sut.numberOfRenderedFeedImagesView(), 1)
+        
+        let view = sut.feedImageView(at: 0) as? FeedImageCell
+        XCTAssertNotNil(view)
+        XCTAssertEqual(view?.isShowingLocation, true)
+        XCTAssertEqual(view?.locationText, image0.location)
+        XCTAssertEqual(view?.descriptionText, image0.description)
+                
+    }
+    
     
     
     // MARK:- Helpers
@@ -62,8 +79,8 @@ class FeedViewControllerTests: XCTestCase {
             completions.append(completion)
         }
         
-        func completeLoad(at index: Int) {
-            completions[index](.success([]))
+        func completeLoad(with feed:[FeedImage] = [], at index: Int) {
+            completions[index](.success(feed))
         }
     }
 }
@@ -76,6 +93,37 @@ private extension FeedViewController {
     func isShowingLoadingIndicator() -> Bool {
         return refreshControl?.isRefreshing == true
     }
+    
+    func numberOfRenderedFeedImagesView() -> Int {
+        return tableView.numberOfRows(inSection: feedImagesSection)
+    }
+    
+    private var feedImagesSection: Int {
+        return 0
+    }
+    
+    func feedImageView(at row: Int) -> UITableViewCell? {
+        let ds = tableView.dataSource
+        let indexPath = IndexPath(row: row, section: feedImagesSection)
+        
+        return ds?.tableView(tableView, cellForRowAt: indexPath)
+    }
+}
+
+private extension FeedImageCell {
+    var isShowingLocation: Bool {
+        return !locationContainer.isHidden
+    }
+    
+    var locationText: String? {
+        return locationLabel.text
+    }
+    
+    var descriptionText: String? {
+        return descriptionLabel.text
+    }
+    
+    
 }
 
 private extension UIRefreshControl {
