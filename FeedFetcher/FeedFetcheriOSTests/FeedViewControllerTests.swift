@@ -39,7 +39,7 @@ class FeedViewControllerTests: XCTestCase {
     }
     
     func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {
-        let image0 = FeedImage(id: UUID(), url: URL(string: "http://any-url.com")!, description: "a description", location: "a location")
+        let image0 = makeImage(description: "a description", location: "a location")
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -67,6 +67,10 @@ class FeedViewControllerTests: XCTestCase {
         trackForMemoryLeak(instance: loader, file: file, line: line)
         
         return (sut, loader)
+    }
+    
+    private func makeImage(id: UUID = UUID(), url: URL = URL(string: "http://any-url.com")!, description: String?, location: String?) -> FeedImage {
+        return FeedImage(id: id, url: url, description: description, location: location)
     }
         
     class LoaderSpy: FeedLoader {
