@@ -154,6 +154,29 @@ class FeedViewControllerTests: XCTestCase {
         
     }
     
+    func test_feedImageViewRetryButton_isVisibleOnImageURLLoadError() {
+        let image0 = makeImage(url: URL(string: "http://image0-url.com")!)
+        let image1 = makeImage(url: URL(string: "http://image1-url.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeLoad(with: [image0, image1], at: 0)
+        
+        let view0 = sut.simulateFeedImageViewVisible(at: 0)
+        let view1 = sut.simulateFeedImageViewVisible(at: 1)
+        XCTAssertEqual(view0?.isShowingRetryButton, false, "Expected no retry button for first view while loading first image")
+        XCTAssertEqual(view1?.isShowingRetryButton, false, "Expected no retry button for second view while loading second image")
+               
+        let imageData0 = UIImage.make(withColor: .green).pngData()!
+        loader.completeImageLoading(withImageData: imageData0, at: 0)
+        XCTAssertEqual(view0?.isShowingRetryButton, false, "Expected no retry button for first view as loading first image completed successfully")
+        XCTAssertEqual(view1?.isShowingRetryButton, false, "Expected no retry button for second view while loading second image")
+        
+        loader.completeImageLoadingWithError(at: 1)
+        XCTAssertEqual(view0?.isShowingRetryButton, false, "Expected no retry button for first view as loading first image completed successfully")
+        XCTAssertEqual(view1?.isShowingRetryButton, true, "Expected retry button for second view as loading second image completed with an error")
+    }
+    
     // MARK:- Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
@@ -304,6 +327,10 @@ private extension FeedImageCell {
     
     var renderedImage: Data? {
         return feedImageView.image?.pngData()
+    }
+    
+    var isShowingRetryButton: Bool {
+        return !feedImageRetryButton.isHidden
     }
     
 }
