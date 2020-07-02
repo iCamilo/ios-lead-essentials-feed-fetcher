@@ -58,6 +58,18 @@ class FeedViewControllerTests: XCTestCase {
         assert(sut, isRendering: multipleImages)
     }
     
+    func test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError() {
+        let image0 = makeImage(description: "a description", location: "a location")
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeLoad(with: [image0], at: 0)
+        assert(sut, isRendering: [image0])
+        
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeLoadWithError(at: 1)
+        assert(sut, isRendering: [image0])
+    }
     
     
     // MARK:- Helpers
@@ -110,6 +122,10 @@ class FeedViewControllerTests: XCTestCase {
         
         func completeLoad(with feed:[FeedImage] = [], at index: Int) {
             completions[index](.success(feed))
+        }
+        
+        func completeLoadWithError(at index: Int) {
+            completions[index](.failure(anyNSError()))
         }
     }
 }
