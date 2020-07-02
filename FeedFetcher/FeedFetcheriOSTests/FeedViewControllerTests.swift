@@ -43,8 +43,9 @@ class FeedViewControllerTests: XCTestCase {
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
-        loader.completeLoad(with:[image0], at: 0)
+        XCTAssertEqual(sut.numberOfRenderedFeedImagesView(), 0)
         
+        loader.completeLoad(with:[image0], at: 0)
         XCTAssertEqual(sut.numberOfRenderedFeedImagesView(), 1)
         
         let view = sut.feedImageView(at: 0) as? FeedImageCell
