@@ -9,6 +9,7 @@ public class FeedImageCell: UITableViewCell {
     public let locationLabel = UILabel()
     public let descriptionLabel = UILabel()
     public let feedImageContainer = UIView()
+    public let feedImageView = UIImageView()
 }
 
 // UIView+Shimmering
@@ -103,9 +104,13 @@ final public class FeedViewController: UITableViewController {
         cell.locationContainer.isHidden = cellModel.location == nil
         cell.locationLabel.text = cellModel.location
         cell.descriptionLabel.text = cellModel.description
+        cell.feedImageView.image =  nil
         
         cell.feedImageContainer.startShimmering()
-        tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.url) {[weak cell] _ in
+        tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.url) {[weak cell] result in
+            let imageData = try? result.get()
+            cell?.feedImageView.image = imageData.map(UIImage.init) ?? nil
+                        
             cell?.feedImageContainer.stopShimmering()
         }
         

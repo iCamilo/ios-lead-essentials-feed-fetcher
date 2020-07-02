@@ -125,6 +125,35 @@ class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(view1?.isShowingImageLoadingIndicator, false, "Expected no loading indicator for second view as loading second image is completed")
     }
     
+    func test_feedImageView_rendersImageLoadedFromURL() {
+        let image0 = makeImage(url: URL(string: "http://image0-url.com")!)
+        let image1 = makeImage(url: URL(string: "http://image1-url.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeLoad(with: [image0, image1], at: 0)
+        
+        let view0 = sut.simulateFeedImageViewVisible(at: 0)
+        let view1 = sut.simulateFeedImageViewVisible(at: 1)
+        XCTAssertEqual(view0?.renderedImage, .none, "Expected no image for first view while loading first image")
+        XCTAssertEqual(view1?.renderedImage, .none, "Expected no image for second view while loading second image")
+        
+        let imageData0 = UIImage.make(withColor: .green).pngData()!
+        loader.completeImageLoading(withImageData: imageData0, at: 0)
+        XCTAssertEqual(view0?.renderedImage, imageData0, "Expected image for first view as loading first image has completed")
+        XCTAssertEqual(view1?.renderedImage, .none, "Expected no image for second view while loading second image")
+                
+        loader.completeImageLoadingWithError(at: 1)
+        XCTAssertEqual(view0?.renderedImage, imageData0, "Expected image for first view as loading first image has completed")
+        XCTAssertEqual(view1?.renderedImage, .none, "Expected no image for second view as loading second image has completed with an error")
+        
+        let imageData1 = UIImage.make(withColor: .blue).pngData()!
+        loader.completeImageLoading(withImageData: imageData1, at: 1)
+        XCTAssertEqual(view0?.renderedImage, imageData0, "Expected image for first view as loading first image has completed")
+        XCTAssertEqual(view1?.renderedImage, imageData1, "Expected image for second view as loading second image has completed")
+        
+    }
+    
     // MARK:- Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
@@ -273,6 +302,10 @@ private extension FeedImageCell {
         return feedImageContainer.isShimmering
     }
     
+    var renderedImage: Data? {
+        return feedImageView.image?.pngData()
+    }
+    
 }
 
 private extension UIRefreshControl {
@@ -283,4 +316,20 @@ private extension UIRefreshControl {
             }
         }
     }
+}
+
+private extension UIImage {
+    
+    static func make(withColor color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(color.cgColor)
+        context.fill(rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return img!
+    }
+    
 }
