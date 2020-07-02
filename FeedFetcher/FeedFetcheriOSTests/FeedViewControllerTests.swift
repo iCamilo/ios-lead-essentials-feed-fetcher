@@ -46,19 +46,16 @@ class FeedViewControllerTests: XCTestCase {
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
-        XCTAssertEqual(sut.numberOfRenderedFeedImagesView(), 0)
-        
-        loader.completeLoad(with:[image0], at: 0)
-        XCTAssertEqual(sut.numberOfRenderedFeedImagesView(), 1)
-        assertFeedImageViewHasBeenConfigured(for: sut, with: image0, at: 0)
-        
+        assert(sut, isRendering: [])
+                
+        let singleImage = [image0]
+        loader.completeLoad(with: singleImage, at: 0)
+        assert(sut, isRendering: singleImage)
+                        
+        let multipleImages = [image0, image1, image2, image3]
         sut.simulateUserInitiatedFeedReload()
-        loader.completeLoad(with:[image0, image1, image2, image3], at: 1)
-        XCTAssertEqual(sut.numberOfRenderedFeedImagesView(), 4)
-        assertFeedImageViewHasBeenConfigured(for: sut, with: image0, at: 0)
-        assertFeedImageViewHasBeenConfigured(for: sut, with: image1, at: 1)
-        assertFeedImageViewHasBeenConfigured(for: sut, with: image2, at: 2)
-        assertFeedImageViewHasBeenConfigured(for: sut, with: image3, at: 3)
+        loader.completeLoad(with: multipleImages, at: 1)
+        assert(sut, isRendering: multipleImages)
     }
     
     
@@ -77,6 +74,14 @@ class FeedViewControllerTests: XCTestCase {
     
     private func makeImage(id: UUID = UUID(), url: URL = URL(string: "http://any-url.com")!, description: String?, location: String?) -> FeedImage {
         return FeedImage(id: id, url: url, description: description, location: location)
+    }
+    
+    private func assert(_ sut: FeedViewController, isRendering feed:[FeedImage], file: StaticString = #file, line: UInt = #line) {
+        XCTAssertEqual(sut.numberOfRenderedFeedImagesView(), feed.count, "Expected to render a total of \(feed.count) image views")
+        
+        feed.enumerated().forEach{ index, image in
+            assertFeedImageViewHasBeenConfigured(for: sut, with: image, at: index, file: file, line: line)
+        }
     }
     
     private func assertFeedImageViewHasBeenConfigured(for sut: FeedViewController, with image: FeedImage, at index: Int, file: StaticString = #file, line: UInt = #line) {
