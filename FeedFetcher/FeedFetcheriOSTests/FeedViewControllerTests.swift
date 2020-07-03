@@ -340,6 +340,8 @@ class FeedViewControllerTests: XCTestCase {
     }
 }
 
+// MARK:- FeedViewController+DSL
+
 private extension FeedViewController {
     func simulateUserInitiatedFeedReload() {
         refreshControl?.simulatePullToRefresh()
@@ -392,6 +394,8 @@ private extension FeedViewController {
     }
 }
 
+// MARK:- FeedImageCell+DSL
+
 private extension FeedImageCell {
     var isShowingLocation: Bool {
         return !locationContainer.isHidden
@@ -423,6 +427,8 @@ private extension FeedImageCell {
     
 }
 
+// MARK:- UIRefreshControl+SimulatePullToRefresh
+
 private extension UIRefreshControl {
     func simulatePullToRefresh() {
         allTargets.forEach { target in
@@ -433,6 +439,7 @@ private extension UIRefreshControl {
     }
 }
 
+// MARK:- UIButton+SimulateTap
 private extension UIButton {
     func simulateTap() {
         allTargets.forEach { target in
@@ -443,8 +450,9 @@ private extension UIButton {
     }
 }
 
+// MARK:- UIImage+MakeWithColor
+
 private extension UIImage {
-    
     static func make(withColor color: UIColor) -> UIImage {
         let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
