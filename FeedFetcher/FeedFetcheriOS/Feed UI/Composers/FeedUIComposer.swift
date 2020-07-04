@@ -8,15 +8,14 @@ import FeedFetcher
 public final class FeedUIComposer {
     private init() {}
     
-    public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
-        let feedPresenter = FeedPresenter()
-        let feedPresentationAdapter = FeedLoaderPresentationAdapter(feedPresenter: feedPresenter, feedLoader: feedLoader)
+    public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {        
+        let feedPresentationAdapter = FeedLoaderPresentationAdapter(feedLoader: feedLoader)
         let refreshController = FeedRefreshViewController(loadFeed: feedPresentationAdapter.loadFeed)
         let feedController = FeedViewController(refreshController: refreshController)
-        
-        feedPresenter.feedLoadingView = WeakRefVirtualProxy(refreshController)
-        feedPresenter.feedView = FeedViewAdapter(feedController: feedController, imageLoader: imageLoader)
-                
+        let feedPresenter = FeedPresenter(feedLoadingView: WeakRefVirtualProxy(refreshController), feedView: FeedViewAdapter(feedController: feedController, imageLoader: imageLoader))
+
+        feedPresentationAdapter.feedPresenter = feedPresenter
+                        
         return feedController
     }
 }
@@ -52,21 +51,20 @@ private final class FeedViewAdapter: FeedView  {
 }
 
 private final class FeedLoaderPresentationAdapter {
-    private let feedPresenter: FeedPresenter
+    var feedPresenter: FeedPresenter?
     private let feedLoader: FeedLoader
     
-    init(feedPresenter: FeedPresenter, feedLoader: FeedLoader) {
-        self.feedPresenter = feedPresenter
+    init(feedLoader: FeedLoader) {
         self.feedLoader = feedLoader
     }
     
     func loadFeed() {
-        feedPresenter.didStartLoading()
+        feedPresenter?.didStartLoading()
         feedLoader.load { [weak self] result in
             if let feed = try? result.get() {
-                self?.feedPresenter.didSuccessfullyLoad(feed)
+                self?.feedPresenter?.didSuccessfullyLoad(feed)
             } else {
-                self?.feedPresenter.didFailToLoad()
+                self?.feedPresenter?.didFailToLoad()
             }
         }
     }
