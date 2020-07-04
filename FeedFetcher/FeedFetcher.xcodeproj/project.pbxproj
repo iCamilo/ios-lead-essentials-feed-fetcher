@@ -434,13 +434,13 @@
 			path = Composers;
 			sourceTree = "<group>";
 		};
-		5BCF0D8E24AFD01F0039C403 /* Models */ = {
+		5BCF0D8E24AFD01F0039C403 /* Feed Presentation */ = {
 			isa = PBXGroup;
 			children = (
 				5BCF0D8C24AFCFFE0039C403 /* FeedViewModel.swift */,
 				5BCF0D8F24B00C040039C403 /* FeedImageViewModel.swift */,
 			);
-			path = Models;
+			path = "Feed Presentation";
 			sourceTree = "<group>";
 		};
 		5BE639A224A85D8A007ABC9F /* FeedFetcheriOS */ = {
@@ -448,6 +448,7 @@
 			children = (
 				5BE639A424A85D8A007ABC9F /* Info.plist */,
 				5BE639D024AEBDB5007ABC9F /* Feed Image Loader */,
+				5BCF0D8E24AFD01F0039C403 /* Feed Presentation */,
 				5BE639CD24AEBD80007ABC9F /* Feed UI */,
 			);
 			path = FeedFetcheriOS;
@@ -473,7 +474,6 @@
 			isa = PBXGroup;
 			children = (
 				5BCF0D8B24AED2B70039C403 /* Composers */,
-				5BCF0D8E24AFD01F0039C403 /* Models */,
 				5BE639CE24AEBD9A007ABC9F /* Controllers */,
 				5BE639CF24AEBDA8007ABC9F /* Views */,
 			);
