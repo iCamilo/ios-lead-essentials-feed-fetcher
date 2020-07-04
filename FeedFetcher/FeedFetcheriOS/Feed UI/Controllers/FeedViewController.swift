@@ -2,7 +2,6 @@
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import UIKit
-//import FeedFetcher
 
 final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var refreshController: FeedRefreshViewController?
