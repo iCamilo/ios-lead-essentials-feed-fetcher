@@ -9,19 +9,29 @@ public final class FeedUIComposer {
     private init() {}
     
     public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
-        let feedViewModel = FeedViewModel(feedLoader: feedLoader)
-        let refreshController = FeedRefreshViewController(feedViewModel: feedViewModel)
+        let feedPresenter = FeedPresenter(feedLoader: feedLoader)
+        let refreshController = FeedRefreshViewController(presenter: feedPresenter)
         let feedController = FeedViewController(refreshController: refreshController)
-        feedViewModel.onFeedLoad = adaptFeedToCellControllers(forwardingTo: feedController, loader: imageLoader)
         
+        feedPresenter.feedLoadingView = refreshController
+        feedPresenter.feedView = FeedViewAdapter(feedController: feedController, imageLoader: imageLoader)
+                
         return feedController
     }
+}
+
+private final class FeedViewAdapter: FeedView  {
+    private weak var feedController: FeedViewController?
+    private let imageLoader: FeedImageDataLoader
     
-    private static func adaptFeedToCellControllers(forwardingTo feedController: FeedViewController, loader imageLoader: FeedImageDataLoader) -> ([FeedImage]) -> Void {
-        return {[weak feedController] feed in
-            feedController?.tableModel = feed.map { feedImage in
-                FeedImageCellController(viewModel: FeedImageViewModel(model: feedImage, imageLoader: imageLoader, imageTransformer: UIImage.init))
-            }
+    init(feedController: FeedViewController, imageLoader: FeedImageDataLoader) {
+        self.feedController = feedController
+        self.imageLoader = imageLoader
+    }
+    
+    func display(feed: [FeedImage]) {
+        feedController?.tableModel = feed.map { feedImage in
+            FeedImageCellController(viewModel: FeedImageViewModel(model: feedImage, imageLoader: imageLoader, imageTransformer: UIImage.init))
         }
     }
 }
