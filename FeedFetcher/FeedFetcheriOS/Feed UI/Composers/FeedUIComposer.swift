@@ -2,6 +2,7 @@
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import Foundation
+import UIKit
 import FeedFetcher
 
 public final class FeedUIComposer {
@@ -18,8 +19,8 @@ public final class FeedUIComposer {
     
     private static func adaptFeedToCellControllers(forwardingTo feedController: FeedViewController, loader imageLoader: FeedImageDataLoader) -> ([FeedImage]) -> Void {
         return {[weak feedController] feed in
-            feedController?.tableModel = feed.map {
-                FeedImageCellController(model: $0, imageLoader: imageLoader)
+            feedController?.tableModel = feed.map { feedImage in
+                FeedImageCellController(viewModel: FeedImageViewModel(model: feedImage, imageLoader: imageLoader, imageTransformer: UIImage.init))
             }
         }
     }
