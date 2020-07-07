@@ -8,7 +8,7 @@ import FeedFetcher
 public final class FeedUIComposer {
     private init() {}
     
-    public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {        
+    public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
         let feedPresentationAdapter = FeedLoaderPresentationAdapter(feedLoader: feedLoader)
         let refreshController = FeedRefreshViewController(loadFeed: feedPresentationAdapter.loadFeed)
         let feedController = FeedViewController(refreshController: refreshController)
@@ -45,7 +45,11 @@ private final class FeedViewAdapter: FeedView  {
     
     func display(_ viewModel: FeedViewModel) {
         feedController?.tableModel = viewModel.feed.map { feedImage in
-            FeedImageCellController(viewModel: FeedImageViewModel(model: feedImage, imageLoader: imageLoader, imageTransformer: UIImage.init))
+            let presenter = FeedImagePresenter<UIImage, FeedImageCellController>(model: feedImage, imageLoader: imageLoader, imageTransformer: UIImage.init)
+            let view = FeedImageCellController(presenter: presenter)
+            presenter.feedImageView = view
+            
+            return view
         }
     }
 }
