@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--My Feed-->
+        <!--Feed View Controller-->
         <scene sceneID="A6G-4t-PsZ">
             <objects>
                 <tableViewController id="hAd-nI-kue" customClass="FeedViewController" customModule="FeedFetcheriOS" customModuleProvider="target" sceneMemberID="viewController">
@@ -112,24 +112,15 @@ Location</string>
                             <outlet property="delegate" destination="hAd-nI-kue" id="Fe2-mL-Uad"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="My Feed" id="zVB-Vk-RWf"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="0WB-l2-Z3s">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
-                            <action selector="refresh" destination="Uyf-31-IR6" eventType="valueChanged" id="4g8-jb-ttj"/>
+                            <action selector="refresh" destination="hAd-nI-kue" eventType="valueChanged" id="NIA-Lq-82b"/>
                         </connections>
                     </refreshControl>
-                    <connections>
-                        <outlet property="refreshController" destination="Uyf-31-IR6" id="EjE-pp-gPy"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F7N-GN-61t" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <customObject id="Uyf-31-IR6" customClass="FeedRefreshViewController" customModule="FeedFetcheriOS" customModuleProvider="target">
-                    <connections>
-                        <outlet property="view" destination="0WB-l2-Z3s" id="wJi-qi-12Q"/>
-                    </connections>
-                </customObject>
             </objects>
             <point key="canvasLocation" x="1418.840579710145" y="-92.410714285714278"/>
         </scene>
