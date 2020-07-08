@@ -110,6 +110,7 @@ Location</string>
                         <connections>
                             <outlet property="dataSource" destination="hAd-nI-kue" id="5HH-ju-yOW"/>
                             <outlet property="delegate" destination="hAd-nI-kue" id="Fe2-mL-Uad"/>
+                            <outlet property="prefetchDataSource" destination="hAd-nI-kue" id="fHd-JZ-3Vn"/>
                         </connections>
                     </tableView>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="0WB-l2-Z3s">
