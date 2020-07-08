@@ -247,6 +247,17 @@ class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.cancelledImagesURLs, [image0.url, image1.url], "Expected second cancelled image URL request once second image is not near visible")
     }
     
+    func test_feedImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeLoad(with: [makeImage()], at: 0)
+
+        let view = sut.simulateFeedImageViewNotVisible(at: 0)
+        loader.completeImageLoading(withImageData: UIImage.make(withColor: .green).pngData()!, at: 0)
+
+        XCTAssertNil(view.renderedImage, "Expected no rendered image when an image load finishes after the view is not visible anymore")
+    }
+    
     // MARK:- Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
@@ -307,6 +318,7 @@ class FeedViewControllerTests: XCTestCase {
             feedRequests[index](.failure(anyNSError()))
         }
         
+        
         // MARK: FeedImageDataLoader
         private struct DataTaskSpy: FeedImageDataTask {
             let cancelCallback: () -> Void
@@ -358,12 +370,15 @@ private extension FeedViewController {
         ds?.tableView(tableView, prefetchRowsAt: [indexPath])
     }
     
-    func simulateFeedImageViewNotVisible(at index: Int) {
+    @discardableResult
+    func simulateFeedImageViewNotVisible(at index: Int) -> FeedImageCell {
         let view = simulateFeedImageViewVisible(at: index)!
         
         let delegate = tableView.delegate
         let indexPath = IndexPath(row: index, section: feedImagesSection)
         delegate?.tableView?(tableView, didEndDisplaying: view, forRowAt: indexPath)
+        
+        return view
     }
     
     func simulateFeedImageViewNotNearVisible(at row: Int) {
@@ -396,7 +411,7 @@ private extension FeedViewController {
 
 // MARK:- FeedImageCell+DSL
 
-private extension FeedImageCell {
+extension FeedImageCell {
     var isShowingLocation: Bool {
         return !locationContainer.isHidden
     }
