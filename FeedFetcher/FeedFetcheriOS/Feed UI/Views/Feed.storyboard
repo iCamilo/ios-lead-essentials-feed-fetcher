@@ -116,14 +116,25 @@ Location</string>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="0WB-l2-Z3s">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refresh" destination="Uyf-31-IR6" eventType="valueChanged" id="4g8-jb-ttj"/>
+                        </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="refreshController" destination="Uyf-31-IR6" id="EjE-pp-gPy"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F7N-GN-61t" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <customObject id="Uyf-31-IR6" customClass="FeedRefreshViewController" customModule="FeedFetcheriOS" customModuleProvider="target">
+                    <connections>
+                        <outlet property="view" destination="0WB-l2-Z3s" id="wJi-qi-12Q"/>
+                    </connections>
+                </customObject>
             </objects>
             <point key="canvasLocation" x="1418.840579710145" y="-92.410714285714278"/>
         </scene>
     </scenes>
     <resources>
-        <image name="pin" width="10" height="14"/>
+        <image name="pin" width="10" height="14.333333015441895"/>
     </resources>
 </document>
