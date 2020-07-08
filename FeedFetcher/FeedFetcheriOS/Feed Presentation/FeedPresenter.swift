@@ -34,3 +34,7 @@ final class FeedPresenter {
         loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
 }
+
+extension FeedPresenter {
+    static var title: String { return "My Feed" }
+}
