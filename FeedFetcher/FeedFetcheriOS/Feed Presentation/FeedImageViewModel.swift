@@ -10,5 +10,5 @@ struct FeedImageViewModel<Image> {
     var isLoading: Bool
     var shouldRetry: Bool
     
-    var displayLocation: Bool { location != .none }
+    var hasLocation: Bool { location != .none }
 }

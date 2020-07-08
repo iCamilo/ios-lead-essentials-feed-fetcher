@@ -3,35 +3,39 @@
 
 import UIKit
 
+protocol FeedImageCellControllerDelegate {
+    func didRequestImage()
+    func didCancelImageRequest()
+}
+
 final class FeedImageCellController: FeedImageView {
+    private let delegate: FeedImageCellControllerDelegate
     private lazy var cell = FeedImageCell()
-    private let presenter: FeedImagePresenter<UIImage, FeedImageCellController>
-        
-    init(presenter: FeedImagePresenter<UIImage, FeedImageCellController>) {
-        self.presenter = presenter
+    
+    init(delegate: FeedImageCellControllerDelegate) {
+        self.delegate = delegate
     }
     
     func view() -> UITableViewCell {
-        presenter.loadImageData()
-        
+        delegate.didRequestImage()
         return cell
     }
     
     func preload() {
-        presenter.loadImageData()
+        delegate.didRequestImage()
     }
     
     func cancelLoad() {
-        presenter.cancelLoadImageData()
+        delegate.didCancelImageRequest()
     }
     
     func display(_ viewModel: FeedImageViewModel<UIImage>) {
-        cell.locationContainer.isHidden = !viewModel.displayLocation
+        cell.locationContainer.isHidden = !viewModel.hasLocation
         cell.locationLabel.text = viewModel.location
         cell.descriptionLabel.text = viewModel.description
         cell.feedImageView.image = viewModel.image
         cell.feedImageContainer.isShimmering = viewModel.isLoading
         cell.feedImageRetryButton.isHidden = !viewModel.shouldRetry
-        cell.onRetry = presenter.loadImageData
+        cell.onRetry = delegate.didRequestImage
     }
 }
