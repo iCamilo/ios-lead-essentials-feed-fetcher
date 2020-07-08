@@ -35,7 +35,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="98s-30-gU6" userLabel="ContentStackView">
                                             <rect key="frame" x="20" y="17" width="374" height="550"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="3hY-CX-nUO" userLabel="locationStackView">
+                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="3hY-CX-nUO" userLabel="locationContainer">
                                                     <rect key="frame" x="0.0" y="0.0" width="374" height="45.333333333333336"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jef-oA-0S6" userLabel="pinIconContainer">
@@ -72,10 +72,24 @@ Location</string>
                                                             <rect key="frame" x="0.0" y="0.0" width="374" height="374"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WZH-aY-d7Z" userLabel="retryButton">
+                                                            <rect key="frame" x="0.0" y="0.0" width="374" height="374"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="65"/>
+                                                            <state key="normal" title="↩︎">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="retryButtonTapped" destination="F7Z-Z7-MUL" eventType="touchUpInside" id="MIZ-x4-Lpr"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.8901960784313725" green="0.8901960784313725" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="WZH-aY-d7Z" secondAttribute="bottom" id="C45-Rh-rw7"/>
                                                         <constraint firstAttribute="width" secondItem="kgo-ic-A1i" secondAttribute="height" multiplier="1:1" id="PJr-je-bPz"/>
+                                                        <constraint firstItem="WZH-aY-d7Z" firstAttribute="top" secondItem="kgo-ic-A1i" secondAttribute="top" id="aU5-G2-4pL"/>
+                                                        <constraint firstAttribute="trailing" secondItem="WZH-aY-d7Z" secondAttribute="trailing" id="fed-XA-sre"/>
+                                                        <constraint firstItem="WZH-aY-d7Z" firstAttribute="leading" secondItem="kgo-ic-A1i" secondAttribute="leading" id="hZM-gB-Wib"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -105,6 +119,14 @@ Location</string>
                                         <constraint firstItem="98s-30-gU6" firstAttribute="trailing" secondItem="36P-r1-BPV" secondAttribute="trailingMargin" id="tKc-IP-KYW"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="3Fb-9a-Lb5" id="V19-XK-WoX"/>
+                                    <outlet property="feedImageContainer" destination="kgo-ic-A1i" id="X53-a7-uXg"/>
+                                    <outlet property="feedImageRetryButton" destination="WZH-aY-d7Z" id="VAs-dV-0FR"/>
+                                    <outlet property="feedImageView" destination="F32-IB-AFR" id="GeU-1u-F2F"/>
+                                    <outlet property="locationContainer" destination="3hY-CX-nUO" id="rh3-ul-wac"/>
+                                    <outlet property="locationLabel" destination="Pg2-nv-hBr" id="WRf-MJ-Hvc"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
