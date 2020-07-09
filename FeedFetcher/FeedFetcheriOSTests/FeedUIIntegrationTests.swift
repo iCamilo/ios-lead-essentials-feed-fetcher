@@ -287,64 +287,6 @@ class FeedUIIntegrationTests: XCTestCase {
     
 }
 
-// MARK:- FeedViewController+DSL
-
- 
-extension FeedViewController {
-    func simulateUserInitiatedFeedReload() {
-        refreshControl?.simulatePullToRefresh()
-    }
-    
-    @discardableResult
-    func simulateFeedImageViewVisible(at index: Int) -> FeedImageCell? {
-        return feedImageView(at: index) as? FeedImageCell
-    }
-    
-    func simulateFeedImageViewNearVisible(at row: Int) {
-        let ds = tableView.prefetchDataSource
-        let indexPath = IndexPath(row: row, section: feedImagesSection)
-        ds?.tableView(tableView, prefetchRowsAt: [indexPath])
-    }
-    
-    @discardableResult
-    func simulateFeedImageViewNotVisible(at index: Int) -> FeedImageCell {
-        let view = simulateFeedImageViewVisible(at: index)!
-        
-        let delegate = tableView.delegate
-        let indexPath = IndexPath(row: index, section: feedImagesSection)
-        delegate?.tableView?(tableView, didEndDisplaying: view, forRowAt: indexPath)
-        
-        return view
-    }
-    
-    func simulateFeedImageViewNotNearVisible(at row: Int) {
-        simulateFeedImageViewNearVisible(at: row)
-        
-        let ds = tableView.prefetchDataSource
-        let indexPath = IndexPath(row: row, section: feedImagesSection)
-        ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [indexPath])
-    }
-    
-    func isShowingLoadingIndicator() -> Bool {
-        return refreshControl?.isRefreshing == true
-    }
-    
-    func numberOfRenderedFeedImagesView() -> Int {
-        return tableView.numberOfRows(inSection: feedImagesSection)
-    }
-    
-    private var feedImagesSection: Int {
-        return 0
-    }
-    
-    func feedImageView(at row: Int) -> UITableViewCell? {
-        let ds = tableView.dataSource
-        let indexPath = IndexPath(row: row, section: feedImagesSection)
-        
-        return ds?.tableView(tableView, cellForRowAt: indexPath)
-    }
-}
-
 // MARK:- FeedImageCell+DSL
 
 extension FeedImageCell {
@@ -380,7 +322,7 @@ extension FeedImageCell {
 
 // MARK:- UIRefreshControl+SimulatePullToRefresh
 
-private extension UIRefreshControl {
+extension UIRefreshControl {
     func simulatePullToRefresh() {
         allTargets.forEach { target in
             actions(forTarget: target, forControlEvent: .valueChanged)?.forEach {
