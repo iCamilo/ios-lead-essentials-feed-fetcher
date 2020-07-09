@@ -51,12 +51,17 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
     }
     
     func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
-        guard let _ = imageTransformer(data) else {
+        guard let image = imageTransformer(data) else {
             return didFinishLoadingImageData(with: InvalidImageDataError(), for: model)
         }
+        
+        view.display(FeedImageViewModel(
+            image: image,
+            location: model.location,
+            description: model.description,
+            isLoading: false,
+            shouldRetry: false))
     }
-    
-    
 }
 
 class FeedImagePresenterTests: XCTestCase {
@@ -121,7 +126,30 @@ class FeedImagePresenterTests: XCTestCase {
         XCTAssertTrue(viewModel.shouldRetry, "View model should retry should be true if loaded image data transform fails")
     }
     
+    func test_didFinishLoadingAndTransformationSucceed_displaysImageView() {
+        let (sut, view) = makeSUT(transformer: succeedTransformer)
+        let anyImage = uniqueImage()
+        let anyData = Data()
+        
+        sut.didFinishLoadingImageData(with: anyData, for: anyImage)
+        
+        guard let viewModel = view.messages.first else {
+            return XCTFail("View Model expected not to be nil")
+        }
+        
+        XCTAssertNotNil(viewModel.image)
+        XCTAssertEqual(anyImage.location, viewModel.location)
+        XCTAssertEqual(anyImage.description, viewModel.description)
+        XCTAssertFalse(viewModel.isLoading, "View model isLoading should be false if image data load did finish")
+        XCTAssertFalse(viewModel.shouldRetry, "View model should retry should be falase if loaded image data transform succeeds")
+    }
+    
     // MARK:- Helpers
+    
+    private let failsTransformer: (Data) -> AnyImage? = { _ in nil }
+    private let succeedTransformer: (Data) -> AnyImage? = { _ in AnyImage() }
+    
+    private struct AnyImage: Equatable {}
     
     private func makeSUT(transformer: @escaping (Data) -> AnyImage? = {_ in nil}, file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter<FeedImageViewSpy, AnyImage>, View: FeedImageViewSpy) {
         let view = FeedImageViewSpy()
@@ -132,9 +160,7 @@ class FeedImagePresenterTests: XCTestCase {
         
         return (sut, view)
     }
-    
-    private struct AnyImage: Equatable {}
-    
+            
     private class FeedImageViewSpy: FeedImageView {
         private(set) var messages = [FeedImageViewModel<AnyImage>]()
         
@@ -142,8 +168,5 @@ class FeedImagePresenterTests: XCTestCase {
             messages.append(model)
         }
     }
-    
-    private let failsTransformer: (Data) -> AnyImage? = { _ in nil }
-    private let succeedTransformer: (Data) -> AnyImage? = { _ in AnyImage() }
-    
+            
 }
