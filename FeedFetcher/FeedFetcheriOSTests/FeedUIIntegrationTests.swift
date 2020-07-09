@@ -304,61 +304,7 @@ class FeedUIIntegrationTests: XCTestCase {
         
         XCTAssertEqual(cell.descriptionText, image.description, "Expected description text to be \(String(describing:image.description)) at index \(index)", file: file, line: line)
     }
-        
-    class LoaderSpy: FeedLoader, FeedImageDataLoader {
-        
-        // MARK: FeedLoader
-        
-        private var feedRequests = [ (FeedLoader.Result) -> Void ]()
-        
-        var loadFeedCallCount: Int {
-            return feedRequests.count
-        }
-        
-        func load(completion: @escaping (FeedLoader.Result) -> Void) {
-            feedRequests.append(completion)
-        }
-        
-        func completeLoad(with feed:[FeedImage] = [], at index: Int) {
-            feedRequests[index](.success(feed))
-        }
-        
-        func completeLoadWithError(at index: Int) {
-            feedRequests[index](.failure(anyNSError()))
-        }
-        
-        
-        // MARK: FeedImageDataLoader
-        private struct DataTaskSpy: FeedImageDataTask {
-            let cancelCallback: () -> Void
-            
-            func cancel() {
-                cancelCallback()
-            }
-        }
-        
-        private(set) var loadImagesRequests = [(url: URL, completion: (FeedImageDataLoader.Result) -> Void)]()
-        var loadedImagesURLs: [URL] {
-            return loadImagesRequests.map { $0.url }
-        }
-        private(set) var cancelledImagesURLs = [URL]()
-        
-        func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void ) -> FeedImageDataTask {
-            loadImagesRequests.append((url: url, completion: completion))
-            return DataTaskSpy { [weak self] in
-                self?.cancelledImagesURLs.append(url)
-            }
-        }
-        
-        func completeImageLoading(withImageData data: Data = Data(), at index: Int) {
-            loadImagesRequests[index].completion(.success(data))
-        }
-        
-        func completeImageLoadingWithError(at index: Int) {
-            let error = NSError(domain: "An Error", code: 0)
-            loadImagesRequests[index].completion(.failure(error))
-        }
-    }
+    
 }
 
 // MARK:- FeedViewController+DSL
