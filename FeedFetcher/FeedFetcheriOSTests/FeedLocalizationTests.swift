@@ -4,27 +4,26 @@ import XCTest
 final class FeedLocalizationTests: XCTestCase {
     
     func test_localizedStrings_haveKeysAndValuesForAllSupportedLocalizations() {
-        let table = "Feed"
-        let presentationBundle = Bundle(for: FeedPresenter.self)
-        let localizationBundles = allLocalizationBundles(in: presentationBundle)
-        let localizedStringKeys = allLocalizedStringKeys(in: localizationBundles, table: table)
-        
-        localizationBundles.forEach { (bundle, localization) in
-            localizedStringKeys.forEach { key in
-                let localizedString = bundle.localizedString(forKey: key, value: nil, table: table)
-                
-                if localizedString == key {
-                    let language = Locale.current.localizedString(forLanguageCode: localization) ?? ""
-                    
-                    XCTFail("Missing \(language) (\(localization)) localized string for key: '\(key)' in table: '\(table)'")
-                }
+         forEachLocalizedString(assert: { localizedComponents in
+            if localizedComponents.value == localizedComponents.key {
+                XCTFail("Missing \(localizedComponents.language) (\(localizedComponents.languageCode)) localized string for key: '\(localizedComponents.key)' in table: '\(localizedComponents.table)'")
             }
-        }
+         })
+        
     }
     
+    func test_localizedStrings_noBlankOrEmptyValuesForAllSupportedLocalizations() {
+        forEachLocalizedString(assert: { localizedComponents in
+            if localizedComponents.value.isBlankOrEmpty {
+                XCTFail("Empty \(localizedComponents.language) (\(localizedComponents.languageCode)) localized string for key: '\(localizedComponents.key)' in table: '\(localizedComponents.table)'")
+            }
+        })
+    }
+        
     // MARK: - Helpers
     
     private typealias LocalizedBundle = (bundle: Bundle, localization: String)
+    private typealias LocalizedComponents = (table: String, language: String, languageCode: String, key: String, value: String)
     
     private func allLocalizationBundles(in bundle: Bundle, file: StaticString = #file, line: UInt = #line) -> [LocalizedBundle] {
         return bundle.localizations.compactMap { localization in
@@ -53,5 +52,28 @@ final class FeedLocalizationTests: XCTestCase {
             
             return acc.union(Set(keys))
         }
+    }
+    
+    private func forEachLocalizedString(assert action: (LocalizedComponents) -> Void) {
+        let table = "Feed"
+        let presentationBundle = Bundle(for: FeedPresenter.self)
+        let localizationBundles = allLocalizationBundles(in: presentationBundle)
+        let localizedStringKeys = allLocalizedStringKeys(in: localizationBundles, table: table)
+        
+        localizationBundles.forEach { (bundle, localization) in
+        localizedStringKeys.forEach { key in
+            let value = bundle.localizedString(forKey: key, value: nil, table: table)
+            let language = Locale.current.localizedString(forLanguageCode: localization) ?? ""
+            
+            action((table: table, language: language, languageCode: localization, key: key, value: value))
+                                                         
+            }
+        }
+    }
+}
+
+private extension String {
+    var isBlankOrEmpty: Bool {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
