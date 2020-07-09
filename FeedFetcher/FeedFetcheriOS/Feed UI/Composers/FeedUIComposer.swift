@@ -5,7 +5,7 @@ public final class FeedUIComposer {
     private init() {}
     
     public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
-        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: MainQueueDispatchFeedLoaderDecorator(decoratee: feedLoader))
+        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader))
         let feedController = FeedViewController.make(delegate: presentationAdapter,
                                                      title: FeedPresenter.title)
                                    
@@ -17,13 +17,15 @@ public final class FeedUIComposer {
     }
 }
 
- class MainQueueDispatchFeedLoaderDecorator: FeedLoader {
-    private let decoratee: FeedLoader
+ class MainQueueDispatchDecorator<T> {
+    private let decoratee: T
     
-    init(decoratee: FeedLoader) {
+    init(decoratee: T) {
         self.decoratee = decoratee
     }
-    
+}
+
+extension MainQueueDispatchDecorator: FeedLoader where T == FeedLoader {
     func load(completion: @escaping (FeedLoader.Result) -> Void) {
         decoratee.load { result in
             guard Thread.isMainThread else {
