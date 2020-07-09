@@ -506,8 +506,8 @@
 		5BE639AD24A85D8A007ABC9F /* FeedFetcheriOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				5B37C04824B69A2B00318CBC /* Helpers */,
 				5BE639B024A85D8A007ABC9F /* Info.plist */,
+				5B37C04824B69A2B00318CBC /* Helpers */,
 				5BE639BA24A96A60007ABC9F /* FeedUIIntegrationTests.swift */,
 			);
 			path = FeedFetcheriOSTests;
