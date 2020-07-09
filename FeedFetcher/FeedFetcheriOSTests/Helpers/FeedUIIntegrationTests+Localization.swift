@@ -5,7 +5,7 @@ import Foundation
 import XCTest
 import  FeedFetcheriOS
 
-extension FeedViewControllerTests {
+extension FeedUIIntegrationTests {
     func localized(key: String, file: StaticString = #file, line: UInt = #line) -> String {
         let bundle = Bundle(for: FeedViewController.self)
         let value = bundle.localizedString(forKey: key, value: nil, table: "Feed")
