@@ -36,5 +36,11 @@ final class FeedPresenter {
 }
 
 extension FeedPresenter {
-    static var title: String { return "My Feed" }
+    static var title: String {
+        let bundle = Bundle(for: FeedViewController.self)
+        return NSLocalizedString("FEED_VIEW_TITLE",
+                                 tableName: "Feed",
+                                 bundle: bundle,
+                                 comment: "Title for the FeedView")
+    }
 }
