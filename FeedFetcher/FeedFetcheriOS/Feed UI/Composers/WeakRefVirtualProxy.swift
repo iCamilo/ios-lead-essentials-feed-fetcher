@@ -1,8 +1,8 @@
 //  Created by Ivan Fuertes on 9/07/20.
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
-import Foundation
 import UIKit
+import FeedFetcher
 
 final class WeakRefVirtualProxy<T: AnyObject> {
     private weak var object: T?

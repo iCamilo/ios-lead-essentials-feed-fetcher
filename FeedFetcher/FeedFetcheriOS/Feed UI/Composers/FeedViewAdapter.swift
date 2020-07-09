@@ -2,6 +2,7 @@
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import UIKit
+import FeedFetcher
 
 final class FeedViewAdapter: FeedView {
     private weak var controller: FeedViewController?
