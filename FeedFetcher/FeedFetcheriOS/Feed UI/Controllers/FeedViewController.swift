@@ -11,7 +11,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     var delegate: FeedViewControllerDelegate?
     
     var tableModel = [FeedImageCellController]() {
-        didSet { tableView.reloadData() }
+        didSet { self.tableView.reloadData() }
     }
             
     public override func viewDidLoad() {
@@ -24,11 +24,11 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
         delegate?.didRequestFeedRefresh()
     }
     
-    func display(_ viewModel: FeedLoadingViewModel) {
+    func display(_ viewModel: FeedLoadingViewModel) {                
         if viewModel.isLoading {
-            refreshControl?.beginRefreshing()
+            self.refreshControl?.beginRefreshing()
         } else {
-            refreshControl?.endRefreshing()
+            self.refreshControl?.endRefreshing()
         }
     }
     
