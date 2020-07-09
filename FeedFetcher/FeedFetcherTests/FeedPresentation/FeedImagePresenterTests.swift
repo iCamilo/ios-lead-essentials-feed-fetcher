@@ -3,6 +3,7 @@
 
 import Foundation
 import XCTest
+import FeedFetcher
 
 struct FeedImageViewModel<Image> {
     var image: Image?
@@ -14,7 +15,27 @@ struct FeedImageViewModel<Image> {
     var hasLocation: Bool { location != .none }
 }
 
-final class FeedImagePresenter {
+protocol FeedImageView {
+    associatedtype Image
+    
+    func display(_ model: FeedImageViewModel<Image>)
+}
+
+final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
+    private let view: View
+    
+    init(view: View) {
+        self.view = view
+    }
+    
+    func didStartLoadingImageData(for model: FeedImage) {
+        view.display(FeedImageViewModel(
+            image: nil,
+            location: model.location,
+            description: model.description,
+            isLoading: true,
+            shouldRetry: false))
+    }
     
 }
 
@@ -27,11 +48,28 @@ class FeedImagePresenterTests: XCTestCase {
         XCTAssertTrue(view.messages.isEmpty, "Expected no view messages at init")
     }
     
+    func test_startLoadingImageData_displaysImageViewIsLoading() {
+        let (sut, view) = makeSUT()
+        let anyImage = uniqueImage()
+        
+        sut.didStartLoadingImageData(for: anyImage)
+        
+        guard let viewModel = view.messages.first else {
+            return XCTFail("View Model expected not to be nil")
+        }
+        
+        XCTAssertNil(viewModel.image)
+        XCTAssertEqual(anyImage.location, viewModel.location)
+        XCTAssertEqual(anyImage.description, viewModel.description)
+        XCTAssertTrue(viewModel.isLoading)
+        XCTAssertFalse(viewModel.shouldRetry)
+    }
+    
     // MARK:- Helpers
     
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter, View: FeedImageViewSpy) {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter<FeedImageViewSpy, AnyImage>, View: FeedImageViewSpy) {
         let view = FeedImageViewSpy()
-        let sut = FeedImagePresenter()
+        let sut = FeedImagePresenter<FeedImageViewSpy, AnyImage>(view: view)
         
         trackForMemoryLeak(instance: view, file: file, line: line)
         trackForMemoryLeak(instance: sut, file: file, line: line)
@@ -41,8 +79,12 @@ class FeedImagePresenterTests: XCTestCase {
     
     private struct AnyImage: Equatable {}
     
-    private class FeedImageViewSpy {
+    private class FeedImageViewSpy: FeedImageView {
         private(set) var messages = [FeedImageViewModel<AnyImage>]()
+        
+        func display(_ model: FeedImageViewModel<AnyImage>) {
+            messages.append(model)
+        }
     }
     
 }
