@@ -23,9 +23,11 @@ protocol FeedImageView {
 
 final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
     private let view: View
+    private let imageTransformer: (Data) -> Image?
     
-    init(view: View) {
+    init(view: View, imageTransformer: @escaping (Data) -> Image?) {
         self.view = view
+        self.imageTransformer = imageTransformer
     }
     
     func didStartLoadingImageData(for model: FeedImage) {
@@ -37,6 +39,8 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
             shouldRetry: false))
     }
     
+    private struct InvalidImageDataError: Error {}
+    
     func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
         view.display(FeedImageViewModel(
             image: nil,
@@ -44,6 +48,12 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
             description: model.description,
             isLoading: false,
             shouldRetry: true))
+    }
+    
+    func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+        guard let _ = imageTransformer(data) else {
+            return didFinishLoadingImageData(with: InvalidImageDataError(), for: model)
+        }
     }
     
     
@@ -93,11 +103,29 @@ class FeedImagePresenterTests: XCTestCase {
         XCTAssertTrue(viewModel.shouldRetry, "View model should retry should be true if loaded image data is not valid")
     }
     
+    func test_didFinishLoadingAndTransformationFails_displaysImageViewShouldRetry() {
+        let (sut, view) = makeSUT(transformer: failsTransformer)
+        let anyImage = uniqueImage()
+        let anyData = Data()
+        
+        sut.didFinishLoadingImageData(with: anyData, for: anyImage)
+        
+        guard let viewModel = view.messages.first else {
+            return XCTFail("View Model expected not to be nil")
+        }
+        
+        XCTAssertNil(viewModel.image)
+        XCTAssertEqual(anyImage.location, viewModel.location)
+        XCTAssertEqual(anyImage.description, viewModel.description)
+        XCTAssertFalse(viewModel.isLoading, "View model isLoading should be false if image data load did finish")
+        XCTAssertTrue(viewModel.shouldRetry, "View model should retry should be true if loaded image data transform fails")
+    }
+    
     // MARK:- Helpers
     
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter<FeedImageViewSpy, AnyImage>, View: FeedImageViewSpy) {
+    private func makeSUT(transformer: @escaping (Data) -> AnyImage? = {_ in nil}, file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter<FeedImageViewSpy, AnyImage>, View: FeedImageViewSpy) {
         let view = FeedImageViewSpy()
-        let sut = FeedImagePresenter<FeedImageViewSpy, AnyImage>(view: view)
+        let sut = FeedImagePresenter<FeedImageViewSpy, AnyImage>(view: view, imageTransformer: transformer)
         
         trackForMemoryLeak(instance: view, file: file, line: line)
         trackForMemoryLeak(instance: sut, file: file, line: line)
@@ -114,5 +142,8 @@ class FeedImagePresenterTests: XCTestCase {
             messages.append(model)
         }
     }
+    
+    private let failsTransformer: (Data) -> AnyImage? = { _ in nil }
+    private let succeedTransformer: (Data) -> AnyImage? = { _ in AnyImage() }
     
 }
