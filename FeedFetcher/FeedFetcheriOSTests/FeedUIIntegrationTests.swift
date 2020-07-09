@@ -281,7 +281,7 @@ class FeedUIIntegrationTests: XCTestCase {
     
     private func makeImage(id: UUID = UUID(), url: URL = URL(string: "http://any-url.com")!, description: String? = nil, location: String? = nil) -> FeedImage {
         return FeedImage(id: id, url: url, description: description, location: location)
-    }    
+    }
     
 }
 
