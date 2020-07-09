@@ -287,39 +287,6 @@ class FeedUIIntegrationTests: XCTestCase {
     
 }
 
-// MARK:- FeedImageCell+DSL
-
-extension FeedImageCell {
-    var isShowingLocation: Bool {
-        return !locationContainer.isHidden
-    }
-    
-    var locationText: String? {
-        return locationLabel.text
-    }
-    
-    var descriptionText: String? {
-        return descriptionLabel.text
-    }
-    
-    var isShowingImageLoadingIndicator: Bool {
-        return feedImageContainer.isShimmering
-    }
-    
-    var renderedImage: Data? {
-        return feedImageView.image?.pngData()
-    }
-    
-    var isShowingRetryButton: Bool {
-        return !feedImageRetryButton.isHidden
-    }
-    
-    func simulateRetryAction() {
-        feedImageRetryButton.simulateTap()
-    }
-    
-}
-
 // MARK:- UIRefreshControl+SimulatePullToRefresh
 
 extension UIRefreshControl {
@@ -333,7 +300,7 @@ extension UIRefreshControl {
 }
 
 // MARK:- UIButton+SimulateTap
-private extension UIButton {
+extension UIButton {
     func simulateTap() {
         allTargets.forEach { target in
             actions(forTarget: target, forControlEvent: .touchUpInside)?.forEach {
