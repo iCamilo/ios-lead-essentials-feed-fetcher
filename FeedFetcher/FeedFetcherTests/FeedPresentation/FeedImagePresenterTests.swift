@@ -4,8 +4,14 @@
 import Foundation
 import XCTest
 
-struct FeedImageViewModel: Equatable {
+struct FeedImageViewModel<Image> {
+    var image: Image?
+    var location: String?
+    var description: String?
+    var isLoading: Bool
+    var shouldRetry: Bool
     
+    var hasLocation: Bool { location != .none }
 }
 
 final class FeedImagePresenter {
@@ -14,17 +20,29 @@ final class FeedImagePresenter {
 
 class FeedImagePresenterTests: XCTestCase {
     
-    func test_feedImagePresenter_initDoesNotSendMessaagesToView() {
-        let view = FeedImageViewSpy()
-        let _ = FeedImagePresenter()
+    func test_init_doesNotSendMessagesToView() {
+        let (_, view) = makeSUT()
         
         
-        XCTAssertEqual(view.messages, [])
+        XCTAssertTrue(view.messages.isEmpty, "Expected no view messages at init")
     }
     
-    class FeedImageViewSpy {
-        private(set) var messages = [FeedImageViewModel]()
+    // MARK:- Helpers
+    
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter, View: FeedImageViewSpy) {
+        let view = FeedImageViewSpy()
+        let sut = FeedImagePresenter()
         
+        trackForMemoryLeak(instance: view, file: file, line: line)
+        trackForMemoryLeak(instance: sut, file: file, line: line)
+        
+        return (sut, view)
+    }
+    
+    private struct AnyImage: Equatable {}
+    
+    private class FeedImageViewSpy {
+        private(set) var messages = [FeedImageViewModel<AnyImage>]()
     }
     
 }
