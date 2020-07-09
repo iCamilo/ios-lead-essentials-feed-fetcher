@@ -37,6 +37,16 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
             shouldRetry: false))
     }
     
+    func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
+        view.display(FeedImageViewModel(
+            image: nil,
+            location: model.location,
+            description: model.description,
+            isLoading: false,
+            shouldRetry: true))
+    }
+    
+    
 }
 
 class FeedImagePresenterTests: XCTestCase {
@@ -61,8 +71,26 @@ class FeedImagePresenterTests: XCTestCase {
         XCTAssertNil(viewModel.image)
         XCTAssertEqual(anyImage.location, viewModel.location)
         XCTAssertEqual(anyImage.description, viewModel.description)
-        XCTAssertTrue(viewModel.isLoading)
-        XCTAssertFalse(viewModel.shouldRetry)
+        XCTAssertTrue(viewModel.isLoading, "View model isLoading should be true if image data has starting loading")
+        XCTAssertFalse(viewModel.shouldRetry, "View model should retry should be false if image data has starting loading")
+    }
+    
+    func test_didFinishLoadingWithError_displaysImageViewShouldRetry() {
+        let (sut, view) = makeSUT()
+        let anyImage = uniqueImage()
+        let anyError = anyNSError()
+        
+        sut.didFinishLoadingImageData(with: anyError, for: anyImage)
+        
+        guard let viewModel = view.messages.first else {
+            return XCTFail("View Model expected not to be nil")
+        }
+        
+        XCTAssertNil(viewModel.image)
+        XCTAssertEqual(anyImage.location, viewModel.location)
+        XCTAssertEqual(anyImage.description, viewModel.description)
+        XCTAssertFalse(viewModel.isLoading, "View model isLoading should be false if image data load did finish")
+        XCTAssertTrue(viewModel.shouldRetry, "View model should retry should be true if loaded image data is not valid")
     }
     
     // MARK:- Helpers
