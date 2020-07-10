@@ -5,69 +5,6 @@ import Foundation
 import XCTest
 import FeedFetcher
 
-struct FeedLoadingViewModel: Equatable {
-    let isLoading: Bool
-}
-
-protocol FeedLoadingView {
-    func display(_ viewModel: FeedLoadingViewModel)
-}
-
-struct FeedViewModel: Equatable {
-    let feed: [FeedImage]
-}
-
-protocol FeedView {
-    func display(_ viewModel: FeedViewModel)
-}
-
-
-final class FeedPresenter {
-    private let feedView: FeedView
-    private let loadingView: FeedLoadingView
-    
-    init(feedView: FeedView, loadingView: FeedLoadingView) {
-        self.feedView = feedView
-        self.loadingView = loadingView
-    }
-    
-    func didStartLoadingFeed() {
-        loadingView.display(FeedLoadingViewModel(isLoading: true))
-    }
-    
-    func didFinishLoadingFeed(with feed: [FeedImage]) {
-        feedView.display(FeedViewModel(feed: feed))
-        loadingView.display(FeedLoadingViewModel(isLoading: false))
-    }
-    
-    func didFinishLoadingFeed(with error: Error) {
-        loadingView.display(FeedLoadingViewModel(isLoading: false))
-    }
-    
-}
-
-extension FeedPresenter {
-    static var title: String {
-        let bundle = Bundle(for: FeedPresenter.self)
-        return NSLocalizedString("FEED_VIEW_TITLE",
-                                 tableName: "Feed",
-                                 bundle: bundle,
-                                 comment: "Title for the FeedView")
-    }
-}
-
-extension FeedPresenterTests {
-    func localized(key: String, file: StaticString = #file, line: UInt = #line) -> String {
-        let bundle = Bundle(for: FeedPresenter.self)
-        let value = bundle.localizedString(forKey: key, value: nil, table: "Feed")
-        
-        if value == key {
-            XCTFail("Missing localization value for key \(key)", file: file, line: line)
-        }
-        
-        return value
-    }
-}
 
 class FeedPresenterTests: XCTestCase {
     
@@ -77,7 +14,6 @@ class FeedPresenterTests: XCTestCase {
         XCTAssertEqual(localizedTitle, FeedPresenter.title)
     }
 
-    
     func test_init_doesNotSendMessagesToView() {
         let (_, view) = makeSUT()
         
@@ -141,4 +77,17 @@ class FeedPresenterTests: XCTestCase {
         
     }
     
+}
+
+extension FeedPresenterTests {
+    func localized(key: String, file: StaticString = #file, line: UInt = #line) -> String {
+        let bundle = Bundle(for: FeedPresenter.self)
+        let value = bundle.localizedString(forKey: key, value: nil, table: "Feed")
+        
+        if value == key {
+            XCTFail("Missing localization value for key \(key)", file: file, line: line)
+        }
+        
+        return value
+    }
 }
