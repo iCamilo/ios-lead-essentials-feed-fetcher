@@ -4,7 +4,7 @@
 import Foundation
 
 public struct FeedLoadingViewModel: Equatable {
-    let isLoading: Bool
+    public let isLoading: Bool
     
     public init(isLoading: Bool) {
         self.isLoading = isLoading

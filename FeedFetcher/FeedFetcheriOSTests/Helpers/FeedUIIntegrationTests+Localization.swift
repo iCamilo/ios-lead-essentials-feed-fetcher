@@ -3,11 +3,12 @@
 
 import Foundation
 import XCTest
-import  FeedFetcheriOS
+import FeedFetcheriOS
+import FeedFetcher
 
 extension FeedUIIntegrationTests {
     func localized(key: String, file: StaticString = #file, line: UInt = #line) -> String {
-        let bundle = Bundle(for: FeedViewController.self)
+        let bundle = Bundle(for: FeedPresenter.self)
         let value = bundle.localizedString(forKey: key, value: nil, table: "Feed")
         
         if value == key {

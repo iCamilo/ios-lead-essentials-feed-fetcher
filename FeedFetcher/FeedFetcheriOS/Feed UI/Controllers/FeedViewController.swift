@@ -2,6 +2,7 @@
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import UIKit
+import FeedFetcher
 
 protocol FeedViewControllerDelegate {
     func didRequestFeedRefresh()
@@ -24,7 +25,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
         delegate?.didRequestFeedRefresh()
     }
     
-    func display(_ viewModel: FeedLoadingViewModel) {                
+    public func display(_ viewModel: FeedLoadingViewModel) {                
         if viewModel.isLoading {
             self.refreshControl?.beginRefreshing()
         } else {
