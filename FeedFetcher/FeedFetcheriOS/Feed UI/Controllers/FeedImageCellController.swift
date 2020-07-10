@@ -2,6 +2,7 @@
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import UIKit
+import FeedFetcher
 
 protocol FeedImageCellControllerDelegate {
     func didRequestImage()

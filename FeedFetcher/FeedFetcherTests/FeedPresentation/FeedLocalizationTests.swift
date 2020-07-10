@@ -1,5 +1,5 @@
 import XCTest
-@testable import FeedFetcheriOS
+import FeedFetcher
 
 final class FeedLocalizationTests: XCTestCase {
     

@@ -1,36 +1,33 @@
-//  Created by Ivan Fuertes on 6/07/20.
+//  Created by Ivan Fuertes on 9/07/20.
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import Foundation
-import FeedFetcher
 
-protocol FeedImageView {
+public protocol FeedImageView {
     associatedtype Image
     
     func display(_ model: FeedImageViewModel<Image>)
 }
 
-final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
+public final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
     private let view: View
     private let imageTransformer: (Data) -> Image?
     
-    internal init(view: View, imageTransformer: @escaping (Data) -> Image?) {
+    public init(view: View, imageTransformer: @escaping (Data) -> Image?) {
         self.view = view
         self.imageTransformer = imageTransformer
     }
     
-    func didStartLoadingImageData(for model: FeedImage) {
+    public func didStartLoadingImageData(for model: FeedImage) {
         view.display(FeedImageViewModel(
             image: nil,
             location: model.location,
-            description: model.description,            
+            description: model.description,
             isLoading: true,
             shouldRetry: false))
     }
     
-    private struct InvalidImageDataError: Error {}
-    
-    func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+    public func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
         guard let image = imageTransformer(data) else {
             return didFinishLoadingImageData(with: InvalidImageDataError(), for: model)
         }
@@ -43,11 +40,13 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
             shouldRetry: false))
     }
     
-    func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
+    private struct InvalidImageDataError: Error {}
+    
+    public func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
         view.display(FeedImageViewModel(
             image: nil,
             location: model.location,
-            description: model.description,                        
+            description: model.description,
             isLoading: false,
             shouldRetry: true))
     }
