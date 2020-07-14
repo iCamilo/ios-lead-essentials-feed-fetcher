@@ -339,6 +339,16 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertFalse(sut.isShowingErrorIndicator, "Error indicator should be hidden as a reload is initiated and not wait until load completes")
     }
     
+    func test_errorIndicator_hasMessage() {
+        let (sut, loader) = makeSUT()
+        let errorMessageKey = "LOADING_FEED_ERROR_MESSAGE"
+        
+        sut.loadViewIfNeeded()
+        loader.completeLoadWithError()
+        
+        XCTAssertEqual(sut.errorIndicatorMessage, localized(key: errorMessageKey))
+    }
+    
     // MARK:- Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {

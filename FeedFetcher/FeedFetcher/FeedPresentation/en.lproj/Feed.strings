@@ -7,3 +7,4 @@
 */
 
 "FEED_VIEW_TITLE" = "My Feed";
+"LOADING_FEED_ERROR_MESSAGE" = "Oops! Something is not right";

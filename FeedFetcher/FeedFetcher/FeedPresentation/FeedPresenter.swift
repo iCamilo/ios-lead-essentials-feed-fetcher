@@ -36,8 +36,11 @@ public final class FeedPresenter {
     }
     
     public func didFinishLoadingFeed(with error: Error) {
+        let errorMessage = Self.localize("LOADING_FEED_ERROR_MESSAGE",
+        comment: "Error message when feed load fails")
+        
         loadingView.display(FeedLoadingViewModel(isLoading: false))
-        errorView.display(FeedErrorViewModel(message: "Error message"))
+        errorView.display(FeedErrorViewModel(message: errorMessage))
     }
     
 }
@@ -49,5 +52,12 @@ extension FeedPresenter {
                                  tableName: "Feed",
                                  bundle: bundle,
                                  comment: "Title for the FeedView")
+    }
+    
+    private static func localize(_ key: String, comment: String) -> String {
+        return NSLocalizedString(key,
+                                 tableName: "Feed",
+                                 bundle: Bundle(for: FeedPresenter.self),
+                                 comment: comment)
     }
 }
