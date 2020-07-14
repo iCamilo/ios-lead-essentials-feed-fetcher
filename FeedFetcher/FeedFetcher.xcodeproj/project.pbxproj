@@ -91,6 +91,7 @@
 		5BE639C824AEAF83007ABC9F /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639C724AEAF83007ABC9F /* FeedImageCell.swift */; };
 		5BE639CA24AEAFFA007ABC9F /* UIView+Shimmering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639C924AEAFFA007ABC9F /* UIView+Shimmering.swift */; };
 		5BE639CC24AEBD0C007ABC9F /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639CB24AEBD0C007ABC9F /* FeedImageDataLoader.swift */; };
+		5BF960DF24BE4B7600186A9A /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF960DE24BE4B7600186A9A /* ErrorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,6 +231,7 @@
 		5BE639C724AEAF83007ABC9F /* FeedImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCell.swift; sourceTree = "<group>"; };
 		5BE639C924AEAFFA007ABC9F /* UIView+Shimmering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shimmering.swift"; sourceTree = "<group>"; };
 		5BE639CB24AEBD0C007ABC9F /* FeedImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoader.swift; sourceTree = "<group>"; };
+		5BF960DE24BE4B7600186A9A /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -587,6 +589,7 @@
 			isa = PBXGroup;
 			children = (
 				5BE639C724AEAF83007ABC9F /* FeedImageCell.swift */,
+				5BF960DE24BE4B7600186A9A /* ErrorView.swift */,
 				5BE639C924AEAFFA007ABC9F /* UIView+Shimmering.swift */,
 				5B37C03E24B656E800318CBC /* Feed.storyboard */,
 				5B37C04024B6576700318CBC /* Feed.xcassets */,
@@ -934,6 +937,7 @@
 				5BE639C824AEAF83007ABC9F /* FeedImageCell.swift in Sources */,
 				5B37C06524B77DE400318CBC /* FeedImageDataLoaderPresentationAdapter.swift in Sources */,
 				5BCF0D8824AECA080039C403 /* FeedImageCellController.swift in Sources */,
+				5BF960DF24BE4B7600186A9A /* ErrorView.swift in Sources */,
 				5B37C06924B77E9100318CBC /* FeedViewAdapter.swift in Sources */,
 				5BCF0D8A24AED2900039C403 /* FeedUIComposer.swift in Sources */,
 			);
