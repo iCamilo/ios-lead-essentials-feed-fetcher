@@ -47,11 +47,8 @@ public final class FeedPresenter {
 
 extension FeedPresenter {
     public static var title: String {
-        let bundle = Bundle(for: FeedPresenter.self)
-        return NSLocalizedString("FEED_VIEW_TITLE",
-                                 tableName: "Feed",
-                                 bundle: bundle,
-                                 comment: "Title for the FeedView")
+        return Self.localize("FEED_VIEW_TITLE",
+                              comment: "Title for the FeedView")
     }
     
     private static func localize(_ key: String, comment: String) -> String {
