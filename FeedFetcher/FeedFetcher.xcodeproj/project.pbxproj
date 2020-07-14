@@ -235,6 +235,7 @@
 		5BF960DE24BE4B7600186A9A /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		5BF960E024BE51AA00186A9A /* FeedErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedErrorViewModel.swift; sourceTree = "<group>"; };
 		5BF960E324BE5A7A00186A9A /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
+		5BF960E424BE5AEB00186A9A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -784,6 +785,7 @@
 				Base,
 				"es-419",
 				el,
+				"pt-BR",
 			);
 			mainGroup = 5B1198E4247EF16A00010566;
 			productRefGroup = 5B1198EF247EF16A00010566 /* Products */;
@@ -1005,6 +1007,7 @@
 				5B37C07824B7ED7D00318CBC /* en */,
 				5B37C07A24B7ED8300318CBC /* es-419 */,
 				5BF960E324BE5A7A00186A9A /* el */,
+				5BF960E424BE5AEB00186A9A /* pt-BR */,
 			);
 			name = Feed.strings;
 			sourceTree = "<group>";
