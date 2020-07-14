@@ -188,6 +188,9 @@ Location</string>
                             <action selector="refresh" destination="hAd-nI-kue" eventType="valueChanged" id="NIA-Lq-82b"/>
                         </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="errorView" destination="sWs-UY-wLK" id="0np-Cg-gPi"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F7N-GN-61t" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
