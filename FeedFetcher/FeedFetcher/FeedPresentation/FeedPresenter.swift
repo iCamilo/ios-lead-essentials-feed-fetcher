@@ -39,8 +39,8 @@ public final class FeedPresenter {
         let errorMessage = Self.localize("LOADING_FEED_ERROR_MESSAGE",
         comment: "Error message when feed load fails")
         
-        loadingView.display(FeedLoadingViewModel(isLoading: false))
         errorView.display(FeedErrorViewModel(message: errorMessage))
+        loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
     
 }
