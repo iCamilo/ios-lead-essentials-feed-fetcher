@@ -24,7 +24,7 @@ class LoaderSpy: FeedLoader {
         feedRequests[index](.success(feed))
     }
     
-    func completeLoadWithError(at index: Int) {
+    func completeLoadWithError(at index: Int = 0) {
         feedRequests[index](.failure(anyNSError()))
     }
 }
