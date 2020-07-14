@@ -15,14 +15,6 @@ public protocol FeedErrorView {
     func display(_ viewModel: FeedErrorViewModel)
 }
 
-public struct FeedErrorViewModel {
-    public let message: String
-    
-    public init(message: String) {
-        self.message = message
-    }
-}
-
 public final class FeedPresenter {
     private let feedView: FeedView
     private let loadingView: FeedLoadingView

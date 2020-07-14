@@ -92,6 +92,7 @@
 		5BE639CA24AEAFFA007ABC9F /* UIView+Shimmering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639C924AEAFFA007ABC9F /* UIView+Shimmering.swift */; };
 		5BE639CC24AEBD0C007ABC9F /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639CB24AEBD0C007ABC9F /* FeedImageDataLoader.swift */; };
 		5BF960DF24BE4B7600186A9A /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF960DE24BE4B7600186A9A /* ErrorView.swift */; };
+		5BF960E124BE51AA00186A9A /* FeedErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF960E024BE51AA00186A9A /* FeedErrorViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -232,6 +233,7 @@
 		5BE639C924AEAFFA007ABC9F /* UIView+Shimmering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shimmering.swift"; sourceTree = "<group>"; };
 		5BE639CB24AEBD0C007ABC9F /* FeedImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoader.swift; sourceTree = "<group>"; };
 		5BF960DE24BE4B7600186A9A /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		5BF960E024BE51AA00186A9A /* FeedErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedErrorViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -376,6 +378,7 @@
 				5B37C07124B7D92800318CBC /* FeedImageViewModel.swift */,
 				5B37C07B24B7EE4600318CBC /* FeedPresenter.swift */,
 				5B37C07E24B7EF3200318CBC /* FeedViewModel.swift */,
+				5BF960E024BE51AA00186A9A /* FeedErrorViewModel.swift */,
 				5B37C08024B7EF5400318CBC /* FeedLoadingViewModel.swift */,
 				5B37C07924B7ED7D00318CBC /* Feed.strings */,
 			);
@@ -869,6 +872,7 @@
 				5B48A5B42483228000A0E03A /* HttpClient.swift in Sources */,
 				5B38570424A65C42005B9F7E /* ManagedCache.swift in Sources */,
 				5B37C07024B7D7EC00318CBC /* FeedImagePresenter.swift in Sources */,
+				5BF960E124BE51AA00186A9A /* FeedErrorViewModel.swift in Sources */,
 				5B37C07C24B7EE4600318CBC /* FeedPresenter.swift in Sources */,
 				5B119909247EF25C00010566 /* FeedImage.swift in Sources */,
 			);
