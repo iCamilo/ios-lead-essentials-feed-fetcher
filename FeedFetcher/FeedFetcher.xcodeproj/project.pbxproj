@@ -94,6 +94,7 @@
 		5BF960E124BE51AA00186A9A /* FeedErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF960E024BE51AA00186A9A /* FeedErrorViewModel.swift */; };
 		5BF960E624BF674500186A9A /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639CB24AEBD0C007ABC9F /* FeedImageDataLoader.swift */; };
 		5BF960E824BF68EC00186A9A /* RemoteFeedImageLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF960E724BF68EC00186A9A /* RemoteFeedImageLoaderTests.swift */; };
+		5BF960EA24BFAFC000186A9A /* HttpClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF960E924BFAFC000186A9A /* HttpClientSpy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -238,6 +239,7 @@
 		5BF960E324BE5A7A00186A9A /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
 		5BF960E424BE5AEB00186A9A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
 		5BF960E724BF68EC00186A9A /* RemoteFeedImageLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedImageLoaderTests.swift; sourceTree = "<group>"; };
+		5BF960E924BFAFC000186A9A /* HttpClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpClientSpy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -296,6 +298,7 @@
 			children = (
 				5B1018662486D7CF003EB0A9 /* XCTestCase+MemoryLeakTracking.swift */,
 				5B790D35249D1B7200D9C756 /* SharedTestsHelpers.swift */,
+				5BF960E924BFAFC000186A9A /* HttpClientSpy.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -903,6 +906,7 @@
 				5B38571424A65CF9005B9F7E /* XCTestCase+FailableInsertFeedStoreSpecs.swift in Sources */,
 				5B38571B24A67533005B9F7E /* InMemoryFeedStoreTests.swift in Sources */,
 				5B37C08224B7F0E200318CBC /* FeedLocalizationTests.swift in Sources */,
+				5BF960EA24BFAFC000186A9A /* HttpClientSpy.swift in Sources */,
 				5B38571024A65CF9005B9F7E /* XCTestCase+FeedStoreSpecs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
