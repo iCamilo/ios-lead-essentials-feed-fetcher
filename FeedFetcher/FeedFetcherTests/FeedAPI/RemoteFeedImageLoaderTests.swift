@@ -12,6 +12,9 @@ final class RemoteFeedImageLoader {
         self.httpClient = httpClient
     }
     
+    func loadImageData(from url: URL) {
+        httpClient.get(from: url) { _ in }
+    }
 }
 
 class RemoteFeedImageLoaderTests: XCTestCase {
@@ -20,6 +23,15 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         let (_, httpClient) = makeSUT()
                         
         XCTAssertEqual(httpClient.imageURLs, [])
+    }
+    
+    func test_loadImageData_requestDataFromURL() {
+        let url = anyURL()
+        let (sut, httpClient) = makeSUT()
+        
+        sut.loadImageData(from: url)
+        
+        XCTAssertEqual(httpClient.imageURLs, [url])
     }
     
 
@@ -33,14 +45,13 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         trackForMemoryLeak(instance: sut, file: file, line: line)
         
         return(sut, client)
-        
     }
     
     private class HttpClientSpy: HttpClient {
         private(set) var imageURLs = [URL]()
         
         func get(from url: URL, completion: @escaping (HttpClient.Result) -> Void) {
-            
+            imageURLs.append(url)
         }
     }
     
