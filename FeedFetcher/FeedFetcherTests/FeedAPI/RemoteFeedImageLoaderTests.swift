@@ -19,7 +19,7 @@ final class RemoteFeedImageLoader {
 
 class RemoteFeedImageLoaderTests: XCTestCase {
     
-    func test_init_doesNotRequestDataFromURL() {
+    func test_init_doesNotRequestData() {
         let (_, httpClient) = makeSUT()
                         
         XCTAssertEqual(httpClient.imageURLs, [])
