@@ -20,11 +20,11 @@ class LoaderSpy: FeedLoader {
         feedRequests.append(completion)
     }
     
-    func completeLoad(with feed:[FeedImage] = [], at index: Int) {
+    func completeLoad(with feed:[FeedImage] = [], at index: Int = 0) {
         feedRequests[index](.success(feed))
     }
     
-    func completeLoadWithError(at index: Int) {
+    func completeLoadWithError(at index: Int = 0) {
         feedRequests[index](.failure(anyNSError()))
     }
 }

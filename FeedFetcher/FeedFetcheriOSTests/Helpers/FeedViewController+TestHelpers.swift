@@ -57,4 +57,13 @@ extension FeedViewController {
         
         return ds?.tableView(tableView, cellForRowAt: indexPath)
     }
+    
+    var isShowingErrorIndicator: Bool {
+        return errorView.message != nil
+    }
+    
+    var errorIndicatorMessage: String? {
+        return errorView.message
+    }
+
 }
