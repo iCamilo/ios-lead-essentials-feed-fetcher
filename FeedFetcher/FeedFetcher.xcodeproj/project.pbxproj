@@ -93,6 +93,7 @@
 		5BF960DF24BE4B7600186A9A /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF960DE24BE4B7600186A9A /* ErrorView.swift */; };
 		5BF960E124BE51AA00186A9A /* FeedErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF960E024BE51AA00186A9A /* FeedErrorViewModel.swift */; };
 		5BF960E624BF674500186A9A /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE639CB24AEBD0C007ABC9F /* FeedImageDataLoader.swift */; };
+		5BF960E824BF68EC00186A9A /* RemoteFeedImageLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF960E724BF68EC00186A9A /* RemoteFeedImageLoaderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -236,6 +237,7 @@
 		5BF960E024BE51AA00186A9A /* FeedErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedErrorViewModel.swift; sourceTree = "<group>"; };
 		5BF960E324BE5A7A00186A9A /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
 		5BF960E424BE5AEB00186A9A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
+		5BF960E724BF68EC00186A9A /* RemoteFeedImageLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedImageLoaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,6 +511,7 @@
 			isa = PBXGroup;
 			children = (
 				5B119914247F491B00010566 /* RemoteFeedLoaderTests.swift */,
+				5BF960E724BF68EC00186A9A /* RemoteFeedImageLoaderTests.swift */,
 				5B1018632485D03E003EB0A9 /* URLSessionHttpClientTests.swift */,
 			);
 			path = FeedAPI;
@@ -889,6 +892,7 @@
 				5B790D36249D1B7200D9C756 /* SharedTestsHelpers.swift in Sources */,
 				5B9C4F35249AA575000BCA18 /* FeedStoreSpy.swift in Sources */,
 				5B790D34249D19DE00D9C756 /* FeedCacheTestHelpers.swift in Sources */,
+				5BF960E824BF68EC00186A9A /* RemoteFeedImageLoaderTests.swift in Sources */,
 				5B37C07424B7E2D900318CBC /* FeedPresenterTests.swift in Sources */,
 				5B38571124A65CF9005B9F7E /* FeedStoreSpecs.swift in Sources */,
 				5B38571324A65CF9005B9F7E /* XCTestCase+FailableDeleteFeedStoreSpecs.swift in Sources */,
