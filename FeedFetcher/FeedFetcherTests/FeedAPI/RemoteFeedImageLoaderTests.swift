@@ -9,6 +9,7 @@ final class RemoteFeedImageLoader {
     typealias Result = Swift.Result<Data, Swift.Error>
     enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     private let httpClient: HttpClient
@@ -19,7 +20,14 @@ final class RemoteFeedImageLoader {
     
     func loadImageData(from url: URL, completion: @escaping (Result) -> Void) {
         httpClient.get(from: url) { result in
-            completion(.failure(Error.connectivity))
+            do {
+                let (response, _) = try result.get()
+                guard response.statusCode == 200 else {
+                    return completion(.failure(Error.invalidData))
+                }
+            } catch {
+                completion(.failure(Error.connectivity))
+            }
         }
     }
 }
@@ -68,6 +76,24 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         }
                 
         httpClient.complete(withError: anyNSError())
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_loadImageData_respondsInvalidDataErrorOnNon200HTTPResponse() {
+        let (sut, httpClient) = makeSUT()
+        
+        let exp = expectation(description: "Waiting for image load to complete")
+        sut.loadImageData(from: anyURL()) { result in
+            switch result {
+            case let .failure(error as RemoteFeedImageLoader.Error):
+                XCTAssertEqual(error, .invalidData)
+            default:
+                XCTFail("Expected invalid ata error on non 200 http response, but got \(result)")
+            }
+            exp.fulfill()
+        }
+        
+        httpClient.complete(withStatusCode: 199)
         wait(for: [exp], timeout: 1.0)
     }
     
