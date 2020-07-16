@@ -21,27 +21,29 @@ final class RemoteFeedImageLoader {
     private let OK_200 = 200
     
     func loadImageData(from url: URL, completion: @escaping (Result) -> Void) {
-        httpClient.get(from: url) { [weak self] result in
+        httpClient.get(from: url) { [weak self] httpResult in
             guard let self = self else {
                 return
             }
             
-            do {
-                let result = try result.get()
-                guard self.isValid(result) else {
-                    return completion(.failure(Error.invalidData))
-                }
-                
-                completion(.success(result.data))
-            } catch {
-                completion(.failure(Error.connectivity))
-            }
+            let result = self.handle(httpResult: httpResult)
+            completion(result)
         }
+    }
+
+    private func handle(httpResult: HttpClient.Result) -> RemoteFeedImageLoader.Result {
+        return httpResult
+            .mapError { _ in Error.connectivity}
+            .flatMap ({ (response, data) in
+                let isValidResponse = self.isValid((response, data))
+                return isValidResponse ? .success(data) : .failure(Error.invalidData)
+            })
     }
     
     private func isValid(_ result: (response: HTTPURLResponse, data: Data)) -> Bool {
         return result.response.statusCode == OK_200 && !result.data.isEmpty
     }
+
 }
 
 class RemoteFeedImageLoaderTests: XCTestCase {
