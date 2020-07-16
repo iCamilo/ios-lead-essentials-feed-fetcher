@@ -80,7 +80,7 @@ class URLSessionHttpClientTests: XCTestCase {
         let exp = expectation(description: "Waiting for get to complete")
         let task = sut.get(from: anyURL()) { result in
             switch result {
-            case let .failure(error) where (error as NSError).domain == "NSURLErrorDomain" && (error as NSError).code == -999:
+            case let .failure(error) where self.isTaskCancelledError(error):
                 break
             default:
                 XCTFail("Expected cancelled task to not complete, but got \(result)")
@@ -157,6 +157,11 @@ class URLSessionHttpClientTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
         return receivedResult
+    }
+    
+    private func isTaskCancelledError(_ error: Error) -> Bool {
+        return (error as NSError).domain == "NSURLErrorDomain"
+            && (error as NSError).code == -999
     }
     
     private class URLProtocolStub: URLProtocol {
