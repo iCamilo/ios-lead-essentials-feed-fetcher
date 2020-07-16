@@ -7,6 +7,7 @@ import FeedFetcher
 class HttpClientSpy: HttpClient {
     typealias Completion = (HttpClient.Result) -> Void
     private var messages = [(requestedURL: URL, completion: Completion)]()
+    private(set) var cancelledRequests = [URL]()
     
     var requestedURLs: [URL] {
         messages.map { $0.requestedURL }
@@ -15,7 +16,9 @@ class HttpClientSpy: HttpClient {
     func get(from url: URL, completion: @escaping Completion) -> HttpClientTask {
         messages.append((url, completion))
         
-        return HttClientSpyTask()
+        return HttClientSpyTask {
+            self.cancelledRequests.append(url)
+        }
     }
     
     func complete(withError error: Error, at index: Int = 0) {
@@ -31,6 +34,10 @@ class HttpClientSpy: HttpClient {
     }
 }
 
-private class HttClientSpyTask: HttpClientTask {
-    func cancel() { }
+private struct HttClientSpyTask: HttpClientTask {
+    var callback: () -> Void
+    
+    func cancel() {
+        callback()
+    }
 }
