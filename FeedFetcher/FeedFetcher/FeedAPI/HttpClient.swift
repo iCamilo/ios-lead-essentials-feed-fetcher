@@ -3,10 +3,15 @@
 
 import Foundation
 
+public protocol HttpClientTask {
+    func cancel()
+}
+
 public protocol HttpClient {
     typealias Result = Swift.Result<(response: HTTPURLResponse, data: Data), Error>    
     
     /// The completion handler can be invoked in any thread.
     /// Clients are responsible to dispatch to appropriate thread if needed.
-    func get(from url: URL, completion: @escaping (Result) -> Void)
+    @discardableResult
+    func get(from url: URL, completion: @escaping (Result) -> Void) -> HttpClientTask
 }

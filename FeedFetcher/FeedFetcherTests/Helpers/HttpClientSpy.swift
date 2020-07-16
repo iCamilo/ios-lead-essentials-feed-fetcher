@@ -12,8 +12,10 @@ class HttpClientSpy: HttpClient {
         messages.map { $0.requestedURL }
     }
     
-    func get(from url: URL, completion: @escaping Completion) {
+    func get(from url: URL, completion: @escaping Completion) -> HttpClientTask {
         messages.append((url, completion))
+        
+        return HttClientSpyTask()
     }
     
     func complete(withError error: Error, at index: Int = 0) {
@@ -27,4 +29,8 @@ class HttpClientSpy: HttpClient {
         
         messages[index].completion(.success((response, data)))
     }
+}
+
+private class HttClientSpyTask: HttpClientTask {
+    func cancel() { }
 }
