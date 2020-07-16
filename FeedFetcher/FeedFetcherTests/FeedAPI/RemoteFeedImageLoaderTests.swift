@@ -21,7 +21,11 @@ final class RemoteFeedImageLoader {
     private static let OK_200 = 200
     
     func loadImageData(from url: URL, completion: @escaping (Result) -> Void) {
-        httpClient.get(from: url) { result in
+        httpClient.get(from: url) { [weak self] result in
+            if self == nil {
+                return
+            }
+            
             do {
                 let result = try result.get()
                 guard Self.isValid(result) else {
@@ -102,6 +106,18 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         expect(sut, toCompleteWith: .success(nonEmptyData), when: {
             httpClient.complete(withStatusCode: 200, data: nonEmptyData)
         })
+    }
+    
+    func test_loadImageData_doesNotCompleteAfterLoaderDeallocation() {
+        let httpClient = HttpClientSpy()
+        var sut: RemoteFeedImageLoader? = RemoteFeedImageLoader(httpClient: httpClient)
+                
+        sut?.loadImageData(from: anyURL()) { result in
+            XCTFail("Load image data should not complete after loader has been deallocated")
+        }
+        
+        sut = nil
+        httpClient.complete(withStatusCode: 200)
     }
             
     // MARK:- Helpers
