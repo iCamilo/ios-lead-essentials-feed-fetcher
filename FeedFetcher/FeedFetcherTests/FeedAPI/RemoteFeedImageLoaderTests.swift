@@ -18,11 +18,13 @@ final class RemoteFeedImageLoader {
         self.httpClient = httpClient
     }
     
+    private static let OK_200 = 200
+    
     func loadImageData(from url: URL, completion: @escaping (Result) -> Void) {
         httpClient.get(from: url) { result in
             do {
                 let (response, _) = try result.get()
-                guard response.statusCode == 200 else {
+                guard response.statusCode == Self.OK_200 else {
                     return completion(.failure(Error.invalidData))
                 }
             } catch {
