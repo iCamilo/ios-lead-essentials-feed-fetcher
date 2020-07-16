@@ -24,7 +24,7 @@ final class RemoteFeedImageLoader {
         httpClient.get(from: url) { result in
             do {
                 let (response, data) = try result.get()
-                guard response.statusCode == Self.OK_200,                
+                guard response.statusCode == Self.OK_200,
                     !data.isEmpty
                 else {
                     return completion(.failure(Error.invalidData))
@@ -37,7 +37,7 @@ final class RemoteFeedImageLoader {
 }
 
 class RemoteFeedImageLoaderTests: XCTestCase {
-    
+        
     func test_init_doesNotRequestData() {
         let (_, httpClient) = makeSUT()
                         
@@ -66,7 +66,7 @@ class RemoteFeedImageLoaderTests: XCTestCase {
     func test_loadImageData_respondsWithConnectivityErrorOnClientError() {        
         let (sut, httpClient) = makeSUT()
         
-        expect(sut, toCompleteWith: .failure(RemoteFeedImageLoader.Error.connectivity), when: {
+        expect(sut, toCompleteWith: failure(.connectivity), when: {
             httpClient.complete(withError: anyNSError())
         })
     }
@@ -76,7 +76,7 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         let samples = [199, 201, 400, 500]
         
         samples.enumerated().forEach { index, statusCode in
-            expect(sut, toCompleteWith: .failure(RemoteFeedImageLoader.Error.invalidData), when: {
+            expect(sut, toCompleteWith: failure(.invalidData), when: {
                 httpClient.complete(withStatusCode: statusCode, at: index)
             })
         }
@@ -86,7 +86,7 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         let (sut, httpClient) = makeSUT()
         let emptyData = Data()
                 
-        expect(sut, toCompleteWith: .failure(RemoteFeedImageLoader.Error.invalidData), when: {
+        expect(sut, toCompleteWith: failure(.invalidData), when: {
             httpClient.complete(withStatusCode: 200, data: emptyData)
         })
     }
@@ -119,5 +119,9 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         action()
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private func failure(_ error: RemoteFeedImageLoader.Error) -> RemoteFeedImageLoader.Result {
+        return .failure(error)
     }
 }
