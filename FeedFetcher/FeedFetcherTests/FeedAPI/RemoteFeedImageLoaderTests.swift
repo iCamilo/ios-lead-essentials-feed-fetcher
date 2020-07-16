@@ -27,6 +27,9 @@ final class RemoteFeedImageLoader {
                 guard Self.isValid(response) else {
                     return completion(.failure(Error.invalidData))
                 }
+                
+                let data = response.1
+                completion(.success(data))
             } catch {
                 completion(.failure(Error.connectivity))
             }
@@ -92,6 +95,15 @@ class RemoteFeedImageLoaderTests: XCTestCase {
             httpClient.complete(withStatusCode: 200, data: emptyData)
         })
     }
+    
+    func test_loadImageData_respondsWithDataOn200HTTPResponseWithNonEmptyData() {
+        let (sut, httpClient) = makeSUT()
+        let nonEmptyData = "nonEmptyData".data(using: .utf8)!
+                
+        expect(sut, toCompleteWith: .success(nonEmptyData), when: {
+            httpClient.complete(withStatusCode: 200, data: nonEmptyData)
+        })
+    }
             
     // MARK:- Helpers
     
@@ -112,6 +124,8 @@ class RemoteFeedImageLoaderTests: XCTestCase {
             switch (expected, result) {
             case let (.failure(expectedError as RemoteFeedImageLoader.Error), .failure(receivedError as RemoteFeedImageLoader.Error)):
                 XCTAssertEqual(expectedError, receivedError, "Expected \(expectedError) but got \(receivedError)", file: file, line: line)
+            case let (.success(expectedData), .success(receivedData)):
+                XCTAssertEqual(expectedData, receivedData, "Expected to receive data \(expectedData) but got \(receivedData)", file: file, line: line)
             default:
                 XCTFail("Expected \(expected) but got \(result)", file: file, line: line)
             }
