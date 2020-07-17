@@ -61,13 +61,13 @@ class FeedFetcherApiEndToEndTests: XCTestCase {
     func getLoadFeedImageResult(file: StaticString = #file, line: UInt = #line) -> RemoteFeedImageLoader.Result? {
         let client = httpClientWithEphemeralSession()
         let imageLoader = RemoteFeedImageLoader(httpClient: client)
-        let testURL = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5d89d74922a4747095bd9acd/1569314700747/FeedCaseStudyAPITestFeedImageData.png")!
+        let testingServerURL = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed/73A7F70C-75DA-4C2E-B5A3-EED40DC53AA6/image")!
                 
         trackForMemoryLeak(instance: imageLoader, file: #file, line: #line)
         
         let exp = expectation(description: "Waiting for load image data to complete")
         var receivedResult: RemoteFeedImageLoader.Result?
-        let _ = imageLoader.loadImageData(from: testURL) { result in
+        let _ = imageLoader.loadImageData(from: testingServerURL) { result in
             receivedResult = result
             
             exp.fulfill()
