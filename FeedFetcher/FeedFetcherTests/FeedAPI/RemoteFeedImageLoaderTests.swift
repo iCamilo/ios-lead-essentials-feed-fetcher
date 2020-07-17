@@ -129,7 +129,7 @@ class RemoteFeedImageLoaderTests: XCTestCase {
     
     func test_loadImageData_respondsWithDataOn200HTTPResponseWithNonEmptyData() {
         let (sut, httpClient) = makeSUT()
-        let nonEmptyData = "nonEmptyData".data(using: .utf8)!
+        let nonEmptyData = anyData()
                 
         expect(sut, toCompleteWith: .success(nonEmptyData), when: {
             httpClient.complete(withStatusCode: 200, data: nonEmptyData)
@@ -169,10 +169,12 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         
         task.cancel()
         httpClient.complete(withError: anyNSError())
+        httpClient.complete(withStatusCode: 404, data: anyData())
+        httpClient.complete(withStatusCode: 200, data: anyData())
     }
             
     // MARK:- Helpers
-    
+         
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: RemoteFeedImageLoader, client: HttpClientSpy) {
         let client = HttpClientSpy()
         let sut = RemoteFeedImageLoader(httpClient: client)
