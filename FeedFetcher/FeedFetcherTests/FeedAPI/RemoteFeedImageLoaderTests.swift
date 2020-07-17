@@ -7,6 +7,7 @@ import FeedFetcher
 
 final class RemoteFeedImageLoader {
     typealias Result = Swift.Result<Data, Swift.Error>
+    
     enum Error: Swift.Error {
         case connectivity
         case invalidData
@@ -17,9 +18,7 @@ final class RemoteFeedImageLoader {
     init(httpClient: HttpClient) {
         self.httpClient = httpClient
     }
-    
-    private let OK_200 = 200
-    
+        
     @discardableResult
     func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataTask {
         let task = RemoteFeedImageTask(completion: completion)
@@ -45,6 +44,8 @@ final class RemoteFeedImageLoader {
     }
     
     private func isValid(_ result: (response: HTTPURLResponse, data: Data)) -> Bool {
+        let OK_200 = 200
+        
         return result.response.statusCode == OK_200 && !result.data.isEmpty
     }
 }
