@@ -16,8 +16,8 @@ class HttpClientSpy: HttpClient {
     func get(from url: URL, completion: @escaping Completion) -> HttpClientTask {
         messages.append((url, completion))
         
-        return HttClientSpyTask {
-            self.cancelledRequests.append(url)
+        return HttClientSpyTask { [weak self] in
+            self?.cancelledRequests.append(url)
         }
     }
     

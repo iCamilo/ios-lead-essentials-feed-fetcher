@@ -22,14 +22,14 @@ final class RemoteFeedImageLoader {
     
     @discardableResult
     func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataTask {
-        let task = RemoteFeedImageTask()
+        let task = RemoteFeedImageTask(completion: completion)
         task.wrappedHttpTask = httpClient.get(from: url) { [weak self] httpResult in
             guard let self = self else {
                 return
             }
             
             let result = self.handle(httpResult: httpResult)
-            completion(result)
+            task.complete(with: result)
         }
         
         return task
@@ -47,15 +47,28 @@ final class RemoteFeedImageLoader {
     private func isValid(_ result: (response: HTTPURLResponse, data: Data)) -> Bool {
         return result.response.statusCode == OK_200 && !result.data.isEmpty
     }
-    
-    private class RemoteFeedImageTask: FeedImageDataTask {
-        var wrappedHttpTask: HttpClientTask?
-        
-        func cancel() {
-            wrappedHttpTask?.cancel()
-        }
-    }
+}
 
+private class RemoteFeedImageTask: FeedImageDataTask {
+    private var completion: ((RemoteFeedImageLoader.Result) -> Void)?
+    var wrappedHttpTask: HttpClientTask?
+            
+    init(completion: @escaping (RemoteFeedImageLoader.Result) -> Void) {
+        self.completion = completion
+    }
+                            
+    func cancel() {
+        wrappedHttpTask?.cancel()
+        invalidateCompletion()
+    }
+    
+    func complete(with result: RemoteFeedImageLoader.Result) {
+        completion?(result)
+    }
+    
+    private func invalidateCompletion() {
+        completion = nil
+    }
 }
 
 class RemoteFeedImageLoaderTests: XCTestCase {
@@ -144,6 +157,18 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         task.cancel()
         XCTAssertEqual(httpClient.cancelledRequests, [aURL], "Expected cancelled url request after task is cancelled")
     }
+    
+    func test_loadImageData_doesNotCompleteAfterCancellingTask() {
+        let (sut, httpClient) = makeSUT()
+        let aURL = anyURL()
+                    
+        let task = sut.loadImageData(from: aURL) { result in
+            XCTFail("Expected load to not complete as the task was cancelled")
+        }
+        
+        task.cancel()
+        httpClient.complete(withError: anyNSError())
+    }
             
     // MARK:- Helpers
     
@@ -151,8 +176,8 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         let client = HttpClientSpy()
         let sut = RemoteFeedImageLoader(httpClient: client)
         
-        trackForMemoryLeak(instance: client, file: file, line: line)
         trackForMemoryLeak(instance: sut, file: file, line: line)
+        trackForMemoryLeak(instance: client, file: file, line: line)
         
         return(sut, client)
     }
