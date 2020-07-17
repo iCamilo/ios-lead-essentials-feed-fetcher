@@ -17,7 +17,7 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, httpClient) = makeSUT()
         
-        sut.loadImageData(from: url) {_ in}
+        _ = sut.loadImageData(from: url) {_ in}
         
         XCTAssertEqual(httpClient.requestedURLs, [url])
     }
@@ -26,8 +26,8 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, httpClient) = makeSUT()
         
-        sut.loadImageData(from: url) {_ in}
-        sut.loadImageData(from: url) {_ in}
+        _ = sut.loadImageData(from: url) {_ in}
+        _ = sut.loadImageData(from: url) {_ in}
         
         XCTAssertEqual(httpClient.requestedURLs, [url, url])
     }
@@ -73,7 +73,7 @@ class RemoteFeedImageLoaderTests: XCTestCase {
         let httpClient = HttpClientSpy()
         var sut: RemoteFeedImageLoader? = RemoteFeedImageLoader(httpClient: httpClient)
                 
-        sut?.loadImageData(from: anyURL()) { result in
+        _ = sut?.loadImageData(from: anyURL()) { result in
             XCTFail("Load image data should not complete after loader has been deallocated")
         }
         
@@ -121,7 +121,7 @@ class RemoteFeedImageLoaderTests: XCTestCase {
     private func expect(_ sut: RemoteFeedImageLoader, toCompleteWith expected: FeedImageDataLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Waiting for image load to complete")
         
-        sut.loadImageData(from: anyURL()) { result in
+        _ = sut.loadImageData(from: anyURL()) { result in
             switch (expected, result) {
             case let (.failure(expectedError as RemoteFeedImageLoader.Error), .failure(receivedError as RemoteFeedImageLoader.Error)):
                 XCTAssertEqual(expectedError, receivedError, "Expected \(expectedError) but got \(receivedError)", file: file, line: line)
