@@ -6,8 +6,8 @@ import FeedFetcher
 
 class FeedFetcherApiEndToEndTests: XCTestCase {
     
-    func test_remoteFeedLoaderUsingTestingServer_load_returnsEightFeeds() {
-        let receivedResult = loadFromTestingServer()
+    func test_endToEndTestServerGETFeedResult_matchesFixedTestAccountData() {
+        let receivedResult = getFeedResult()
         
         switch receivedResult {
         case let .success(imageFeed):
@@ -38,7 +38,7 @@ class FeedFetcherApiEndToEndTests: XCTestCase {
     
     // MARK: - Helpers
     
-    func loadFromTestingServer(file: StaticString = #file, line: UInt = #line) -> RemoteFeedLoader.Result? {
+    func getFeedResult(file: StaticString = #file, line: UInt = #line) -> RemoteFeedLoader.Result? {
         let testingServerURL = URL(string:"https://essentialdeveloper.com/feed-case-study/test-api/feed")!
         let session = URLSession(configuration: .ephemeral)
         let client = URLSessionHttpClient(session: session)
