@@ -22,6 +22,20 @@ class FeedFetcherApiEndToEndTests: XCTestCase {
         }
     }
     
+    func test_endToEndTestServerGETFeedImage_matchesFixedTestAccountData() {
+        let result = getLoadFeedImageResult()
+        
+        switch result {
+        case let .success(data):
+            XCTAssertFalse(data.isEmpty, "Expected not empty image data result")
+        case let .failure(error):
+            XCTFail("Expected not empty image data result but got error \(error)")
+        default:
+            XCTFail("Expected not empty image data result but got no result")
+        }
+        
+    }
+    
     // MARK: - Helpers
     
     func loadFromTestingServer(file: StaticString = #file, line: UInt = #line) -> RemoteFeedLoader.Result? {
@@ -42,6 +56,28 @@ class FeedFetcherApiEndToEndTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 5.0)
+        
+        return receivedResult
+    }
+    
+    func getLoadFeedImageResult(file: StaticString = #file, line: UInt = #line) -> RemoteFeedImageLoader.Result? {
+        let session = URLSession(configuration: .ephemeral)
+        let httpClient = URLSessionHttpClient(session: session)
+        let imageLoader = RemoteFeedImageLoader(httpClient: httpClient)
+        let testURL = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5d89d74922a4747095bd9acd/1569314700747/FeedCaseStudyAPITestFeedImageData.png")!
+        
+        trackForMemoryLeak(instance: httpClient, file: #file, line: #line)
+        trackForMemoryLeak(instance: imageLoader, file: #file, line: #line)
+        
+        let exp = expectation(description: "Waiting for load image data to complete")
+        var receivedResult: RemoteFeedImageLoader.Result?
+        let _ = imageLoader.loadImageData(from: testURL) { result in
+            receivedResult = result
+            
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 5.0)
         
         return receivedResult
     }
