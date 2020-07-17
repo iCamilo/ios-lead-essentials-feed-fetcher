@@ -74,6 +74,24 @@ class URLSessionHttpClientTests: XCTestCase {
         XCTAssertEqual(response.url, result?.response.url)
     }
     
+    func test_cancelGetFromURLTask_cancelsURLRequest() {
+        let sut = makeSUT()
+        
+        let exp = expectation(description: "Waiting for get to complete")
+        let task = sut.get(from: anyURL()) { result in
+            switch result {
+            case let .failure(error) where self.isTaskCancelledError(error):
+                break
+            default:
+                XCTFail("Expected cancelled task to not complete, but got \(result)")
+            }
+            exp.fulfill()
+        }
+        
+        task.cancel()
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     
     
     // MARK: - Helpers
@@ -89,11 +107,7 @@ class URLSessionHttpClientTests: XCTestCase {
     private func nonHTTPURLResponse() -> URLResponse {
         return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
     }
-    
-    private func anyData() -> Data {
-        return Data("any-data".utf8)
-    }
-    
+            
     private func anyHTTPURLResponse() -> HTTPURLResponse {
         return HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
     }
@@ -141,66 +155,10 @@ class URLSessionHttpClientTests: XCTestCase {
         return receivedResult
     }
     
-    private class URLProtocolStub: URLProtocol {
-        private static var stub: Stub?
-        private static var requestsObserver: ((URLRequest?) -> Void)?
-        
-        private struct Stub {
-            let data: Data?
-            let response: URLResponse?
-            let error: Error?
-        }
-        
-        static func stub(data: Data?, response: URLResponse?, error: Error?) {
-            stub = Stub(data: data, response: response, error: error)
-        }
-        
-        static func startInterceptingRequests() {
-            URLProtocol.registerClass(URLProtocolStub.self)
-        }
-        
-        static func stopInterceptingRequests() {
-            URLProtocol.unregisterClass(URLProtocolStub.self)
-            stub = nil
-            requestsObserver = nil
-        }
-        
-        static func observeRequests(_ observer: @escaping (URLRequest?) -> Void) {
-            requestsObserver = observer
-        }
-        
-        override class func canInit(with request: URLRequest) -> Bool {
-            return true
-        }
-        
-        override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-            return request
-        }
-        
-        override func startLoading() {
-            if let observer =  URLProtocolStub.requestsObserver {
-                // if requests observer exist,  finish the request so it doesn't outlive for others to use 
-                client?.urlProtocolDidFinishLoading(self)
-                return observer(request)
-            }
-            
-            if let data = URLProtocolStub.stub?.data {
-                client?.urlProtocol(self, didLoad: data)
-            }
-            
-            if let response = URLProtocolStub.stub?.response {
-                client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-            }
-            
-            if let error = URLProtocolStub.stub?.error {
-                client?.urlProtocol(self, didFailWithError: error)
-            }
-            
-            client?.urlProtocolDidFinishLoading(self)
-        }
-        
-        override func stopLoading() { }
-        
+    private func isTaskCancelledError(_ error: Error) -> Bool {
+        return (error as NSError).domain == "NSURLErrorDomain"
+            && (error as NSError).code == -999
     }
-    
+            
 }
+
