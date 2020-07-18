@@ -5,18 +5,27 @@ import Foundation
 import XCTest
 
 protocol FeedImageDataStore {
-    func retrieveImageData(for url: URL)
+    typealias Result = Swift.Result<Data,Error>
+    
+    func retrieveImageData(for url: URL, completion: @escaping (Result)-> Void)
 }
 
 final class LocalFeedImageDataLoader {
+    typealias Result = Swift.Result<Data, Error>
+    enum Error: Swift.Error {
+        case loadingImageData
+    }
+    
     private let store: FeedImageDataStore
     
     init(store: FeedImageDataStore) {
         self.store = store
     }
     
-    func loadImageData(for url: URL) {
-        store.retrieveImageData(for: url)
+    func loadImageData(for url: URL, completion: @escaping (Result) -> Void) {
+        store.retrieveImageData(for: url) { result in
+            completion(.failure(.loadingImageData))
+        }
     }
 }
 
@@ -32,7 +41,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         let aURL = anyURL()
         
-        sut.loadImageData(for: aURL)
+        sut.loadImageData(for: aURL) { _ in}
         
         XCTAssertEqual(store.messages, [.retrieveImageData(aURL)])
     }
@@ -42,11 +51,26 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let aURL = anyURL()
         let otherUrl = URL(string: "http://other-url.com")!
         
-        sut.loadImageData(for: aURL)
-        sut.loadImageData(for: otherUrl)
+        sut.loadImageData(for: aURL) { _ in }
+        sut.loadImageData(for: otherUrl) { _ in }
         
         XCTAssertEqual(store.messages, [.retrieveImageData(aURL), .retrieveImageData(otherUrl)])
     }
+    
+    func test_loadImageData_completesWithLoadingImageDataErrorOnStoreFailure() {
+        let (sut, store) = makeSUT()
+        let aURL = anyURL()
+        
+        let exp = expectation(description: "Waiting for load image data to complete")
+        sut.loadImageData(for: aURL) { result in
+            XCTAssertEqual(result, .failure(.loadingImageData), "Expected to complete with loadingImageData error but got \(result) instead")
+            exp.fulfill()
+        }
+        
+        store.completeWith(error: NSError(domain: "Tests", code: 0))
+        wait(for: [exp], timeout: 1.0)
+    }
+    
 }
 
 // MARK:- Helpers
@@ -72,8 +96,14 @@ private class DataStoreSpy: FeedImageDataStore {
     }
     
     private(set) var messages = [Message]()
+    private(set) var retrieveCompletions = [(FeedImageDataStore.Result) -> Void]()
     
-    func retrieveImageData(for url: URL) {
+    func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.Result)-> Void) {
         messages.append(.retrieveImageData(url))
+        retrieveCompletions.append(completion)
+    }
+    
+    func completeWith(error: Error, at index: Int = 0) {
+        retrieveCompletions[index](.failure(error))
     }
 }
