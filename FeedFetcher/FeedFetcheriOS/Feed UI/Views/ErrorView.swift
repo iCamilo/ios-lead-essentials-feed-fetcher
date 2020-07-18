@@ -5,7 +5,7 @@ import UIKit
 
 public final class ErrorView: UIView {
     @IBOutlet private var container: UIView!
-    @IBOutlet private var label: UILabel!
+    @IBOutlet public private(set) var label: UIButton!
     
     public var message: String? {
         get { return isVisible ? label.text : nil }
@@ -44,6 +44,13 @@ public final class ErrorView: UIView {
         container.layer.cornerRadius = 5
         container.layer.borderWidth = 2
         container.layer.borderColor = UIColor.cayenne.cgColor
+    }
+}
+
+private extension UIButton {
+    var text: String? {
+        get { titleLabel?.text }
+        set { setTitle(newValue, for: .normal) }
     }
 }
 

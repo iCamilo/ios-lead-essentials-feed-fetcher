@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hAd-nI-kue">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hAd-nI-kue">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -20,50 +20,40 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eDG-Ub-EPr" userLabel="ContainerView">
                                     <rect key="frame" x="9" y="9" width="396" height="26"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HLQ-B1-tpU" userLabel="label">
+                                            <rect key="frame" x="0.0" y="0.0" width="396" height="26"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" title="errorMessage">
+                                                <color key="titleColor" red="0.58039215690000001" green="0.066666666669999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="hideMessage" destination="sWs-UY-wLK" eventType="touchUpInside" id="ttN-MJ-A8e"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     <gestureRecognizers/>
+                                    <constraints>
+                                        <constraint firstItem="HLQ-B1-tpU" firstAttribute="top" secondItem="eDG-Ub-EPr" secondAttribute="top" id="IjN-td-KN5"/>
+                                        <constraint firstAttribute="bottom" secondItem="HLQ-B1-tpU" secondAttribute="bottom" id="SMs-oM-r4C"/>
+                                        <constraint firstAttribute="trailing" secondItem="HLQ-B1-tpU" secondAttribute="trailing" id="clw-Fb-s3L"/>
+                                        <constraint firstItem="HLQ-B1-tpU" firstAttribute="leading" secondItem="eDG-Ub-EPr" secondAttribute="leading" id="gIY-qO-l9k"/>
+                                    </constraints>
                                 </view>
-                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="kkG-KU-abn" userLabel="MessageContainer">
-                                    <rect key="frame" x="28" y="13" width="358" height="18"/>
-                                    <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="error" translatesAutoresizingMaskIntoConstraints="NO" id="Unj-Ik-Tdk" userLabel="iconImage">
-                                            <rect key="frame" x="0.0" y="0.0" width="25" height="18"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <color key="tintColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="25" id="KtJ-bf-wXz"/>
-                                                <constraint firstAttribute="width" constant="25" id="xnN-Js-D0Z"/>
-                                            </constraints>
-                                        </imageView>
-                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="E3G-mD-jyR">
-                                            <rect key="frame" x="33" y="0.0" width="325" height="18"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Un error ha ocurrido, intente mas tarde" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lP8-X2-SgB" userLabel="messageLabel">
-                                                    <rect key="frame" x="0.0" y="0.0" width="325" height="18"/>
-                                                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
-                                                    <color key="textColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </stackView>
-                                    </subviews>
-                                </stackView>
                             </subviews>
                             <gestureRecognizers/>
                             <constraints>
                                 <constraint firstItem="eDG-Ub-EPr" firstAttribute="top" secondItem="sWs-UY-wLK" secondAttribute="topMargin" constant="1" id="46W-P5-3Go"/>
                                 <constraint firstItem="eDG-Ub-EPr" firstAttribute="leading" secondItem="sWs-UY-wLK" secondAttribute="leadingMargin" constant="1" id="58A-uX-YOq"/>
                                 <constraint firstAttribute="bottomMargin" secondItem="eDG-Ub-EPr" secondAttribute="bottom" constant="1" id="KK7-kQ-meO"/>
-                                <constraint firstAttribute="trailingMargin" secondItem="kkG-KU-abn" secondAttribute="trailing" constant="20" id="R9A-44-130"/>
                                 <constraint firstAttribute="trailingMargin" secondItem="eDG-Ub-EPr" secondAttribute="trailing" constant="1" id="UzM-ue-mKD"/>
-                                <constraint firstItem="kkG-KU-abn" firstAttribute="leading" secondItem="sWs-UY-wLK" secondAttribute="leadingMargin" constant="20" id="ZY7-j7-xSr"/>
-                                <constraint firstItem="kkG-KU-abn" firstAttribute="top" secondItem="sWs-UY-wLK" secondAttribute="topMargin" constant="5" id="aE5-92-7ZI"/>
-                                <constraint firstAttribute="bottomMargin" secondItem="kkG-KU-abn" secondAttribute="bottom" constant="5" id="gQY-G5-3XI"/>
                             </constraints>
                             <connections>
                                 <outlet property="container" destination="eDG-Ub-EPr" id="GSa-2h-jvi"/>
-                                <outlet property="label" destination="lP8-X2-SgB" id="LcM-8E-93c"/>
-                                <outletCollection property="gestureRecognizers" destination="jJE-vn-56A" appends="YES" id="pjl-Mx-ZW5"/>
+                                <outlet property="label" destination="HLQ-B1-tpU" id="SIg-eD-XTp"/>
                             </connections>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="vmF-ie-Hcc" userLabel="BottomSeparator">
@@ -194,17 +184,11 @@ Location</string>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F7N-GN-61t" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="jJE-vn-56A">
-                    <connections>
-                        <action selector="hideMessage" destination="sWs-UY-wLK" id="NbD-xM-Y7A"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1418.840579710145" y="-92.410714285714278"/>
         </scene>
     </scenes>
     <resources>
-        <image name="error" width="128" height="128"/>
         <image name="pin" width="10" height="14.333333015441895"/>
     </resources>
 </document>
