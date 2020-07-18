@@ -365,6 +365,16 @@ class FeedUIIntegrationTests: XCTestCase {
         
         sut.simulateTappingErrorIndicator()
         assertIsNotShowingErrorIndicator(sut, "Error indicator should be dismissed after tapping the error indicator")
+        
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeLoadWithError(at: 1)
+        assertIsShowingErrorIndicator(sut, "Error indicator should be shown as the feed re-load did fail")
+        
+        sut.simulateTappingErrorIndicator()
+        assertIsNotShowingErrorIndicator(sut, "Error indicator should be dismissed after tapping the error indicator")
+        
+        sut.simulateTappingErrorIndicator()
+        assertIsNotShowingErrorIndicator(sut, "Tapping should not have any effect as the error indicator was not shown")
     }
     
     // MARK:- Helpers
