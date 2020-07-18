@@ -4,13 +4,19 @@
 import Foundation
 import XCTest
 
-protocol FeedImageDataStore {}
+protocol FeedImageDataStore {
+    func retrieveImageData(for url: URL)
+}
 
 final class LocalFeedImageDataLoader {
     private let store: FeedImageDataStore
     
     init(store: FeedImageDataStore) {
         self.store = store
+    }
+    
+    func loadImageData(for url: URL) {
+        store.retrieveImageData(for: url)
     }
 }
 
@@ -22,6 +28,14 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.messages, [])
     }
     
+    func test_loadImageData_requestsRetrievalToStore() {
+        let (sut, store) = makeSUT()
+        let aURL = anyURL()
+        
+        sut.loadImageData(for: aURL)
+        
+        XCTAssertEqual(store.messages, [.retrieveImageData(aURL)])
+    }
 }
 
 // MARK:- Helpers
@@ -42,7 +56,13 @@ private extension LoadFeedImageDataFromCacheUseCaseTests {
 // MARK: - DataStoreSpy
 
 private class DataStoreSpy: FeedImageDataStore {
-    enum Message: Equatable {}
+    enum Message: Equatable {
+        case retrieveImageData(URL)
+    }
     
     private(set) var messages = [Message]()
+    
+    func retrieveImageData(for url: URL) {
+        messages.append(.retrieveImageData(url))
+    }
 }
