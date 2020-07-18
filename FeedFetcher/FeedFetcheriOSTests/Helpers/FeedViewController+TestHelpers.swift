@@ -61,5 +61,9 @@ extension FeedViewController {
     var errorIndicatorMessage: String? {
         return errorView.message
     }
+    
+    func simulateTappingErrorIndicator() {
+        errorView.label.simulateTap()
+    }
 
 }
