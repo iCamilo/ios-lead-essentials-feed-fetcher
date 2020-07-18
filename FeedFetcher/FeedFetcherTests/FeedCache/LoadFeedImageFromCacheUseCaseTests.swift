@@ -36,6 +36,17 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         
         XCTAssertEqual(store.messages, [.retrieveImageData(aURL)])
     }
+    
+    func test_loadImageDataTwice_requestsRetrievalToStoreTwice() {
+        let (sut, store) = makeSUT()
+        let aURL = anyURL()
+        let otherUrl = URL(string: "http://other-url.com")!
+        
+        sut.loadImageData(for: aURL)
+        sut.loadImageData(for: otherUrl)
+        
+        XCTAssertEqual(store.messages, [.retrieveImageData(aURL), .retrieveImageData(otherUrl)])
+    }
 }
 
 // MARK:- Helpers
