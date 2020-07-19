@@ -24,15 +24,12 @@ final class LocalFeedImageDataLoader {
     }
     
     func loadImageData(for url: URL, completion: @escaping (Result) -> Void) {
-        store.retrieveImageData(for: url) { result in
-            switch result {
-            case let .success(data):
-                if data.isEmpty {
-                    completion(.failure(.notFound))
-                }
-            case .failure:
-                completion(.failure(.loadingImageData))
-            }
+        store.retrieveImageData(for: url) { retrieveResult in
+            let loadResult: Result = retrieveResult
+                .mapError{ _ in Error.loadingImageData}
+                .flatMap{ data in .failure(.notFound) }
+            
+            completion(loadResult)
         }
     }
 }
@@ -70,7 +67,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         
         loadImageData(sut, andExpect: .failure(.loadingImageData), when: {
             store.completeWith(error: NSError(domain: "Tests", code: 0))
-        })        
+        })
     }
     
     func test_loadImageData_completesWithNotFoundErrorOnEmptyCache() {
