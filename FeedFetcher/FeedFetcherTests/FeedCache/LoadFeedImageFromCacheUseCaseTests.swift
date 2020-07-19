@@ -24,11 +24,13 @@ final class LocalFeedImageDataLoader {
     }
     
     func loadImageData(for url: URL, completion: @escaping (Result) -> Void) {
-        store.retrieveImageData(for: url) { retrieveResult in
+        store.retrieveImageData(for: url) { [weak self] retrieveResult in
+            if self == nil { return }
+            
             let loadResult: Result = retrieveResult
                 .mapError{ _ in Error.loadingImageData}
                 .flatMap{ data in
-                    return !data.isEmpty ? .success(data) :.failure(.notFound)                    
+                    return !data.isEmpty ? .success(data) :.failure(.notFound)
                 }
             
             completion(loadResult)
@@ -96,6 +98,18 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         loadImageData(sut, andExpect: .success(nonEmptyData), when: {
             store.completeWith(data: anyData())
         })
+    }
+    
+    func test_loadImageData_doesNotCompleteAfterLoaderIsDeallocated() {
+        let store = DataStoreSpy()
+        var sut: LocalFeedImageDataLoader? = LocalFeedImageDataLoader(store: store)
+                
+        sut?.loadImageData(for: anyURL()) { _ in
+            XCTFail("Expected load to not complete after the sut has been deallocated")
+        }
+        
+        sut = nil
+        store.completeWithEmptyCache()
     }
     
     
