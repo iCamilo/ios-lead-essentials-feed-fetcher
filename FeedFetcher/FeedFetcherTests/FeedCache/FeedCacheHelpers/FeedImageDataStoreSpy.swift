@@ -27,16 +27,16 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
         })
     }
     
-    func completeWithError(at index: Int = 0) {
+    func completeRetrievalWithError(at index: Int = 0) {
         retrieveCompletions[index](.failure(storeError))
     }
     
-    func completeWithEmptyCache(at index: Int = 0) {
+    func completeRetrievalWithEmptyCache(at index: Int = 0) {
         let emptyData = Data()
         retrieveCompletions[index](.success(emptyData))
     }
     
-    func completeWith(data: Data, at index: Int = 0) {
+    func completeRetrievalWith(data: Data, at index: Int = 0) {
         retrieveCompletions[index](.success(data))
     }
     

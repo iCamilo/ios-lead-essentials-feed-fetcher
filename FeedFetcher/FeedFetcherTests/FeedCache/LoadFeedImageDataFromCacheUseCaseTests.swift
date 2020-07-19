@@ -37,7 +37,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         
         loadImageData(sut, andExpect: failure(.loadingImageData), when: {
-            store.completeWithError()
+            store.completeRetrievalWithError()
         })
     }
         
@@ -45,7 +45,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         
         loadImageData(sut, andExpect: failure(.notFound), when: {
-            store.completeWithEmptyCache()
+            store.completeRetrievalWithEmptyCache()
         })
     }
     
@@ -54,7 +54,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let emptyData = Data()
         
         loadImageData(sut, andExpect: failure(.notFound), when: {
-            store.completeWith(data: emptyData)
+            store.completeRetrievalWith(data: emptyData)
         })
     }
     
@@ -63,7 +63,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let nonEmptyData = anyData()
         
         loadImageData(sut, andExpect: .success(nonEmptyData), when: {
-            store.completeWith(data: anyData())
+            store.completeRetrievalWith(data: anyData())
         })
     }
     
@@ -76,7 +76,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         }
         
         sut = nil
-        store.completeWithEmptyCache()
+        store.completeRetrievalWithEmptyCache()
     }
     
     func test_loadImageDataCancel_requestStoreToCancelRetrieval() {
@@ -97,7 +97,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         }
         
         task.cancel()
-        loader.completeWithError()
+        loader.completeRetrievalWithError()
     }
     
     
