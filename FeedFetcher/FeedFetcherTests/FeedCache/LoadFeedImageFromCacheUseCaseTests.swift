@@ -36,18 +36,23 @@ final class LocalFeedImageDataLoader {
         let task = ImageDataLoadTask(completion: completion)
         
         task.wrappedTask =  store.retrieveImageData(for: url) { [weak self] retrieveResult in
-            if self == nil { return }
+            guard let self = self else { return }
             
-            let loadResult: Result = retrieveResult
-                .mapError{ _ in Error.loadingImageData}
-                .flatMap{ data in
-                    return !data.isEmpty ? .success(data) :.failure(.notFound)
-            }
-            
+            let loadResult = self.handle(storeRetrieveResult: retrieveResult)
             task.complete(with: loadResult)
         }
         
         return task
+    }
+    
+    private func handle(storeRetrieveResult retrieveResult: FeedImageDataStore.Result) -> LocalFeedImageDataLoader.Result {
+        let loadResult = retrieveResult
+            .mapError{ _ in Error.loadingImageData}
+            .flatMap{ data in
+                return !data.isEmpty ? .success(data) :.failure(.notFound)
+            }
+        
+        return loadResult
     }
     
     // MARK:- ImageDataLoadTask
