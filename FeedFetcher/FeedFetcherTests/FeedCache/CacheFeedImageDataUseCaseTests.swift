@@ -33,6 +33,16 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         XCTAssertEqual(store.messages, [.insertImageData(aData), .insertImageData(otherData)], "Expected loader to request store to insert data as many times as required")
     }
     
+    func test_saveSameDataTwice_doesNotOverrideInsertedData() {
+        let (sut, store) = makeSUT()
+        let aData = anyData()
+        
+        sut.saveImageData(aData) {_ in}
+        sut.saveImageData(aData) {_ in}
+        
+        XCTAssertEqual(store.messages, [.insertImageData(aData), .insertImageData(aData)], "Expected not to override inserted data, and to store it as many times as requested")
+    }
+    
     func test_saveImageData_completesWithSavingImageDataErrorOnInsertionError() {
         let (sut, store) = makeSUT()
                 
