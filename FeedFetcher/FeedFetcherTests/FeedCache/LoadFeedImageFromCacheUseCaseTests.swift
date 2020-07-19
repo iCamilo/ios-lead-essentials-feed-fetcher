@@ -67,30 +67,18 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
     
     func test_loadImageData_completesWithLoadingImageDataErrorOnStoreFailure() {
         let (sut, store) = makeSUT()
-        let aURL = anyURL()
         
-        let exp = expectation(description: "Waiting for load image data to complete")
-        sut.loadImageData(for: aURL) { result in
-            XCTAssertEqual(result, .failure(.loadingImageData), "Expected to complete with loadingImageData error but got \(result) instead")
-            exp.fulfill()
-        }
-        
-        store.completeWith(error: NSError(domain: "Tests", code: 0))
-        wait(for: [exp], timeout: 1.0)
+        loadImageData(sut, andExpect: .failure(.loadingImageData), when: {
+            store.completeWith(error: NSError(domain: "Tests", code: 0))
+        })        
     }
     
     func test_loadImageData_completesWithNotFoundErrorOnEmptyCache() {
         let (sut, store) = makeSUT()
-        let aURL = anyURL()
         
-        let exp = expectation(description: "Waiting for load image data to complete")
-        sut.loadImageData(for: aURL) { result in
-            XCTAssertEqual(result, .failure(.notFound), "Expected to complete with notFound error but got \(result) instead")
-            exp.fulfill()
-        }
-        
-        store.completeWithEmptyCache()
-        wait(for: [exp], timeout: 1.0)
+        loadImageData(sut, andExpect: .failure(.notFound), when: {
+            store.completeWithEmptyCache()
+        })
     }
     
 }
@@ -106,6 +94,27 @@ private extension LoadFeedImageDataFromCacheUseCaseTests {
         trackForMemoryLeak(instance: sut, file: file, line: line)
         
         return (sut, store)
+    }
+    
+    func loadImageData(_ sut: LocalFeedImageDataLoader, andExpect expected: LocalFeedImageDataLoader.Result, when action: ()-> Void, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Waiting for load image data to complete")
+        
+        sut.loadImageData(for: anyURL()) { result in
+            switch (expected, result) {
+            case let (.failure(expectedError), .failure(resultError)):
+                XCTAssertEqual(expectedError, resultError, "Expected failure result with error \(expectedError) but got \(resultError)")
+            case let (.success(expectedData), .success(resultData)):
+                XCTAssertEqual(expectedData, resultData, "Expected success result with data \(expectedData) but got \(resultData)")
+            default:
+                XCTFail("Expected \(expected) but got \(result)")
+            }
+                        
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
 }
