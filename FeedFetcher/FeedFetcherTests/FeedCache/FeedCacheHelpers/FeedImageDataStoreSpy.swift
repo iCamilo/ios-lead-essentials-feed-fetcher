@@ -10,22 +10,12 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
         case cancelRetrieval(URL)
         case insertImageData(Data)
     }
-    
-    private struct RetrieveTask: RetrieveImageDataTask {
-        private let callback: () -> Void
         
-        init(_ callback: @escaping () -> Void) {
-            self.callback = callback
-        }
-        
-        func cancel() {
-            callback()
-        }
-    }
-    
     private let storeError = NSError(domain: "ImageDataStore", code: 0)
-    
     private(set) var messages = [Message]()
+    
+    // MARK:- retrieveImageData
+    
     private(set) var retrieveCompletions = [(FeedImageDataStore.RetrieveResult) -> Void]()
     
     func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult)-> Void) -> RetrieveImageDataTask {
@@ -50,6 +40,8 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
         retrieveCompletions[index](.success(data))
     }
     
+    // MARK:- insertImageData
+    
     private(set) var insertCompletions = [(FeedImageDataStore.InsertResult) -> Void]()
     
     func insertImageData(_ data: Data, completion: @escaping (FeedImageDataStore.InsertResult) -> Void) {
@@ -63,5 +55,19 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
     
     func completeInsertionWith(data: Data, at index: Int = 0) {
         insertCompletions[index](.success(()))
+    }
+    
+    // MARK:- RetrieveImageDataTask
+    
+    private struct RetrieveTask: RetrieveImageDataTask {
+        private let callback: () -> Void
+        
+        init(_ callback: @escaping () -> Void) {
+            self.callback = callback
+        }
+        
+        func cancel() {
+            callback()
+        }
     }
 }
