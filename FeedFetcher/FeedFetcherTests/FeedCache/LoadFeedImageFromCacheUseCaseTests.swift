@@ -33,7 +33,8 @@ final class LocalFeedImageDataLoader {
     
     @discardableResult
     func loadImageData(for url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoadTask {
-        let task = LocalFeedImageDataLoadTask()
+        let task = LocalFeedImageDataLoadTask(completion: completion)
+        
         task.wrappedTask =  store.retrieveImageData(for: url) { [weak self] retrieveResult in
             if self == nil { return }
             
@@ -43,7 +44,7 @@ final class LocalFeedImageDataLoader {
                     return !data.isEmpty ? .success(data) :.failure(.notFound)
             }
             
-            completion(loadResult)
+            task.complete(with: loadResult)
         }
         
         return task
@@ -51,10 +52,20 @@ final class LocalFeedImageDataLoader {
 }
 
 private class LocalFeedImageDataLoadTask: FeedImageDataLoadTask {
+    private var completion: ((LocalFeedImageDataLoader.Result) -> Void)?
     var wrappedTask: RetrieveImageDataTask?
+    
+    init(completion: @escaping (LocalFeedImageDataLoader.Result) -> Void) {
+        self.completion = completion
+    }
     
     func cancel() {
         wrappedTask?.cancel()
+        completion = nil
+    }
+    
+    func complete(with result: LocalFeedImageDataLoader.Result) {
+        completion?(result)
     }
 }
 
@@ -142,10 +153,22 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(loader.messages, [ .retrieveImageData(aURL), .cancelRetrieval(aURL) ], "Expected store to receive a cancel request after task cancellation")
     }
     
+    func test_loadImageData_doesNotCompleteAfterTaskCancellation() {
+        let (sut, loader) = makeSUT()
+                
+        let task = sut.loadImageData(for: anyURL()) { _ in
+            XCTFail("Expected load to not complete after task cancellation")
+        }
+        
+        task.cancel()
+        loader.completeWithError()
+    }
+    
     
 }
 
 // MARK:- Helpers
+
 private extension LoadFeedImageDataFromCacheUseCaseTests {
     
     func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: DataStoreSpy) {
