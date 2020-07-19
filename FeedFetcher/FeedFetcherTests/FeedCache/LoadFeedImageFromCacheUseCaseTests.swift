@@ -14,6 +14,7 @@ final class LocalFeedImageDataLoader {
     typealias Result = Swift.Result<Data, Error>
     enum Error: Swift.Error {
         case loadingImageData
+        case notFound
     }
     
     private let store: FeedImageDataStore
@@ -24,7 +25,14 @@ final class LocalFeedImageDataLoader {
     
     func loadImageData(for url: URL, completion: @escaping (Result) -> Void) {
         store.retrieveImageData(for: url) { result in
-            completion(.failure(.loadingImageData))
+            switch result {
+            case let .success(data):
+                if data.isEmpty {
+                    completion(.failure(.notFound))
+                }
+            case .failure:
+                completion(.failure(.loadingImageData))
+            }
         }
     }
 }
@@ -71,6 +79,20 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_loadImageData_completesWithNotFoundErrorOnEmptyCache() {
+        let (sut, store) = makeSUT()
+        let aURL = anyURL()
+        
+        let exp = expectation(description: "Waiting for load image data to complete")
+        sut.loadImageData(for: aURL) { result in
+            XCTAssertEqual(result, .failure(.notFound), "Expected to complete with notFound error but got \(result) instead")
+            exp.fulfill()
+        }
+        
+        store.completeWithEmptyCache()
+        wait(for: [exp], timeout: 1.0)
+    }
+    
 }
 
 // MARK:- Helpers
@@ -105,5 +127,10 @@ private class DataStoreSpy: FeedImageDataStore {
     
     func completeWith(error: Error, at index: Int = 0) {
         retrieveCompletions[index](.failure(error))
+    }
+    
+    func completeWithEmptyCache(at index: Int = 0) {
+        let emptyData = Data()
+        retrieveCompletions[index](.success(emptyData))
     }
 }
