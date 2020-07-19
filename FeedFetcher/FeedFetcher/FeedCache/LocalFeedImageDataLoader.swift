@@ -3,10 +3,6 @@
 
 import Foundation
 
-public protocol FeedImageDataLoadTask {
-    func cancel()
-}
-
 public final class LocalFeedImageDataLoader {
     public enum Error: Swift.Error {
         case loadingImageData
@@ -26,7 +22,7 @@ public final class LocalFeedImageDataLoader {
 public extension LocalFeedImageDataLoader {
     typealias Result = Swift.Result<Data, Error>
     
-    func loadImageData(for url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoadTask {
+    func loadImageData(for url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataTask {
         let task = ImageDataLoadTask(completion: completion)
         
         task.wrappedTask =  store.retrieveImageData(for: url) { [weak self] retrieveResult in
@@ -51,7 +47,7 @@ public extension LocalFeedImageDataLoader {
     
     // MARK: ImageDataLoadTask
     
-    private class ImageDataLoadTask: FeedImageDataLoadTask {
+    private class ImageDataLoadTask: FeedImageDataTask {
         private var completion: ((LocalFeedImageDataLoader.Result) -> Void)?
         var wrappedTask: RetrieveImageDataTask?
         
