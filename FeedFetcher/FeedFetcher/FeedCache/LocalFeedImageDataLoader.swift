@@ -73,7 +73,9 @@ public extension LocalFeedImageDataLoader {
     typealias SaveResult = Swift.Result<Void,Error>
     
     func saveImageData(_ data: Data, completion: @escaping (SaveResult) -> Void) {
-        store.insertImageData(data) { insertResult in
+        store.insertImageData(data) { [weak self] insertResult in
+            if self == nil { return }
+            
             let result: SaveResult = insertResult.mapError { _ in Error.savingImageData }
             
             completion(result)

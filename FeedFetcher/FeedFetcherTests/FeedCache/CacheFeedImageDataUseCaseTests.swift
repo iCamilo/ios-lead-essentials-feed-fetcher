@@ -59,6 +59,20 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         })
     }
     
+    func test_saveImageData_doesNotCompleteOnLoaderDeallocation() {
+        let store = FeedImageDataStoreSpy()
+        var sut: LocalFeedImageDataLoader? = .init(store: store)
+        let aData = anyData()
+        
+        sut?.saveImageData(aData) { _ in
+            XCTFail("Expected saveImageData to not complete if loader is deallocated")
+        }
+        
+        sut = nil
+        store.completeInsertionWithError()
+        store.completeInsertionWith(data: aData)                
+    }
+    
 }
 
 // MARK:- Helpers
