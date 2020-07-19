@@ -52,6 +52,26 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         store.completeInsertionWithError()
         wait(for: [exp], timeout: 1.0)
     }
+    
+    func test_saveImageData_completesWithNoErrorOnInsertionSuccess() {
+        let (sut, store) = makeSUT()
+        let aData = anyData()
+        
+        let exp = expectation(description: "Waiting save image data to complete")
+        sut.saveImageData(aData) { result in
+            switch result {
+            case .success:
+                break
+            default:
+                XCTFail("Expected to complete without error but got \(result)")
+            }
+                        
+            exp.fulfill()
+        }
+        
+        store.completeInsertionWith(data: anyData())
+        wait(for: [exp], timeout: 1.0)
+    }
         
     
 }
