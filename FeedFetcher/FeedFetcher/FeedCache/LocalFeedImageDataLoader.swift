@@ -19,10 +19,9 @@ public final class LocalFeedImageDataLoader {
 
 // MARK:-loadImageData
 
-public extension LocalFeedImageDataLoader {
-    typealias Result = Swift.Result<Data, Error>
+extension LocalFeedImageDataLoader: FeedImageDataLoader {
     
-    func loadImageData(for url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataTask {
+    public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataTask {
         let task = ImageDataLoadTask(completion: completion)
         
         task.wrappedTask =  store.retrieveImageData(for: url) { [weak self] retrieveResult in
@@ -35,14 +34,12 @@ public extension LocalFeedImageDataLoader {
         return task
     }
     
-    private func handle(storeRetrieveResult retrieveResult: FeedImageDataStore.Result) -> LocalFeedImageDataLoader.Result {
-        let loadResult = retrieveResult
+    private func handle(storeRetrieveResult retrieveResult: FeedImageDataStore.Result) -> FeedImageDataLoader.Result {
+        return retrieveResult
             .mapError{ _ in Error.loadingImageData}
             .flatMap{ data in
-                return !data.isEmpty ? .success(data) :.failure(.notFound)
-            }
-        
-        return loadResult
+                return !data.isEmpty ? .success(data) : .failure(Error.notFound)
+            }                
     }
     
     // MARK: ImageDataLoadTask
