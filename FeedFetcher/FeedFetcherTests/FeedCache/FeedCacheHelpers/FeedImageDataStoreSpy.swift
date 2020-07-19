@@ -8,6 +8,7 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
     enum Message: Equatable {
         case retrieveImageData(URL)
         case cancelRetrieval(URL)
+        case insertImageData(Data)
     }
     
     private struct RetrieveTask: RetrieveImageDataTask {
@@ -46,5 +47,9 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
     
     func completeWith(data: Data, at index: Int = 0) {
         retrieveCompletions[index](.success(data))
+    }
+    
+    func insertImageData(_ data: Data) {
+        messages.append(.insertImageData(data))
     }
 }

@@ -13,6 +13,15 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         XCTAssertEqual(store.messages, [], "Loader should not request to save any data at creation")
     }
     
+    func test_saveImageData_doesRequestStoreToInsertData() {
+        let (sut, store) = makeSUT()
+        let aData = anyData()
+        
+        sut.saveImageData(aData)
+        
+        XCTAssertEqual(store.messages, [.insertImageData(aData)], "Expected loader to request store to insert data at saveImageData")
+    }
+    
 }
 
 // MARK:- Helpers

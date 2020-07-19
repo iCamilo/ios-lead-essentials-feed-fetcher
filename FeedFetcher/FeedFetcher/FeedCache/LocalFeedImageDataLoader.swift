@@ -67,3 +67,9 @@ public final class LocalFeedImageDataLoader {
         }
     }
 }
+
+public extension LocalFeedImageDataLoader {
+    func saveImageData(_ data: Data) {
+        store.insertImageData(data)
+    }
+}
