@@ -78,6 +78,16 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         })
     }
     
+    func test_loadImageData_completesWithNotFoundErrorOnNotEmptyCacheButEmptyData() {
+        let (sut, store) = makeSUT()
+        let emptyData = Data()
+        
+        loadImageData(sut, andExpect: .failure(.notFound), when: {
+            store.completeWith(data: emptyData)
+        })
+    }
+    
+    
 }
 
 // MARK:- Helpers
@@ -138,5 +148,9 @@ private class DataStoreSpy: FeedImageDataStore {
     func completeWithEmptyCache(at index: Int = 0) {
         let emptyData = Data()
         retrieveCompletions[index](.success(emptyData))
+    }
+    
+    func completeWith(data: Data, at index: Int = 0) {
+        retrieveCompletions[index](.success(data))
     }
 }
