@@ -33,7 +33,7 @@ final class LocalFeedImageDataLoader {
     
     @discardableResult
     func loadImageData(for url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoadTask {
-        let task = LocalFeedImageDataLoadTask(completion: completion)
+        let task = ImageDataLoadTask(completion: completion)
         
         task.wrappedTask =  store.retrieveImageData(for: url) { [weak self] retrieveResult in
             if self == nil { return }
@@ -49,25 +49,29 @@ final class LocalFeedImageDataLoader {
         
         return task
     }
+    
+    // MARK:- ImageDataLoadTask
+    
+    private class ImageDataLoadTask: FeedImageDataLoadTask {
+        private var completion: ((LocalFeedImageDataLoader.Result) -> Void)?
+        var wrappedTask: RetrieveImageDataTask?
+        
+        init(completion: @escaping (LocalFeedImageDataLoader.Result) -> Void) {
+            self.completion = completion
+        }
+        
+        func cancel() {
+            wrappedTask?.cancel()
+            completion = nil
+        }
+        
+        func complete(with result: LocalFeedImageDataLoader.Result) {
+            completion?(result)
+        }
+    }
 }
 
-private class LocalFeedImageDataLoadTask: FeedImageDataLoadTask {
-    private var completion: ((LocalFeedImageDataLoader.Result) -> Void)?
-    var wrappedTask: RetrieveImageDataTask?
-    
-    init(completion: @escaping (LocalFeedImageDataLoader.Result) -> Void) {
-        self.completion = completion
-    }
-    
-    func cancel() {
-        wrappedTask?.cancel()
-        completion = nil
-    }
-    
-    func complete(with result: LocalFeedImageDataLoader.Result) {
-        completion?(result)
-    }
-}
+
 
 class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
     
@@ -132,7 +136,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
     }
     
     func test_loadImageData_doesNotCompleteAfterLoaderIsDeallocated() {
-        let store = DataStoreSpy()
+        let store = FeedImageDataStoreSpy()
         var sut: LocalFeedImageDataLoader? = LocalFeedImageDataLoader(store: store)
                 
         sut?.loadImageData(for: anyURL()) { _ in
@@ -171,8 +175,8 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
 
 private extension LoadFeedImageDataFromCacheUseCaseTests {
     
-    func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: DataStoreSpy) {
-        let store = DataStoreSpy()
+    func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: FeedImageDataStoreSpy) {
+        let store = FeedImageDataStoreSpy()
         let sut = LocalFeedImageDataLoader(store: store)
         
         trackForMemoryLeak(instance: store, file: file, line: line)
@@ -204,9 +208,9 @@ private extension LoadFeedImageDataFromCacheUseCaseTests {
     
 }
 
-// MARK: - DataStoreSpy
+// MARK: - FeedImageDataStoreSpy
 
-private class DataStoreSpy: FeedImageDataStore {
+private class FeedImageDataStoreSpy: FeedImageDataStore {
     enum Message: Equatable {
         case retrieveImageData(URL)
         case cancelRetrieval(URL)
