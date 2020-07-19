@@ -9,8 +9,8 @@ public protocol RetrieveImageDataTask {
 
 public protocol FeedImageDataStore {
     typealias Result = Swift.Result<Data,Error>
+    typealias InsertResult = Swift.Result<Void,Error>
     
     func retrieveImageData(for url: URL, completion: @escaping (Result)-> Void) -> RetrieveImageDataTask
-    
-    func insertImageData(_ data: Data)
+    func insertImageData(_ data: Data, completion: @escaping (InsertResult) -> Void)
 }

@@ -49,7 +49,15 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
         retrieveCompletions[index](.success(data))
     }
     
-    func insertImageData(_ data: Data) {
+    private(set) var insertCompletions = [(FeedImageDataStore.InsertResult) -> Void]()
+    
+    func insertImageData(_ data: Data, completion: @escaping (FeedImageDataStore.InsertResult) -> Void) {
         messages.append(.insertImageData(data))
+        insertCompletions.append(completion)
+    }
+    
+    func completeInsertionWithError(at index: Int = 0) {
+        let storeError = NSError(domain: "DataStoreSpy", code: 0)
+        insertCompletions[index](.failure(storeError))
     }
 }

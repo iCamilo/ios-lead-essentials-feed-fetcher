@@ -17,7 +17,7 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         let aData = anyData()
         
-        sut.saveImageData(aData)
+        sut.saveImageData(aData) {_ in}
         
         XCTAssertEqual(store.messages, [.insertImageData(aData)], "Expected loader to request store to insert data at saveImageData")
     }
@@ -27,11 +27,32 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         let aData = anyData()
         let otherData = "Other Data".data(using: .utf8)!
         
-        sut.saveImageData(aData)
-        sut.saveImageData(otherData)
+        sut.saveImageData(aData) {_ in}
+        sut.saveImageData(otherData) {_ in}
         
         XCTAssertEqual(store.messages, [.insertImageData(aData), .insertImageData(otherData)], "Expected loader to request store to insert data as many times as required")
     }
+    
+    func test_saveImageData_completesWithSavingImageDataErrorOnInsertionError() {
+        let (sut, store) = makeSUT()
+        let aData = anyData()
+        
+        let exp = expectation(description: "Waiting save image data to complete")
+        sut.saveImageData(aData) { result in
+            switch result {
+            case let .failure(error):
+                XCTAssertEqual(error, .savingImageData, "Expected to complete with saving error but got \(error)")
+            default:
+                XCTFail("Expected failure with saving error but got \(result) ")
+            }
+                        
+            exp.fulfill()
+        }
+        
+        store.completeInsertionWithError()
+        wait(for: [exp], timeout: 1.0)
+    }
+        
     
 }
 

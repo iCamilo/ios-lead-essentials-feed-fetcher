@@ -11,6 +11,7 @@ public final class LocalFeedImageDataLoader {
     public typealias Result = Swift.Result<Data, Error>
     public enum Error: Swift.Error {
         case loadingImageData
+        case savingImageData
         case notFound
     }
     
@@ -69,7 +70,11 @@ public final class LocalFeedImageDataLoader {
 }
 
 public extension LocalFeedImageDataLoader {
-    func saveImageData(_ data: Data) {
-        store.insertImageData(data)
+    typealias SaveResult = Swift.Result<Void,Error>
+    
+    func saveImageData(_ data: Data, completion: @escaping (SaveResult) -> Void) {
+        store.insertImageData(data) { _ in
+            completion(.failure(.savingImageData))
+        }
     }
 }
