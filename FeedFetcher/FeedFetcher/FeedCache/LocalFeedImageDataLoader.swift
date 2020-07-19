@@ -34,7 +34,7 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader {
         return task
     }
     
-    private func handle(storeRetrieveResult retrieveResult: FeedImageDataStore.Result) -> FeedImageDataLoader.Result {
+    private func handle(storeRetrieveResult retrieveResult: FeedImageDataStore.RetrieveResult) -> FeedImageDataLoader.Result {
         return retrieveResult
             .mapError{ _ in Error.loadingImageData}
             .flatMap{ data in

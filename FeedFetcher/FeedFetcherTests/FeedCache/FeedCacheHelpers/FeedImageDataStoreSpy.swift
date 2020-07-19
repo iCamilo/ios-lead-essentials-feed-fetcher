@@ -26,9 +26,9 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
     private let storeError = NSError(domain: "ImageDataStore", code: 0)
     
     private(set) var messages = [Message]()
-    private(set) var retrieveCompletions = [(FeedImageDataStore.Result) -> Void]()
+    private(set) var retrieveCompletions = [(FeedImageDataStore.RetrieveResult) -> Void]()
     
-    func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.Result)-> Void) -> RetrieveImageDataTask {
+    func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult)-> Void) -> RetrieveImageDataTask {
         messages.append(.retrieveImageData(url))
         retrieveCompletions.append(completion)
         
