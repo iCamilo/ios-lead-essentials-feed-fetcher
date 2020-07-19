@@ -70,7 +70,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         
         loadImageData(sut, andExpect: .failure(.loadingImageData), when: {
-            store.completeWith(error: NSError(domain: "Tests", code: 0))
+            store.completeWithError()
         })
     }
     
@@ -166,8 +166,9 @@ private class DataStoreSpy: FeedImageDataStore {
         retrieveCompletions.append(completion)
     }
     
-    func completeWith(error: Error, at index: Int = 0) {
-        retrieveCompletions[index](.failure(error))
+    func completeWithError(at index: Int = 0) {
+        let storeError = NSError(domain: "DataStoreSpy", code: 0)
+        retrieveCompletions[index](.failure(storeError))
     }
     
     func completeWithEmptyCache(at index: Int = 0) {
