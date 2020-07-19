@@ -109,11 +109,11 @@ private extension LoadFeedImageDataFromCacheUseCaseTests {
         sut.loadImageData(for: anyURL()) { result in
             switch (expected, result) {
             case let (.failure(expectedError), .failure(resultError)):
-                XCTAssertEqual(expectedError, resultError, "Expected failure result with error \(expectedError) but got \(resultError)")
+                XCTAssertEqual(expectedError, resultError, "Expected failure result with error \(expectedError) but got \(resultError)", file: file, line: line)
             case let (.success(expectedData), .success(resultData)):
-                XCTAssertEqual(expectedData, resultData, "Expected success result with data \(expectedData) but got \(resultData)")
+                XCTAssertEqual(expectedData, resultData, "Expected success result with data \(expectedData) but got \(resultData)", file: file, line: line)
             default:
-                XCTFail("Expected \(expected) but got \(result)")
+                XCTFail("Expected \(expected) but got \(result)", file: file, line: line)
             }
                         
             exp.fulfill()
