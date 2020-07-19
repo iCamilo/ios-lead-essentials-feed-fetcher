@@ -8,7 +8,6 @@ public protocol FeedImageDataLoadTask {
 }
 
 public final class LocalFeedImageDataLoader {
-    public typealias Result = Swift.Result<Data, Error>
     public enum Error: Swift.Error {
         case loadingImageData
         case savingImageData
@@ -20,8 +19,14 @@ public final class LocalFeedImageDataLoader {
     public init(store: FeedImageDataStore) {
         self.store = store
     }
-        
-    public func loadImageData(for url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoadTask {
+}
+
+// MARK:-loadImageData
+
+public extension LocalFeedImageDataLoader {
+    typealias Result = Swift.Result<Data, Error>
+    
+    func loadImageData(for url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoadTask {
         let task = ImageDataLoadTask(completion: completion)
         
         task.wrappedTask =  store.retrieveImageData(for: url) { [weak self] retrieveResult in
@@ -44,7 +49,7 @@ public final class LocalFeedImageDataLoader {
         return loadResult
     }
     
-    // MARK:- ImageDataLoadTask
+    // MARK: ImageDataLoadTask
     
     private class ImageDataLoadTask: FeedImageDataLoadTask {
         private var completion: ((LocalFeedImageDataLoader.Result) -> Void)?
@@ -68,6 +73,8 @@ public final class LocalFeedImageDataLoader {
         }
     }
 }
+
+// MARK:- saveImageData
 
 public extension LocalFeedImageDataLoader {
     typealias SaveResult = Swift.Result<Void,Error>
