@@ -35,44 +35,19 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
     
     func test_saveImageData_completesWithSavingImageDataErrorOnInsertionError() {
         let (sut, store) = makeSUT()
-        let aData = anyData()
-        
-        let exp = expectation(description: "Waiting save image data to complete")
-        sut.saveImageData(aData) { result in
-            switch result {
-            case let .failure(error):
-                XCTAssertEqual(error, .savingImageData, "Expected to complete with saving error but got \(error)")
-            default:
-                XCTFail("Expected failure with saving error but got \(result) ")
-            }
-                        
-            exp.fulfill()
-        }
-        
-        store.completeInsertionWithError()
-        wait(for: [exp], timeout: 1.0)
+                
+        saveImageData(sut, andExpect: .failure(.savingImageData), when: {
+            store.completeInsertionWithError()
+        })
     }
     
     func test_saveImageData_completesWithNoErrorOnInsertionSuccess() {
         let (sut, store) = makeSUT()
-        let aData = anyData()
-        
-        let exp = expectation(description: "Waiting save image data to complete")
-        sut.saveImageData(aData) { result in
-            switch result {
-            case .success:
-                break
-            default:
-                XCTFail("Expected to complete without error but got \(result)")
-            }
-                        
-            exp.fulfill()
-        }
-        
-        store.completeInsertionWith(data: anyData())
-        wait(for: [exp], timeout: 1.0)
+                
+        saveImageData(sut, andExpect: .success(()), when: {
+            store.completeInsertionWith(data: anyData())
+        })
     }
-        
     
 }
 
@@ -88,6 +63,27 @@ private extension CacheFeedImageDataUseCaseTests {
         trackForMemoryLeak(instance: sut, file: file, line: line)
         
         return (sut, store)
+    }
+    
+    func saveImageData(_ sut: LocalFeedImageDataLoader, andExpect expected: LocalFeedImageDataLoader.SaveResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Waiting save image data to complete")
+        
+        sut.saveImageData(anyData()) { result in
+            switch (expected, result) {
+            case (.success, .success):
+                break
+            case let (.failure(expectedError), .failure(receivedError)):
+                XCTAssertEqual(expectedError, receivedError, "Expected to fail with \(expectedError) but got \(receivedError)", file: file, line: line)
+            default:
+                XCTFail("Expected to complete with \(expected) but got \(result)", file: file, line: line)
+            }
+                        
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
 }
