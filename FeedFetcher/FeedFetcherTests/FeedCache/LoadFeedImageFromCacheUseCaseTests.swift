@@ -17,7 +17,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         let aURL = anyURL()
         
-        sut.loadImageData(for: aURL) { _ in}
+        let _ = sut.loadImageData(for: aURL) { _ in}
         
         XCTAssertEqual(store.messages, [.retrieveImageData(aURL)])
     }
@@ -27,8 +27,8 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let aURL = anyURL()
         let otherUrl = URL(string: "http://other-url.com")!
         
-        sut.loadImageData(for: aURL) { _ in }
-        sut.loadImageData(for: otherUrl) { _ in }
+        let _ = sut.loadImageData(for: aURL) { _ in }
+        let _ = sut.loadImageData(for: otherUrl) { _ in }
         
         XCTAssertEqual(store.messages, [.retrieveImageData(aURL), .retrieveImageData(otherUrl)])
     }
@@ -71,7 +71,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         let store = FeedImageDataStoreSpy()
         var sut: LocalFeedImageDataLoader? = LocalFeedImageDataLoader(store: store)
                 
-        sut?.loadImageData(for: anyURL()) { _ in
+        let _ = sut?.loadImageData(for: anyURL()) { _ in
             XCTFail("Expected load to not complete after the sut has been deallocated")
         }
         
@@ -120,7 +120,7 @@ private extension LoadFeedImageDataFromCacheUseCaseTests {
     func loadImageData(_ sut: LocalFeedImageDataLoader, andExpect expected: LocalFeedImageDataLoader.Result, when action: ()-> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Waiting for load image data to complete")
         
-        sut.loadImageData(for: anyURL()) { result in
+        let _ = sut.loadImageData(for: anyURL()) { result in
             switch (expected, result) {
             case let (.failure(expectedError), .failure(resultError)):
                 XCTAssertEqual(expectedError, resultError, "Expected failure result with error \(expectedError) but got \(resultError)", file: file, line: line)

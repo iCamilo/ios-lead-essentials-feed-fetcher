@@ -19,8 +19,7 @@ public final class LocalFeedImageDataLoader {
     public init(store: FeedImageDataStore) {
         self.store = store
     }
-    
-    @discardableResult
+        
     public func loadImageData(for url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoadTask {
         let task = ImageDataLoadTask(completion: completion)
         
