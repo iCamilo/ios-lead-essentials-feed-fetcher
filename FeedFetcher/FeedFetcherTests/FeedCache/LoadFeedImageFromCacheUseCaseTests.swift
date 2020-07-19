@@ -67,11 +67,15 @@ final class LocalFeedImageDataLoader {
         
         func cancel() {
             wrappedTask?.cancel()
-            completion = nil
+            invalidateCompletion()
         }
         
         func complete(with result: LocalFeedImageDataLoader.Result) {
             completion?(result)
+        }
+        
+        private func invalidateCompletion() {
+            completion = nil
         }
     }
 }
