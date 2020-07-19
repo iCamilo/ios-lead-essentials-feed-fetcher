@@ -4,10 +4,18 @@
 import Foundation
 import XCTest
 
+protocol RetrieveImageDataTask {
+    func cancel()
+}
+
 protocol FeedImageDataStore {
     typealias Result = Swift.Result<Data,Error>
     
-    func retrieveImageData(for url: URL, completion: @escaping (Result)-> Void)
+    func retrieveImageData(for url: URL, completion: @escaping (Result)-> Void) -> RetrieveImageDataTask
+}
+
+protocol FeedImageDataLoadTask {
+    func cancel()
 }
 
 final class LocalFeedImageDataLoader {
@@ -23,18 +31,30 @@ final class LocalFeedImageDataLoader {
         self.store = store
     }
     
-    func loadImageData(for url: URL, completion: @escaping (Result) -> Void) {
-        store.retrieveImageData(for: url) { [weak self] retrieveResult in
+    @discardableResult
+    func loadImageData(for url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoadTask {
+        let task = LocalFeedImageDataLoadTask()
+        task.wrappedTask =  store.retrieveImageData(for: url) { [weak self] retrieveResult in
             if self == nil { return }
             
             let loadResult: Result = retrieveResult
                 .mapError{ _ in Error.loadingImageData}
                 .flatMap{ data in
                     return !data.isEmpty ? .success(data) :.failure(.notFound)
-                }
+            }
             
             completion(loadResult)
         }
+        
+        return task
+    }
+}
+
+private class LocalFeedImageDataLoadTask: FeedImageDataLoadTask {
+    var wrappedTask: RetrieveImageDataTask?
+    
+    func cancel() {
+        wrappedTask?.cancel()
     }
 }
 
@@ -112,6 +132,16 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         store.completeWithEmptyCache()
     }
     
+    func test_loadImageDataCancel_requestStoreToCancelRetrieval() {
+        let (sut, loader) = makeSUT()
+        let aURL = anyURL()
+        
+        let task = sut.loadImageData(for: aURL) { _ in }
+        task.cancel()
+        
+        XCTAssertEqual(loader.messages, [ .retrieveImageData(aURL), .cancelRetrieval(aURL) ], "Expected store to receive a cancel request after task cancellation")
+    }
+    
     
 }
 
@@ -156,14 +186,31 @@ private extension LoadFeedImageDataFromCacheUseCaseTests {
 private class DataStoreSpy: FeedImageDataStore {
     enum Message: Equatable {
         case retrieveImageData(URL)
+        case cancelRetrieval(URL)
+    }
+    
+    private struct RetrieveTask: RetrieveImageDataTask {
+        private let callback: () -> Void
+        
+        init(_ callback: @escaping () -> Void) {
+            self.callback = callback
+        }
+        
+        func cancel() {
+            callback()
+        }
     }
     
     private(set) var messages = [Message]()
     private(set) var retrieveCompletions = [(FeedImageDataStore.Result) -> Void]()
     
-    func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.Result)-> Void) {
+    func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.Result)-> Void) -> RetrieveImageDataTask {
         messages.append(.retrieveImageData(url))
         retrieveCompletions.append(completion)
+        
+        return RetrieveTask ({ [weak self] in
+            self?.messages.append(.cancelRetrieval(url))
+        })
     }
     
     func completeWithError(at index: Int = 0) {
