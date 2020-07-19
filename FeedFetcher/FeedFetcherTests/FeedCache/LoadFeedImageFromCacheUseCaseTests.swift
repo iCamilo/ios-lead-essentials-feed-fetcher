@@ -3,16 +3,7 @@
 
 import Foundation
 import XCTest
-
-protocol RetrieveImageDataTask {
-    func cancel()
-}
-
-protocol FeedImageDataStore {
-    typealias Result = Swift.Result<Data,Error>
-    
-    func retrieveImageData(for url: URL, completion: @escaping (Result)-> Void) -> RetrieveImageDataTask
-}
+import FeedFetcher
 
 protocol FeedImageDataLoadTask {
     func cancel()
