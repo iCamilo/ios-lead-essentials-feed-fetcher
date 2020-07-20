@@ -122,7 +122,7 @@ private extension LoadFeedImageDataFromCacheUseCaseTests {
         
         let _ = sut.loadImageData(from: anyURL()) { result in
             switch (expected, result) {
-            case let (.failure(expectedError as LocalFeedImageDataLoader.Error), .failure(resultError as LocalFeedImageDataLoader.Error)):
+            case let (.failure(expectedError as LocalFeedImageDataLoader.LoadError), .failure(resultError as LocalFeedImageDataLoader.LoadError)):
                 XCTAssertEqual(expectedError, resultError, "Expected failure result with error \(expectedError) but got \(resultError)", file: file, line: line)
             case let (.success(expectedData), .success(resultData)):
                 XCTAssertEqual(expectedData, resultData, "Expected success result with data \(expectedData) but got \(resultData)", file: file, line: line)
@@ -138,7 +138,7 @@ private extension LoadFeedImageDataFromCacheUseCaseTests {
         wait(for: [exp], timeout: 1.0)
     }
     
-    func failure(_ with: LocalFeedImageDataLoader.Error) -> LocalFeedImageDataLoader.Result {
+    func failure(_ with: LocalFeedImageDataLoader.LoadError) -> LocalFeedImageDataLoader.Result {
         return .failure(with)
     }
     

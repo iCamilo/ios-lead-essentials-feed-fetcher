@@ -20,6 +20,10 @@ public final class LocalFeedImageDataLoader {
 // MARK:-loadImageData
 
 extension LocalFeedImageDataLoader: FeedImageDataLoader {
+    public enum LoadError: Swift.Error {
+        case failed
+        case notFound
+    }
     
     public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataTask {
         let task = ImageDataLoadTask(completion: completion)
@@ -36,12 +40,12 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader {
     
     private func handle(storeRetrieveResult retrieveResult: FeedImageDataStore.RetrieveResult) -> FeedImageDataLoader.Result {
         return retrieveResult
-            .mapError{ _ in Error.failed}
+            .mapError{ _ in LoadError.failed}
             .flatMap{ data in
                 if let data = data {
                     return .success(data)
                 } else {
-                    return .failure(Error.notFound)
+                    return .failure(LoadError.notFound)
                 }
             }                
     }
