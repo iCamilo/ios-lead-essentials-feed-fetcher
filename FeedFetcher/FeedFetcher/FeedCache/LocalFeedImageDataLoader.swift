@@ -5,7 +5,7 @@ import Foundation
 
 public final class LocalFeedImageDataLoader {
     public enum Error: Swift.Error {
-        case loadingImageData
+        case failed
         case savingImageData
         case notFound
     }
@@ -36,7 +36,7 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader {
     
     private func handle(storeRetrieveResult retrieveResult: FeedImageDataStore.RetrieveResult) -> FeedImageDataLoader.Result {
         return retrieveResult
-            .mapError{ _ in Error.loadingImageData}
+            .mapError{ _ in Error.failed}
             .flatMap{ data in
                 if let data = data {
                     return .success(data)
