@@ -41,29 +41,29 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         })
     }
         
-    func test_loadImageData_completesWithNotFoundErrorOnEmptyCache() {
+    func test_loadImageData_completesWithNotFoundErrorOnNotFound() {
         let (sut, store) = makeSUT()
         
         loadImageData(sut, andExpect: failure(.notFound), when: {
-            store.completeRetrievalWithEmptyCache()
+            store.completeRetrievalWith(data: nil)
         })
     }
     
-    func test_loadImageData_completesWithNotFoundErrorOnNotEmptyCacheButEmptyData() {
+    func test_loadImageData_completesWithDataOnFoundData() {
+        let (sut, store) = makeSUT()
+        let foundData = anyData()
+        
+        loadImageData(sut, andExpect: .success(foundData), when: {
+            store.completeRetrievalWith(data: foundData)
+        })
+    }
+    
+    func test_loadImageData_completesWithEmptyDataOnFoundEmptyData() {
         let (sut, store) = makeSUT()
         let emptyData = Data()
         
-        loadImageData(sut, andExpect: failure(.notFound), when: {
+        loadImageData(sut, andExpect: .success(emptyData), when: {
             store.completeRetrievalWith(data: emptyData)
-        })
-    }
-    
-    func test_loadImageData_completesWithDataOnNotEmptyCache() {
-        let (sut, store) = makeSUT()
-        let nonEmptyData = anyData()
-        
-        loadImageData(sut, andExpect: .success(nonEmptyData), when: {
-            store.completeRetrievalWith(data: anyData())
         })
     }
     

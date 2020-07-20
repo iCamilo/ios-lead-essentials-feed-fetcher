@@ -36,7 +36,7 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
         retrieveCompletions[index](.success(emptyData))
     }
     
-    func completeRetrievalWith(data: Data, at index: Int = 0) {
+    func completeRetrievalWith(data: Data?, at index: Int = 0) {
         retrieveCompletions[index](.success(data))
     }
     

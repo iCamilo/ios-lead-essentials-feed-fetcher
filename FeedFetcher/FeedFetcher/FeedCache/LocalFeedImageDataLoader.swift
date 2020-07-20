@@ -38,7 +38,11 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader {
         return retrieveResult
             .mapError{ _ in Error.loadingImageData}
             .flatMap{ data in
-                return !data.isEmpty ? .success(data) : .failure(Error.notFound)
+                if let data = data {
+                    return .success(data)
+                } else {
+                    return .failure(Error.notFound)
+                }
             }                
     }
     
