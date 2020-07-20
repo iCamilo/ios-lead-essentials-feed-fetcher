@@ -4,12 +4,6 @@
 import Foundation
 
 public final class LocalFeedImageDataLoader {
-    public enum Error: Swift.Error {
-        case failed
-        case savingImageData
-        case notFound
-    }
-    
     private let store: FeedImageDataStore
     
     public init(store: FeedImageDataStore) {
@@ -78,13 +72,17 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader {
 // MARK:- saveImageData
 
 public extension LocalFeedImageDataLoader {
-    typealias SaveResult = Swift.Result<Void,Error>
+    typealias SaveResult = Swift.Result<Void,SaveError>
+    
+    enum SaveError: Swift.Error {
+        case failed        
+    }
     
     func saveImageData(_ data: Data, completion: @escaping (SaveResult) -> Void) {
         store.insertImageData(data) { [weak self] insertResult in
             if self == nil { return }
             
-            let result: SaveResult = insertResult.mapError { _ in Error.savingImageData }
+            let result: SaveResult = insertResult.mapError { _ in SaveError.failed }
             
             completion(result)
         }

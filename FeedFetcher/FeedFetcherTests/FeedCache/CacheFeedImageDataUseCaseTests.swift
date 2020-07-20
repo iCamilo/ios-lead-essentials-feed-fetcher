@@ -43,10 +43,10 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         XCTAssertEqual(store.messages, [.insertImageData(aData), .insertImageData(aData)], "Expected not to override inserted data, and to store it as many times as requested")
     }
     
-    func test_saveImageData_completesWithSavingImageDataErrorOnInsertionError() {
+    func test_saveImageData_completesWithFailedErrorOnInsertionError() {
         let (sut, store) = makeSUT()
                 
-        saveImageData(sut, andExpect: .failure(.savingImageData), when: {
+        saveImageData(sut, andExpect: .failure(.failed), when: {
             store.completeInsertionWithError()
         })
     }
