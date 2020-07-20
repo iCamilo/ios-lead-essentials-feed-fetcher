@@ -8,7 +8,7 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
     enum Message: Equatable {
         case retrieveImageData(URL)
         case cancelRetrieval(URL)
-        case insertImageData(Data)
+        case insertImageData(Data, for: URL)
     }
         
     private let storeError = NSError(domain: "ImageDataStore", code: 0)
@@ -44,8 +44,8 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
     
     private(set) var insertCompletions = [(FeedImageDataStore.InsertResult) -> Void]()
     
-    func insertImageData(_ data: Data, completion: @escaping (FeedImageDataStore.InsertResult) -> Void) {
-        messages.append(.insertImageData(data))
+    func insertImageData(_ data: Data, for url: URL, completion: @escaping (FeedImageDataStore.InsertResult) -> Void) {
+        messages.append(.insertImageData(data, for: url))
         insertCompletions.append(completion)
     }
     

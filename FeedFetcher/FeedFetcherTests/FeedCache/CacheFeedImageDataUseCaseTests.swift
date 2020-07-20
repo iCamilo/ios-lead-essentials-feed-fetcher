@@ -16,31 +16,35 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
     func test_saveImageData_doesRequestStoreToInsertData() {
         let (sut, store) = makeSUT()
         let aData = anyData()
+        let aURL = anyURL()
         
-        sut.saveImageData(aData) {_ in}
+        sut.saveImageData(aData, for: aURL) {_ in}
         
-        XCTAssertEqual(store.messages, [.insertImageData(aData)], "Expected loader to request store to insert data at saveImageData")
+        XCTAssertEqual(store.messages, [.insertImageData(aData, for: aURL)], "Expected loader to request store to insert data at saveImageData")
     }
     
     func test_saveImageDataTwice_doesRequestStoreToInsertDataTwice() {
         let (sut, store) = makeSUT()
+        let aURL = anyURL()
         let aData = anyData()
+        let otherURL = URL(string: "http://other-url.com")!
         let otherData = "Other Data".data(using: .utf8)!
         
-        sut.saveImageData(aData) {_ in}
-        sut.saveImageData(otherData) {_ in}
+        sut.saveImageData(aData, for: aURL) {_ in}
+        sut.saveImageData(otherData, for: otherURL) {_ in}
         
-        XCTAssertEqual(store.messages, [.insertImageData(aData), .insertImageData(otherData)], "Expected loader to request store to insert data as many times as required")
+        XCTAssertEqual(store.messages, [.insertImageData(aData, for: aURL), .insertImageData(otherData, for: otherURL)], "Expected loader to request store to insert data as many times as required")
     }
     
     func test_saveSameDataTwice_doesNotOverrideInsertedData() {
         let (sut, store) = makeSUT()
         let aData = anyData()
+        let aURL = anyURL()
         
-        sut.saveImageData(aData) {_ in}
-        sut.saveImageData(aData) {_ in}
+        sut.saveImageData(aData, for: aURL) {_ in}
+        sut.saveImageData(aData, for: aURL) {_ in}
         
-        XCTAssertEqual(store.messages, [.insertImageData(aData), .insertImageData(aData)], "Expected not to override inserted data, and to store it as many times as requested")
+        XCTAssertEqual(store.messages, [.insertImageData(aData, for: aURL), .insertImageData(aData, for: aURL)], "Expected not to override inserted data, and to store it as many times as requested")
     }
     
     func test_saveImageData_completesWithFailedErrorOnInsertionError() {
@@ -63,8 +67,9 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         let store = FeedImageDataStoreSpy()
         var sut: LocalFeedImageDataLoader? = .init(store: store)
         let aData = anyData()
+        let aURL = anyURL()
         
-        sut?.saveImageData(aData) { _ in
+        sut?.saveImageData(aData, for: aURL) { _ in
             XCTFail("Expected saveImageData to not complete if loader is deallocated")
         }
         
@@ -92,7 +97,7 @@ private extension CacheFeedImageDataUseCaseTests {
     func saveImageData(_ sut: LocalFeedImageDataLoader, andExpect expected: LocalFeedImageDataLoader.SaveResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Waiting save image data to complete")
         
-        sut.saveImageData(anyData()) { result in
+        sut.saveImageData(anyData(), for: anyURL()) { result in
             switch (expected, result) {
             case (.success, .success):
                 break
