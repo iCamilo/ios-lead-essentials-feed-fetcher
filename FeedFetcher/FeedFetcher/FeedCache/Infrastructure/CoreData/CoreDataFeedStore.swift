@@ -67,7 +67,34 @@ public final class CoreDataFeedStore: FeedStore {
 public extension CoreDataFeedStore {
     
     func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult)-> Void) {
-        completion(.success(nil))
+        let request = NSFetchRequest<ManagedFeedImage>(entityName: ManagedFeedImage.entity().name!)
+        request.predicate = NSPredicate(format: "url == %@", argumentArray: [url])
+        
+        do {
+            let managedImage = try context.fetch(request).first
+            
+            completion(.success(managedImage?.data))
+        } catch {
+            
+        }
+    }
+    
+    func insertImageData(_ data: Data, for url: URL, completion: @escaping (FeedImageDataStore.InsertResult) -> Void) {
+        perform { context in
+            let request = NSFetchRequest<ManagedFeedImage>(entityName: ManagedFeedImage.entity().name!)
+            request.predicate = NSPredicate(format: "url == %@", argumentArray: [url])
+                        
+            do {
+                let managedImage = try context.fetch(request).first
+                managedImage?.data = data
+                
+                try context.saveIfHasPendingChanges()
+                
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
     
 }
