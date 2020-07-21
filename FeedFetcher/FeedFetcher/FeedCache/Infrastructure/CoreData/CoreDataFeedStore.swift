@@ -51,8 +51,7 @@ extension CoreDataFeedStore: FeedStore {
     public func retrieveCachedFeed(completion: @escaping RetrievalCompletion) {
         perform { context in
             completion(Result {
-                let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
-                guard let managedCache = try context.fetch(request).first else {
+                guard let managedCache = try Self.fetchFirstManagedCache(from: context) else {
                     return nil
                 }
                 
@@ -63,10 +62,14 @@ extension CoreDataFeedStore: FeedStore {
     }
     
     private static func deleteAllManagedCache(in context: NSManagedObjectContext) throws {
+        try fetchFirstManagedCache(from: context).flatMap { context.delete($0) }
+    }
+    
+    @discardableResult
+    private static func fetchFirstManagedCache(from context: NSManagedObjectContext) throws -> ManagedCache? {
         let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
-        let caches = try context.fetch(request)
         
-        _ = caches.map { context.delete($0) }
+        return try context.fetch(request).first
     }
     
 }
