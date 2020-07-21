@@ -68,26 +68,27 @@ public extension CoreDataFeedStore {
     
     func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult)-> Void) {
         perform { [weak self] context in
-            do {
+            let retrieveResult: FeedImageDataStore.RetrieveResult =  Result(catching: {
                 let managedImage = try self?.firstFetchManagedImage(for: url, from: context)
                 
-                completion(.success(managedImage?.data))
-            } catch { }
+                return managedImage?.data
+            })
+            
+            completion(retrieveResult)
         }
     }
     
     func insertImageData(_ data: Data, for url: URL, completion: @escaping (FeedImageDataStore.InsertResult) -> Void) {
         perform { [weak self] context in
-            do {
+            let insertResult: FeedImageDataStore.InsertResult = Result(catching: {
                 let managedImage = try self?.firstFetchManagedImage(for: url, from: context)
                 managedImage?.data = data
                 
                 try context.saveIfHasPendingChanges()
-                
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
+                return ()
+            })
+            
+            completion(insertResult)
         }
     }
     
