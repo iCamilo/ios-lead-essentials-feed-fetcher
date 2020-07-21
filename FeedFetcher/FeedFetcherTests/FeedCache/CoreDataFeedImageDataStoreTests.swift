@@ -7,10 +7,8 @@ import FeedFetcher
 
 class CoreDataFeedImageDataStoreTests: XCTestCase {
     
-    func test_retrieveImageData_completesWithNotFoundDataOnEmptyCache() {
-        let bundle = Bundle(for: CoreDataFeedStore.self)
-        let testSpecificURL = URL(fileURLWithPath: "/dev/null")
-        let sut = try! CoreDataFeedStore(bundle: bundle, storeURL: testSpecificURL)
+    func test_retrieveImageData_completesWithNotFoundDataOnEmptyCache() {        
+        let sut = makeSUT()
         
         let exp = expectation(description: "Waiting for retrieve image data to complete")
         sut.retrieveImageData(for: anyURL()) { result in
@@ -25,6 +23,22 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
         }
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+}
+
+// MARK:- Helpers
+
+private extension CoreDataFeedImageDataStoreTests {
+    
+    func makeSUT(file: StaticString = #file, line: UInt = #line) -> CoreDataFeedStore {
+        let bundle = Bundle(for: CoreDataFeedStore.self)
+        let testSpecificURL = URL(fileURLWithPath: "/dev/null")
+        let sut = try! CoreDataFeedStore(bundle: bundle, storeURL: testSpecificURL)
+        
+        trackForMemoryLeak(instance: sut, file: file, line: line)
+        
+        return sut
     }
     
 }
