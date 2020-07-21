@@ -81,7 +81,7 @@ extension CoreDataFeedStore: FeedImageDataStore {
     public func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult)-> Void) {
         perform { [weak self] context in
             let retrieveResult: FeedImageDataStore.RetrieveResult =  Result(catching: {
-                let managedImage = try self?.firstFetchManagedImage(for: url, from: context)
+                let managedImage = try self?.fetchFirstManagedImage(for: url, from: context)
                 
                 return managedImage?.data
             })
@@ -93,7 +93,7 @@ extension CoreDataFeedStore: FeedImageDataStore {
     public func insertImageData(_ data: Data, for url: URL, completion: @escaping (FeedImageDataStore.InsertResult) -> Void) {
         perform { [weak self] context in
             let insertResult: FeedImageDataStore.InsertResult = Result(catching: {
-                let managedImage = try self?.firstFetchManagedImage(for: url, from: context)
+                let managedImage = try self?.fetchFirstManagedImage(for: url, from: context)
                 managedImage?.data = data
                 
                 try context.saveIfHasPendingChanges()
@@ -104,7 +104,7 @@ extension CoreDataFeedStore: FeedImageDataStore {
         }
     }
     
-    private func firstFetchManagedImage(for url: URL, from context: NSManagedObjectContext) throws -> ManagedFeedImage? {
+    private func fetchFirstManagedImage(for url: URL, from context: NSManagedObjectContext) throws -> ManagedFeedImage? {
         let predicate = NSPredicate(format: "url == %@", argumentArray: [url])
         let request = NSFetchRequest<ManagedFeedImage>(entityName: ManagedFeedImage.entity().name!)
                 
