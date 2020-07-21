@@ -45,6 +45,24 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteRetrievalWith: .success(latestData), for: url)
     }
     
+    func test_sideEffects_runSerially() {
+        let sut = makeSUT()
+        let url = anyURL()
+
+        let op1 = expectation(description: "Operation 1")
+        sut.insert([localImage(url: url)], timestamp: Date()) { _ in
+            op1.fulfill()
+        }
+        
+        let op2 = expectation(description: "Operation 2")
+        sut.insertImageData(anyData(), for: url) { _ in    op2.fulfill() }
+        
+        let op3 = expectation(description: "Operation 3")
+        sut.insertImageData(anyData(), for: url) { _ in op3.fulfill() }
+        
+        wait(for: [op1, op2, op3], timeout: 5.0, enforceOrder: true)
+    }
+    
 }
 
 // MARK:- Helpers
