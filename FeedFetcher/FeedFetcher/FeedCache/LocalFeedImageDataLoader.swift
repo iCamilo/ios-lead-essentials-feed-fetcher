@@ -22,7 +22,7 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader {
     public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataTask {
         let task = ImageDataLoadTask(completion: completion)
         
-        task.wrappedTask =  store.retrieveImageData(for: url) { [weak self] retrieveResult in
+        store.retrieveImageData(for: url) { [weak self] retrieveResult in
             guard let self = self else { return }
             
             let loadResult = self.handle(storeRetrieveResult: retrieveResult)
@@ -48,14 +48,12 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader {
     
     private class ImageDataLoadTask: FeedImageDataTask {
         private var completion: ((LocalFeedImageDataLoader.Result) -> Void)?
-        var wrappedTask: RetrieveImageDataTask?
         
         init(completion: @escaping (LocalFeedImageDataLoader.Result) -> Void) {
             self.completion = completion
         }
         
         func cancel() {
-            wrappedTask?.cancel()
             invalidateCompletion()
         }
         
