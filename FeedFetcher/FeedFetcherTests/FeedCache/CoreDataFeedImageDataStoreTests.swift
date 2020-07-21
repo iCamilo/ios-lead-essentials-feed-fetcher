@@ -23,6 +23,16 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteRetrievalWith: .success(.none), for: nonExistentURL)
     }
     
+    func test_retrieveImageData_completesWithFoundDataForStoredURL() {
+        let sut = makeSUT()
+        let url = anyURL()
+        let data = anyData()
+                                
+        insert(data, for: url, into: sut)
+                                        
+        expect(sut, toCompleteRetrievalWith: .success(data), for: url)
+    }
+    
 }
 
 // MARK:- Helpers
