@@ -67,25 +67,19 @@ public final class CoreDataFeedStore: FeedStore {
 public extension CoreDataFeedStore {
     
     func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult)-> Void) {
-        let request = NSFetchRequest<ManagedFeedImage>(entityName: ManagedFeedImage.entity().name!)
-        request.predicate = NSPredicate(format: "url == %@", argumentArray: [url])
-        
-        do {
-            let managedImage = try context.fetch(request).first
-            
-            completion(.success(managedImage?.data))
-        } catch {
-            
+        perform { [weak self] context in
+            do {
+                let managedImage = try self?.firstFetchManagedImage(for: url, from: context)
+                
+                completion(.success(managedImage?.data))
+            } catch { }
         }
     }
     
     func insertImageData(_ data: Data, for url: URL, completion: @escaping (FeedImageDataStore.InsertResult) -> Void) {
-        perform { context in
-            let request = NSFetchRequest<ManagedFeedImage>(entityName: ManagedFeedImage.entity().name!)
-            request.predicate = NSPredicate(format: "url == %@", argumentArray: [url])
-                        
+        perform { [weak self] context in
             do {
-                let managedImage = try context.fetch(request).first
+                let managedImage = try self?.firstFetchManagedImage(for: url, from: context)
                 managedImage?.data = data
                 
                 try context.saveIfHasPendingChanges()
@@ -95,6 +89,16 @@ public extension CoreDataFeedStore {
                 completion(.failure(error))
             }
         }
+    }
+    
+    private func firstFetchManagedImage(for url: URL, from context: NSManagedObjectContext) throws -> ManagedFeedImage? {
+        let predicate = NSPredicate(format: "url == %@", argumentArray: [url])
+        let request = NSFetchRequest<ManagedFeedImage>(entityName: ManagedFeedImage.entity().name!)
+                
+        request.predicate = predicate
+        request.fetchLimit = 1
+                        
+        return try context.fetch(request).first
     }
     
 }
