@@ -4,7 +4,7 @@
 import Foundation
 import CoreData
 
-public final class CoreDataFeedStore: FeedStore {
+public final class CoreDataFeedStore {
     private let modelName = "FeedStore"
                 
     private let container: NSPersistentContainer
@@ -14,6 +14,19 @@ public final class CoreDataFeedStore: FeedStore {
         container = try NSPersistentContainer.load(modelName: modelName, in: bundle, storeURL: storeURL)
         context = container.newBackgroundContext()
     }
+            
+    private func perform(_ action:@escaping (NSManagedObjectContext) -> Void) {
+        let context = self.context
+        context.perform {
+            action(context)
+        }
+    }
+                
+}
+
+// MARK:- FeedStore
+
+extension CoreDataFeedStore: FeedStore {
     
     public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
         perform { context in
@@ -49,19 +62,13 @@ public final class CoreDataFeedStore: FeedStore {
         }
     }
     
-    private func perform(_ action:@escaping (NSManagedObjectContext) -> Void) {
-        let context = self.context
-        context.perform {
-            action(context)
-        }
-    }
-            
     private static func deleteAllManagedCache(in context: NSManagedObjectContext) throws {
         let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
         let caches = try context.fetch(request)
         
         _ = caches.map { context.delete($0) }
     }
+    
 }
 
 // MARK:- FeedImageDataStore
