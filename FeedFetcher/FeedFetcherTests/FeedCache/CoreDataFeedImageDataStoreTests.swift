@@ -10,19 +10,7 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
     func test_retrieveImageData_completesWithNotFoundDataOnEmptyCache() {
         let sut = makeSUT()
         
-        let exp = expectation(description: "Waiting for retrieve image data to complete")
-        sut.retrieveImageData(for: anyURL()) { result in
-            switch result {
-            case let .success(receivedData):
-                XCTAssertEqual(receivedData, nil)
-            default:
-                XCTFail("Expected to complete with not found data on empty cache, but got \(result)")
-            }
-            
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
+        expect(sut, toCompleteRetrievalWith: .success(.none), for: anyURL())
     }
     
     func test_retrieveImageData_completesWithNotFoundForNonStoredURL() {
@@ -51,18 +39,7 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
         }
         wait(for: [insertExp], timeout: 1.0)
                                         
-        let exp = expectation(description: "Waiting for retrieve image data to complete")
-        sut.retrieveImageData(for: noStoreImageURL) { result in
-            switch result {
-            case let .success(receivedData):
-                XCTAssertEqual(receivedData, nil, "Expected not found data for url that is not stored")
-            default:
-                XCTFail("Expected to complete with not found data for url that is not stored, but got \(result)")
-            }
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
+        expect(sut, toCompleteRetrievalWith: .success(.none), for: noStoreImageURL)
     }
     
 }
@@ -79,6 +56,24 @@ private extension CoreDataFeedImageDataStoreTests {
         trackForMemoryLeak(instance: sut, file: file, line: line)
         
         return sut
+    }
+    
+    func expect(_ sut: CoreDataFeedStore, toCompleteRetrievalWith expected: FeedImageDataStore.RetrieveResult, for url: URL, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Waiting for retrieve image data to complete")
+        
+        sut.retrieveImageData(for: url) { result in
+            switch (expected, result) {
+            
+            case let (.success(expectedData), .success(receivedData)):
+                XCTAssertEqual(expectedData, receivedData, "Expected success with image data \(expected) but got \(result) instead", file: file, line: line)
+                                        
+            default:
+                XCTFail("Expected to complete with not found data for url that is not stored, but got \(result)", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
     func localImage(url: URL) -> LocalFeedImage {
