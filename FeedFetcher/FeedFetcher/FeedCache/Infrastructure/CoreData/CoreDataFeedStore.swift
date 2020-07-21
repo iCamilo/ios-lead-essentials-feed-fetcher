@@ -63,3 +63,11 @@ public final class CoreDataFeedStore: FeedStore {
         _ = caches.map { context.delete($0) }
     }
 }
+
+public extension CoreDataFeedStore {
+    
+    func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult)-> Void) {
+        completion(.success(nil))
+    }
+    
+}
