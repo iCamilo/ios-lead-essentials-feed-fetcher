@@ -15,12 +15,12 @@ final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataTask {
-        let _ = fallbackLoader.loadImageData(from: url) {[weak self] fallbackResult in
-            if case .success = fallbackResult {
-                return completion(fallbackResult)
+        let _ = primaryLoader.loadImageData(from: url) {[weak self] primaryResult in
+            if case .success = primaryResult {
+                return completion(primaryResult)
             }
             
-            let _ = self?.primaryLoader.loadImageData(from: url, completion: completion)
+            let _ = self?.fallbackLoader.loadImageData(from: url, completion: completion)
         }
         
         return LoadImageTask()
@@ -35,18 +35,19 @@ final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
 
 final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
         
-    func test_loadImageData_completesWithFallbackImageDataOnFallbackLoaderSuccees() {
+    func test_loadImageData_completesWithPrimaryImageDataOnPrimaryLoaderSuccess() {
+        let primaryData = "primaryData".data(using: .utf8)!
+        let fallbackData = "fallbackData".data(using: .utf8)!
+        let sut = makeSUT(primaryResult: .success(primaryData), fallbackResult: .success(fallbackData))
+        
+        expect(sut, toCompleteLoadImageDataWith: .success(primaryData), from: anyURL)
+    }
+    
+    func test_loadImageData_completesWithFallbackImageDataOnPrimaryLoaderFailAndFallbackLoaderSuccess() {
         let fallbackData = "fallbackData".data(using: .utf8)!
         let sut = makeSUT(primaryResult: .failure(anyError), fallbackResult: .success(fallbackData))
         
         expect(sut, toCompleteLoadImageDataWith: .success(fallbackData), from: anyURL)
-    }
-    
-    func test_loadImageData_completesWithPrimaryImageDataOnFallbackLoaderFailsAndPrimaryLoaderSuccess() {
-        let primaryData = "primaryData".data(using: .utf8)!
-        let sut = makeSUT(primaryResult: .success(primaryData), fallbackResult: .failure(anyError))
-        
-        expect(sut, toCompleteLoadImageDataWith: .success(primaryData), from: anyURL)
     }
     
     func test_loadImageData_completesWithErrorOnBothFallbackPrimaryLoadersFail() {
@@ -55,7 +56,6 @@ final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
         
         expect(sut, toCompleteLoadImageDataWith: .failure(loadImageError), from: anyURL)
     }
-        
     
 }
 
