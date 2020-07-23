@@ -3,29 +3,7 @@
 
 import XCTest
 import FeedFetcher
-
-final class FeedLoaderWithFallbackComposite: FeedLoader {
-    private let primaryFeedLoader: FeedLoader
-    private let fallbackFeedLoader: FeedLoader
-    
-    init(primaryFeedLoader: FeedLoader, fallbackFeedLoader: FeedLoader) {
-        self.primaryFeedLoader = primaryFeedLoader
-        self.fallbackFeedLoader = fallbackFeedLoader
-    }
-    
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        primaryFeedLoader.load { primaryResult in
-            if case .success = primaryResult {
-                return completion(primaryResult)
-            }
-            
-            self.fallbackFeedLoader.load { fallbackResult in
-                completion(fallbackResult)
-            }
-        }
-    }
-    
-}
+import FeedFetchApp
 
 class FeedLoaderWithFallbackCompositeTests: XCTestCase {
 
