@@ -19,7 +19,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
     func test_emptyCache_load_completesWithEmptyFeed() {
         let sut = makeFeedLoader()
                 
-        assertLoad(sut, completeWith: [])
+        expect(sut, toLoadFeed: [])
     }
     
     func test_noEmptyCache_load_completesWithCachedFeed() {
@@ -29,7 +29,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
                        
         saveFeed(feed, with: saveSUT)
         
-        assertLoad(loadSUT, completeWith: feed)
+        expect(loadSUT, toLoadFeed: feed)
     }
     
     func test_noEmptyCache_saveRecentFeed_overridesOldFeedWithNewFeed() {
@@ -42,7 +42,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         saveFeed(oldFeed, with: saveOldFeedSUT)
         saveFeed(recentFeed, with: saveRecentFeedSUT)
         
-        assertLoad(loadSUT, completeWith: recentFeed)
+        expect(loadSUT, toLoadFeed: recentFeed)
     }
         
     // MARK:- LocalFeedImageDataLoader Tests
@@ -56,7 +56,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         saveFeed([image], with: feedLoader)
         saveImageData(imageData, for: image.url, with: imageLoader)
                     
-        expect(imageLoader, toLoad: imageData, from: image.url)
+        expect(imageLoader, toLoadImageData: imageData, from: image.url)
     }
     
     func test_loadImageData_deliversSavedImageDataOnASeparateLoaderInstance() {
@@ -69,7 +69,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         saveFeed([image], with: feedLoader)
         saveImageData(imageData, for: image.url, with: imageLoaderToSave)
         
-        expect(imageLoderToLoad, toLoad: imageData, from: image.url)
+        expect(imageLoderToLoad, toLoadImageData: imageData, from: image.url)
     }
     
     func test_saveImageData_overridesSavedImageDataOnASeparateInstance() {
@@ -83,11 +83,11 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         
         let imageLoaderToSaveFirst = makeImageLoader()
         saveImageData(firstImageData, for: image.url, with: imageLoaderToSaveFirst)
-        expect(imageLoaderToLoad, toLoad: firstImageData, from: image.url)
+        expect(imageLoaderToLoad, toLoadImageData: firstImageData, from: image.url)
         
         let imageLoaderToSaveLast = makeImageLoader()
         saveImageData(lastImageData, for: image.url, with: imageLoaderToSaveLast)
-        expect(imageLoaderToLoad, toLoad: lastImageData, from: image.url)        
+        expect(imageLoaderToLoad, toLoadImageData: lastImageData, from: image.url)
     }
 }
     
@@ -115,7 +115,7 @@ private extension FeedFetcherFeedCacheIntegrationTests {
         return sut
     }
     
-    private func assertLoad(_ sut: LocalFeedLoader, completeWith expected: [FeedImage], file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: LocalFeedLoader, toLoadFeed expected: [FeedImage], file: StaticString = #file, line: UInt = #line) {
         let expec = expectation(description: "Waiting for load to complete")
         
         sut.load { result in
@@ -165,7 +165,7 @@ private extension FeedFetcherFeedCacheIntegrationTests {
         wait(for: [exp], timeout: 1.0)
     }
     
-    private func expect(_ sut: LocalFeedImageDataLoader, toLoad expectedData: Data, from url: URL, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: LocalFeedImageDataLoader, toLoadImageData expectedData: Data, from url: URL, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Waiting for load image data to complete")
         
         let _ = sut.loadImageData(from: url) { loadResult in
