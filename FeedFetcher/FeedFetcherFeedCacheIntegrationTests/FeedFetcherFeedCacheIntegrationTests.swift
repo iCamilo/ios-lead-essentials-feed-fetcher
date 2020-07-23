@@ -27,7 +27,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         let loadSUT = makeFeedLoader()
         let feed = uniqueImageFeed().model
                        
-        save(saveSUT, feed: feed)
+        saveFeed(feed, with: saveSUT)
         
         assertLoad(loadSUT, completeWith: feed)
     }
@@ -39,8 +39,8 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         let recentFeed = uniqueImageFeed().model        
         let loadSUT = makeFeedLoader()
         
-        save(saveOldFeedSUT, feed: oldFeed)
-        save(saveRecentFeedSUT, feed: recentFeed)
+        saveFeed(oldFeed, with: saveOldFeedSUT)
+        saveFeed(recentFeed, with: saveRecentFeedSUT)
         
         assertLoad(loadSUT, completeWith: recentFeed)
     }
@@ -51,8 +51,8 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         let sut = makeImageLoader()
         
         let image = uniqueImage()
-        let localFeedLoader = makeFeedLoader()
-        save(localFeedLoader, feed: [image])
+        let feedLoader = makeFeedLoader()
+        saveFeed([image], with: feedLoader)
             
         let imageData = anyData()
         saveImageData(imageData, for: image.url, with: sut)
@@ -67,7 +67,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         let imageLoderToLoad = makeImageLoader()
         let feedLoader = makeFeedLoader()
         
-        save(feedLoader, feed: [image])
+        saveFeed([image], with: feedLoader)
         saveImageData(imageData, for: image.url, with: imageLoaderToSave)
         
         expect(imageLoderToLoad, toLoad: imageData, from: image.url)
@@ -115,7 +115,7 @@ private extension FeedFetcherFeedCacheIntegrationTests {
         wait(for: [expec], timeout: 1.0)
     }
     
-    private func save(_ sut: LocalFeedLoader, feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
+    private func saveFeed(_ feed: [FeedImage], with sut: LocalFeedLoader, file: StaticString = #file, line: UInt = #line) {
         let saveExp = expectation(description: "Waiting for save to complete")
         
         sut.save(feed: feed) { saveResult in
