@@ -4,39 +4,7 @@
 import Foundation
 import XCTest
 import FeedFetcher
-
-final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
-    private let primaryLoader: FeedImageDataLoader
-    private let fallbackLoader: FeedImageDataLoader
-            
-    init(primaryLoader: FeedImageDataLoader, fallbackLoader: FeedImageDataLoader) {
-        self.primaryLoader = primaryLoader
-        self.fallbackLoader = fallbackLoader
-    }
-    
-    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataTask {
-        let task = LoadImageTask()
-        task.wrappedTask = primaryLoader.loadImageData(from: url) {[weak self] primaryResult in
-            if case .success = primaryResult {
-                return completion(primaryResult)
-            }
-            
-            task.wrappedTask = self?.fallbackLoader.loadImageData(from: url, completion: completion)
-        }
-        
-        return task
-    }
-    
-    private final class LoadImageTask: FeedImageDataTask {
-        var wrappedTask: FeedImageDataTask?
-        
-        func cancel() {
-            wrappedTask?.cancel()
-        }
-    }
-
-    
-}
+import FeedFetchApp
 
 final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
         
