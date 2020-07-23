@@ -19,6 +19,7 @@
 		5B29AB7D24CA1F95007BD104 /* FeedFetcheriOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */; };
 		5B29AB7E24CA1F95007BD104 /* FeedFetcheriOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5B6714D124CA3F7600FB37AB /* FeedLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714D024CA3F7600FB37AB /* FeedLoaderWithFallbackComposite.swift */; };
+		5B6714D324CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714D224CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		5B29AB7924CA1F95007BD104 /* FeedFetcher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeedFetcher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeedFetcheriOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6714D024CA3F7600FB37AB /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
+		5B6714D224CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				5B29A99724CA1D9C007BD104 /* FeedLoaderWithFallbackCompositeTests.swift */,
+				5B6714D224CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift */,
 				5B29A99924CA1D9C007BD104 /* Info.plist */,
 			);
 			path = FeedFetchAppTests;
@@ -248,6 +251,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B6714D324CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift in Sources */,
 				5B29A99824CA1D9C007BD104 /* FeedLoaderWithFallbackCompositeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
