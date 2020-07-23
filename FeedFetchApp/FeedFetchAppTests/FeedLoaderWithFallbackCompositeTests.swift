@@ -4,7 +4,7 @@
 import XCTest
 import FeedFetcher
 
-final class FeedLoaderWithFallback: FeedLoader {
+final class FeedLoaderWithFallbackComposite: FeedLoader {
     private let primaryFeedLoader: FeedLoader
     private let fallbackFeedLoader: FeedLoader
     
@@ -21,16 +21,16 @@ final class FeedLoaderWithFallback: FeedLoader {
     
 }
 
-class FeedLoaderWithFallbackTests: XCTestCase {
+class FeedLoaderWithFallbackCompositeTests: XCTestCase {
 
     func test_load_completesWithPrimaryFeedOnPrimaryLoaderSuccess() {
         let primaryFeed = uniqueFeed()
         let fallbackFeed = uniqueFeed()
         let primaryFeedLoader = FeedLoaderStub(result: .success(primaryFeed))
         let fallbackFeedLoader = FeedLoaderStub(result: .success(fallbackFeed))
-        let sut = FeedLoaderWithFallback(primaryFeedLoader: primaryFeedLoader, fallbackFeedLoader: fallbackFeedLoader)
+        let sut = FeedLoaderWithFallbackComposite(primaryFeedLoader: primaryFeedLoader, fallbackFeedLoader: fallbackFeedLoader)
                     
-        let exp = expectation(description: "Waiting for remote feed load to complete")
+        let exp = expectation(description: "Waiting for feed load to complete")
         sut.load { result in
             switch result {
             case let .failure(error):
