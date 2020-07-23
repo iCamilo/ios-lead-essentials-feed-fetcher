@@ -30,15 +30,12 @@ final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
 final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
     
     func test_loadImageData_completesWithPrimaryImageDataOnPrimaryLoaderSucceed() {
-        let url = URL(string: "http://any-url.com")!
         let primaryData = "primaryData".data(using: .utf8)!
         let fallbackData = "fallbackData".data(using: .utf8)!
-        let primaryLoader = FeedImageDataLoaderStub(result: .success(primaryData))
-        let fallbackLoader = FeedImageDataLoaderStub(result: .success(fallbackData))
-        let sut = FeedImageDataLoaderWithFallbackComposite(primaryLoader: primaryLoader, fallbackLoader: fallbackLoader)
+        let sut = makeSUT(primaryResult: .success(primaryData), fallbackResult: .success(fallbackData))
         
         let exp = expectation(description: "Waiting for load image data to complete")
-        let _ = sut.loadImageData(from: url) { result in
+        let _ = sut.loadImageData(from: anyURL) { result in
             switch result {
             case let .failure(error):
                 XCTFail("Expected load image data to complete but got error \(error)")
@@ -53,6 +50,34 @@ final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
     }
     
 }
+
+// MARK:- Helpers
+
+private extension FeedImageLoaderWithFallbackCompositeTests {
+    
+    func makeSUT(primaryResult: FeedImageDataLoader.Result, fallbackResult: FeedImageDataLoader.Result, file: StaticString = #file, line: UInt = #line) -> FeedImageDataLoaderWithFallbackComposite {
+        let primaryLoader = FeedImageDataLoaderStub(result: primaryResult)
+        let fallbackLoader = FeedImageDataLoaderStub(result: fallbackResult)
+        let sut = FeedImageDataLoaderWithFallbackComposite(primaryLoader: primaryLoader, fallbackLoader: fallbackLoader)
+        
+        trackForMemoryLeak(instance: primaryLoader, file: file, line: line)
+        trackForMemoryLeak(instance: fallbackLoader, file: file, line: line)
+        trackForMemoryLeak(instance: sut, file: file, line: line)
+        
+        return sut
+    }
+    
+    var anyURL: URL { return URL(string: "http://any-url.com")! }
+    
+    func trackForMemoryLeak(instance: AnyObject, file: StaticString, line: UInt) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Check For Possible Memory Leak", file: file, line: line)
+        }
+    }
+    
+}
+
+// MARK:- FeedImageDataLoaderStub
 
 private final class FeedImageDataLoaderStub: FeedImageDataLoader {
     private let result: FeedImageDataLoader.Result
