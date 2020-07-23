@@ -21,7 +21,7 @@ final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
                 return completion(primaryResult)
             }
             
-            let _ = self?.fallbackLoader.loadImageData(from: url, completion: completion)
+            task.wrappedTask = self?.fallbackLoader.loadImageData(from: url, completion: completion)
         }
         
         return task
@@ -31,7 +31,7 @@ final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
         var wrappedTask: FeedImageDataTask?
         
         func cancel() {
-            wrappedTask?.cancel()            
+            wrappedTask?.cancel()
         }
     }
 
@@ -71,6 +71,19 @@ final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
         
         XCTAssertEqual(primaryLoader.cancelledUrls, [url], "Primary loader expected to cancel data load if task is cancelled before it completes")
         XCTAssertEqual(fallbackLoader.cancelledUrls, [], "Secondary loader expected to no cancel anything as the data load has been cancelled before it is even called")
+    }
+    
+    func test_cancelLoadImageData_cancelsFallbackLoaderTaskAfterPrimaryLoaderFailure() {
+        let url = anyURL
+        let (sut, primaryLoader, fallbackLoader) = makeSUT()
+        
+        let task = sut.loadImageData(from: url) { _ in }
+        primaryLoader.complete(with: anyError)
+        
+        task.cancel()
+        
+        XCTAssertEqual(primaryLoader.cancelledUrls, [], "Primary loader expected to not cancel data load as it has already completed")
+        XCTAssertEqual(fallbackLoader.cancelledUrls, [url], "Fallback loader expected to cancel data load as task is cancelled before it completes")
     }
 }
 
@@ -153,6 +166,10 @@ private final class FeedImageDataLoaderSpy: FeedImageDataLoader {
         return Task(callback: { [weak self] in
             self?.cancelledUrls.append(url)
         })
+    }
+            
+    func complete(with error: NSError, at index: Int = 0) {
+        completions[index](.failure(error))
     }
     
     private struct Task: FeedImageDataTask {
