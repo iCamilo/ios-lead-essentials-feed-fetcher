@@ -44,6 +44,17 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         
         expect(loadSUT, toLoadFeed: recentFeed)
     }
+    
+    func test_validateCache_doesNotDeleteRecentlySavedFeed() {
+        let feed = [uniqueImage(), uniqueImage()]
+        let feedLoaderToSave = makeFeedLoader()
+        let feedLoaderToValidate = makeFeedLoader()
+        
+        saveFeed(feed, with: feedLoaderToSave)
+        validateCache(with: feedLoaderToValidate)
+                
+        expect(feedLoaderToSave, toLoadFeed: feed)
+    }
         
     // MARK:- LocalFeedImageDataLoader Tests
     
@@ -148,6 +159,19 @@ private extension FeedFetcherFeedCacheIntegrationTests {
         wait(for: [saveExp], timeout: 1.0)
     }
     
+    private func validateCache(with sut: LocalFeedLoader, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Waiting for validate cache to complete")
+        
+        sut.validateCache() { result in
+            if case let Result.failure(error) = result {
+                XCTFail("Expected feed validation to suceed, but got error \(error)")
+            }
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     private func saveImageData(_ data: Data, for url: URL, with sut: LocalFeedImageDataLoader, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Waiting for save image data to complete")
         
@@ -181,7 +205,7 @@ private extension FeedFetcherFeedCacheIntegrationTests {
         
         wait(for: [exp], timeout: 1.0)
     }
-                    
+                        
     private var userDomainCacheURL: URL {
         FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     }
