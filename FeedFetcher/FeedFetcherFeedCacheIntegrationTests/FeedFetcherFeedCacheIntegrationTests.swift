@@ -85,10 +85,12 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         wait(for: [loadExpectation], timeout: 1.0)
         
     }
+}
     
-    
-    // MARK:- Helpers
-    
+// MARK:- Helpers
+
+private extension FeedFetcherFeedCacheIntegrationTests {
+        
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
         let store = try! CoreDataFeedStore(bundle: coreDataFeedStoreBundle, storeURL: testSpecificStoreURL)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
