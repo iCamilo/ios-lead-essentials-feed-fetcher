@@ -78,17 +78,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
         sut = nil
         store.completeRetrievalWithEmptyCache()
     }
-    
-    func test_loadImageDataCancel_requestStoreToCancelRetrieval() {
-        let (sut, loader) = makeSUT()
-        let aURL = anyURL()
         
-        let task = sut.loadImageData(from : aURL) { _ in }
-        task.cancel()
-        
-        XCTAssertEqual(loader.messages, [ .retrieveImageData(aURL), .cancelRetrieval(aURL) ], "Expected store to receive a cancel request after task cancellation")
-    }
-    
     func test_loadImageData_doesNotCompleteAfterTaskCancellation() {
         let (sut, loader) = makeSUT()
                 

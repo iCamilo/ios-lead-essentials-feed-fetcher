@@ -6,8 +6,7 @@ import FeedFetcher
 
 class FeedImageDataStoreSpy: FeedImageDataStore {
     enum Message: Equatable {
-        case retrieveImageData(URL)
-        case cancelRetrieval(URL)
+        case retrieveImageData(URL)        
         case insertImageData(Data, for: URL)
     }
         
@@ -18,13 +17,9 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
     
     private(set) var retrieveCompletions = [(FeedImageDataStore.RetrieveResult) -> Void]()
     
-    func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult)-> Void) -> RetrieveImageDataTask {
+    func retrieveImageData(for url: URL, completion: @escaping (FeedImageDataStore.RetrieveResult)-> Void) {
         messages.append(.retrieveImageData(url))
         retrieveCompletions.append(completion)
-        
-        return RetrieveTask ({ [weak self] in
-            self?.messages.append(.cancelRetrieval(url))
-        })
     }
     
     func completeRetrievalWithError(at index: Int = 0) {
@@ -57,17 +52,4 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
         insertCompletions[index](.success(()))
     }
     
-    // MARK:- RetrieveImageDataTask
-    
-    private struct RetrieveTask: RetrieveImageDataTask {
-        private let callback: () -> Void
-        
-        init(_ callback: @escaping () -> Void) {
-            self.callback = callback
-        }
-        
-        func cancel() {
-            callback()
-        }
-    }
 }
