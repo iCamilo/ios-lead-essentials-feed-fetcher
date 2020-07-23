@@ -53,22 +53,10 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         let image = uniqueImage()
         let localFeedLoader = makeFeedLoader()
         save(localFeedLoader, feed: [image])
-                        
-        let imageData = anyData()
-        let exp = expectation(description: "Waiting for load to complete")
-        sut.saveImageData(imageData, for: image.url) { saveResult in
-            switch saveResult {
-            case let .failure(saveResult):
-                XCTFail("Save image data failed with error \(saveResult)")
-            case .success:
-                    break
-            }
             
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1.0)
-        
-        
+        let imageData = anyData()
+        saveImageData(imageData, for: image.url, with: sut)
+                                                
         let loadExpectation = expectation(description: "Waiting for load image data to complete")
         let _ = sut.loadImageData(from: image.url) { loadResult in
             switch loadResult {
@@ -142,6 +130,23 @@ private extension FeedFetcherFeedCacheIntegrationTests {
         wait(for: [saveExp], timeout: 1.0)
     }
     
+    private func saveImageData(_ data: Data, for url: URL, with sut: LocalFeedImageDataLoader, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Waiting for save image data to complete")
+        
+        sut.saveImageData(data, for: url) { result in
+            switch result {
+            case let .failure(saveResult):
+                XCTFail("Save image data failed with error \(saveResult)", file: file, line: line)
+            case .success:
+                break
+            }
+            
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+            
     private var userDomainCacheURL: URL {
         FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     }
