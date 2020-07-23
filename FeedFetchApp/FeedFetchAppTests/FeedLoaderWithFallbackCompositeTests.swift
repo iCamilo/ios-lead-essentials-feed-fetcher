@@ -66,10 +66,7 @@ private extension FeedLoaderWithFallbackCompositeTests{
         
         wait(for: [exp], timeout: 1.0)
     }
-    
-    var anyURL: URL { return URL(string: "http://any-url.com")! }
-    var anyError: NSError { return NSError(domain: "FeedLoaderCompositeTest", code: 0) }
-            
+                     
     func uniqueFeed() -> [FeedImage] {
         return [FeedImage(id: UUID(), url: anyURL, description: "anyDescription", location:"anyLocation")]
     }        

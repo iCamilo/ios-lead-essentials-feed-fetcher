@@ -66,8 +66,6 @@ private extension FeedImageLoaderWithFallbackCompositeTests {
         
         return sut
     }
-    
-    var anyURL: URL { return URL(string: "http://any-url.com")! }
             
 }
 
