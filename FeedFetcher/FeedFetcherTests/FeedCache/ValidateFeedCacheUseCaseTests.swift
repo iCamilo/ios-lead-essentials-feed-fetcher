@@ -67,24 +67,20 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
     func test_validateCache_failsOnDeletionErrorOfFailedRetrieval() {
         let (store, sut) = makeSUT()
         let deleteError = anyNSError()
-                
-        let exp = expectation(description: "Waiting for validate cache to complete")
-        sut.validateCache { result in
-            switch result {
-            case let .failure(error):
-                XCTAssertEqual(deleteError, error as NSError, "Validate cache expected to fail on store delete error")
-            default:
-                XCTFail("Validate cache expected to fail on delete failure but got \(result)")
-            }
-            
-            exp.fulfill()
-        }
-        
-        
-        store.completeRetrieval(with: anyNSError())
-        store.completeDeletion(with: deleteError)
-        
-        wait(for: [exp], timeout: 1.0)
+                     
+        expectValidate(sut, toCompleteWith: .failure(deleteError), when: {
+            store.completeRetrieval(with: anyNSError())
+            store.completeDeletion(with: deleteError)
+        })
+    }
+    
+    func test_validateCache_succedOnDeletionSucessOfFailedRetrieval() {
+        let (store, sut) = makeSUT()
+          
+        expectValidate(sut, toCompleteWith: .success(()), when: {
+            store.completeRetrieval(with: anyNSError())
+            store.completeDeletionSuccessfully()
+        })
     }
     
     func test_feedLoaderIsDeallocated_validateCache_doesNotDeleteCache() {
@@ -109,6 +105,27 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
         trackForMemoryLeak(instance: sut, file: file, line: line)
         
         return (store, sut)
+    }
+    
+    private func expectValidate(_ sut: LocalFeedLoader, toCompleteWith expected: LocalFeedLoader.ValidateResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Waiting for validate cache to complete")
+        
+        sut.validateCache { result in
+            switch (expected, result) {
+            case (.success, .success):
+                break
+            case let (.failure(expectedError as NSError), .failure(receivedError as NSError)):
+                XCTAssertEqual(expectedError, receivedError, "Validate cache expected to fail with error \(expectedError) but got error \(receivedError)", file: file, line: line)
+            default:
+                XCTFail("Validate cache expected to complete with \(expected) but got \(result)", file: file, line: line)
+            }
+            
+            exp.fulfill()
+        }
+        
+        action()
+                
+        wait(for: [exp], timeout: 1.0)
     }
         
 }
