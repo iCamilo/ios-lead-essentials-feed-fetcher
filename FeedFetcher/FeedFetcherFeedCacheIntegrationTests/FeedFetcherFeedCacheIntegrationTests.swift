@@ -45,6 +45,48 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         assertLoad(loadSUT, completeWith: recentFeed)
     }
         
+    // MARK:- LocalFeedImageDataLoader Tests
+    
+    func test_loadImageData_deliversSavedImageDataForSavedFeed() {
+        let bundle = Bundle(for: CoreDataFeedStore.self)
+        let store = try! CoreDataFeedStore(bundle: bundle, storeURL: testSpecificStoreURL)
+        let sut = LocalFeedImageDataLoader(store: store)
+        
+        let image = uniqueImage()
+        let localFeedLoader = makeSUT()
+        save(localFeedLoader, feed: [image])
+                        
+        let imageData = anyData()
+        let exp = expectation(description: "Waiting for load to complete")
+        sut.saveImageData(imageData, for: image.url) { saveResult in
+            switch saveResult {
+            case let .failure(saveResult):
+                XCTFail("Save image data failed with error \(saveResult)")
+            case .success:
+                    break
+            }
+            
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+        
+        
+        let loadExpectation = expectation(description: "Waiting for load image data to complete")
+        let _ = sut.loadImageData(from: image.url) { loadResult in
+            switch loadResult {
+            case let .failure(loadError):
+                XCTFail("Expected load image to retrieve saved data but failed with error \(loadError)")
+            case let .success(resultData):
+                XCTAssertEqual(imageData, resultData, "Expected to load image data \(imageData) but got \(resultData)")
+            }
+            
+            loadExpectation.fulfill()
+        }
+        wait(for: [loadExpectation], timeout: 1.0)
+        
+    }
+    
+    
     // MARK:- Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
