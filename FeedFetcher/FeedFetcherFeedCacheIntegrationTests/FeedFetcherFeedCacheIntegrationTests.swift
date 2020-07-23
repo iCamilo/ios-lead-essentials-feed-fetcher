@@ -15,6 +15,8 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         super.tearDown()
         cleanStore()
     }
+    
+    // MARK:- LocalFeedLoader Tests
 
     func test_emptyCache_load_completesWithEmptyFeed() {
         let sut = makeFeedLoader()
