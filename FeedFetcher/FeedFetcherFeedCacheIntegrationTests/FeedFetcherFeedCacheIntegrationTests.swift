@@ -56,20 +56,8 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
             
         let imageData = anyData()
         saveImageData(imageData, for: image.url, with: sut)
-                                                
-        let loadExpectation = expectation(description: "Waiting for load image data to complete")
-        let _ = sut.loadImageData(from: image.url) { loadResult in
-            switch loadResult {
-            case let .failure(loadError):
-                XCTFail("Expected load image to retrieve saved data but failed with error \(loadError)")
-            case let .success(resultData):
-                XCTAssertEqual(imageData, resultData, "Expected to load image data \(imageData) but got \(resultData)")
-            }
-            
-            loadExpectation.fulfill()
-        }
-        wait(for: [loadExpectation], timeout: 1.0)
-        
+                    
+        expect(sut, toLoad: imageData, from: image.url)
     }
 }
     
@@ -146,7 +134,24 @@ private extension FeedFetcherFeedCacheIntegrationTests {
         
         wait(for: [exp], timeout: 1.0)
     }
+    
+    private func expect(_ sut: LocalFeedImageDataLoader, toLoad expectedData: Data, from url: URL, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Waiting for load image data to complete")
+        
+        let _ = sut.loadImageData(from: url) { loadResult in
+            switch loadResult {
+            case let .failure(loadError):
+                XCTFail("Expected load image to retrieve saved data but failed with error \(loadError)", file: file, line: line)
+            case let .success(resultData):
+                XCTAssertEqual(expectedData, resultData, "Expected to load image data \(expectedData) but got \(resultData)", file: file, line: line)
+            }
             
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+                    
     private var userDomainCacheURL: URL {
         FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     }
