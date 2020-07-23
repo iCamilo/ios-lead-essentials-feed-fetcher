@@ -57,6 +57,17 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
                 
         expect(feedLoaderToSave, toLoadFeed: feed)
     }
+    
+    func test_validateCache_deletesNoLongerValidSavedFeed() {
+        let feed = [uniqueImage(), uniqueImage()]
+        let feedLoaderToSave = makeFeedLoader(currentDate: .distantPast)
+        let feedLoaderToValidate = makeFeedLoader(currentDate: Date())
+        
+        saveFeed(feed, with: feedLoaderToSave)
+        validateCache(with: feedLoaderToValidate)
+                
+        expect(feedLoaderToSave, toLoadFeed: [])
+    }
         
     // MARK:- LocalFeedImageDataLoader Tests
     
@@ -108,9 +119,9 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
 
 private extension FeedFetcherFeedCacheIntegrationTests {
         
-    private func makeFeedLoader(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
+    private func makeFeedLoader(currentDate: Date = Date(),file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
         let store = try! CoreDataFeedStore(storeURL: testSpecificStoreURL)
-        let sut = LocalFeedLoader(store: store, currentDate: Date.init)
+        let sut = LocalFeedLoader(store: store, currentDate: { currentDate })
         
         trackForMemoryLeak(instance: store, file: file, line: line)
         trackForMemoryLeak(instance: sut, file: file, line: line)
