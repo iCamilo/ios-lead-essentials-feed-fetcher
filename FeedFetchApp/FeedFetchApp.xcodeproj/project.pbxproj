@@ -14,6 +14,10 @@
 		5B29A98A24CA1D9C007BD104 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B29A98924CA1D9C007BD104 /* Assets.xcassets */; };
 		5B29A98D24CA1D9C007BD104 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B29A98B24CA1D9C007BD104 /* LaunchScreen.storyboard */; };
 		5B29A99824CA1D9C007BD104 /* FeedFetchAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B29A99724CA1D9C007BD104 /* FeedFetchAppTests.swift */; };
+		5B29AB7B24CA1F95007BD104 /* FeedFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B29AB7924CA1F95007BD104 /* FeedFetcher.framework */; };
+		5B29AB7C24CA1F95007BD104 /* FeedFetcher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B29AB7924CA1F95007BD104 /* FeedFetcher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5B29AB7D24CA1F95007BD104 /* FeedFetcheriOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */; };
+		5B29AB7E24CA1F95007BD104 /* FeedFetcheriOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +29,21 @@
 			remoteInfo = FeedFetchApp;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5B29AB7F24CA1F95007BD104 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5B29AB7E24CA1F95007BD104 /* FeedFetcheriOS.framework in Embed Frameworks */,
+				5B29AB7C24CA1F95007BD104 /* FeedFetcher.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5B29A97D24CA1D9A007BD104 /* FeedFetchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedFetchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +57,8 @@
 		5B29A99324CA1D9C007BD104 /* FeedFetchAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedFetchAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B29A99724CA1D9C007BD104 /* FeedFetchAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFetchAppTests.swift; sourceTree = "<group>"; };
 		5B29A99924CA1D9C007BD104 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5B29AB7924CA1F95007BD104 /* FeedFetcher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeedFetcher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeedFetcheriOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +66,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B29AB7D24CA1F95007BD104 /* FeedFetcheriOS.framework in Frameworks */,
+				5B29AB7B24CA1F95007BD104 /* FeedFetcher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +87,7 @@
 				5B29A97F24CA1D9A007BD104 /* FeedFetchApp */,
 				5B29A99624CA1D9C007BD104 /* FeedFetchAppTests */,
 				5B29A97E24CA1D9A007BD104 /* Products */,
+				5B29AB7824CA1F95007BD104 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,6 +123,15 @@
 			path = FeedFetchAppTests;
 			sourceTree = "<group>";
 		};
+		5B29AB7824CA1F95007BD104 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5B29AB7924CA1F95007BD104 /* FeedFetcher.framework */,
+				5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -109,6 +142,7 @@
 				5B29A97924CA1D9A007BD104 /* Sources */,
 				5B29A97A24CA1D9A007BD104 /* Frameworks */,
 				5B29A97B24CA1D9A007BD104 /* Resources */,
+				5B29AB7F24CA1F95007BD104 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
