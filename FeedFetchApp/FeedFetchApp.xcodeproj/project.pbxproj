@@ -13,7 +13,7 @@
 		5B29A98824CA1D9A007BD104 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B29A98624CA1D9A007BD104 /* Main.storyboard */; };
 		5B29A98A24CA1D9C007BD104 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B29A98924CA1D9C007BD104 /* Assets.xcassets */; };
 		5B29A98D24CA1D9C007BD104 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B29A98B24CA1D9C007BD104 /* LaunchScreen.storyboard */; };
-		5B29A99824CA1D9C007BD104 /* FeedFetchAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B29A99724CA1D9C007BD104 /* FeedFetchAppTests.swift */; };
+		5B29A99824CA1D9C007BD104 /* FeedLoaderWithFallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B29A99724CA1D9C007BD104 /* FeedLoaderWithFallbackTests.swift */; };
 		5B29AB7B24CA1F95007BD104 /* FeedFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B29AB7924CA1F95007BD104 /* FeedFetcher.framework */; };
 		5B29AB7C24CA1F95007BD104 /* FeedFetcher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B29AB7924CA1F95007BD104 /* FeedFetcher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5B29AB7D24CA1F95007BD104 /* FeedFetcheriOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */; };
@@ -55,7 +55,7 @@
 		5B29A98C24CA1D9C007BD104 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5B29A98E24CA1D9C007BD104 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B29A99324CA1D9C007BD104 /* FeedFetchAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedFetchAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B29A99724CA1D9C007BD104 /* FeedFetchAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFetchAppTests.swift; sourceTree = "<group>"; };
+		5B29A99724CA1D9C007BD104 /* FeedLoaderWithFallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackTests.swift; sourceTree = "<group>"; };
 		5B29A99924CA1D9C007BD104 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B29AB7924CA1F95007BD104 /* FeedFetcher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeedFetcher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeedFetcheriOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,7 +117,7 @@
 		5B29A99624CA1D9C007BD104 /* FeedFetchAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				5B29A99724CA1D9C007BD104 /* FeedFetchAppTests.swift */,
+				5B29A99724CA1D9C007BD104 /* FeedLoaderWithFallbackTests.swift */,
 				5B29A99924CA1D9C007BD104 /* Info.plist */,
 			);
 			path = FeedFetchAppTests;
@@ -244,7 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B29A99824CA1D9C007BD104 /* FeedFetchAppTests.swift in Sources */,
+				5B29A99824CA1D9C007BD104 /* FeedLoaderWithFallbackTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
