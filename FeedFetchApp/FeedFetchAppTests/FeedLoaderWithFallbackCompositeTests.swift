@@ -14,8 +14,14 @@ final class FeedLoaderWithFallbackComposite: FeedLoader {
     }
     
     func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        primaryFeedLoader.load { remoteResult in
-            completion(remoteResult)
+        primaryFeedLoader.load { primaryResult in
+            if case .success = primaryResult {
+                return completion(primaryResult)
+            }
+            
+            self.fallbackFeedLoader.load { fallbackResult in
+                completion(fallbackResult)
+            }
         }
     }
     
@@ -43,6 +49,25 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_load_completesWithFallbackFeedOnPrimaryLoaderFailureAndFallbackLoaderSuccess() {
+        let fallbackFeed = uniqueFeed()
+        let sut = makeSUT(primaryResult: .failure(anyError), fallbackResult: .success(fallbackFeed))
+                    
+        let exp = expectation(description: "Waiting for feed load to complete")
+        sut.load { result in
+            switch result {
+            case let .failure(error):
+                XCTFail("Expected feed load to succeed but got an error \(error)")
+            case let .success(resultFeed):
+                XCTAssertEqual(fallbackFeed, resultFeed, "Expected feed load to complete with fallback feed \(fallbackFeed) but got \(resultFeed)")
+            }
+            
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     // MARK:- Helpers
     
     func makeSUT(primaryResult: FeedLoader.Result, fallbackResult: FeedLoader.Result,  file: StaticString = #file, line: UInt = #line) -> FeedLoaderWithFallbackComposite {
@@ -58,6 +83,7 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
     }
     
     var anyURL: URL { return URL(string: "http://any-url.com")! }
+    var anyError: NSError { return NSError(domain: "FeedLoaderCompositeTest", code: 0) }
             
     func uniqueFeed() -> [FeedImage] {
         return [FeedImage(id: UUID(), url: anyURL, description: "anyDescription", location:"anyLocation")]
