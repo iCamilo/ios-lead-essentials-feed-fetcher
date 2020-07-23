@@ -48,8 +48,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
     // MARK:- LocalFeedImageDataLoader Tests
     
     func test_loadImageData_deliversSavedImageDataForSavedFeed() {
-        let bundle = Bundle(for: CoreDataFeedStore.self)
-        let store = try! CoreDataFeedStore(bundle: bundle, storeURL: testSpecificStoreURL)
+        let store = try! CoreDataFeedStore(storeURL: testSpecificStoreURL)
         let sut = LocalFeedImageDataLoader(store: store)
         
         let image = uniqueImage()
@@ -92,7 +91,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
 private extension FeedFetcherFeedCacheIntegrationTests {
         
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
-        let store = try! CoreDataFeedStore(bundle: coreDataFeedStoreBundle, storeURL: testSpecificStoreURL)
+        let store = try! CoreDataFeedStore(storeURL: testSpecificStoreURL)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
         
         trackForMemoryLeak(instance: store, file: file, line: line)
@@ -141,11 +140,7 @@ private extension FeedFetcherFeedCacheIntegrationTests {
     private var testSpecificStoreURL: URL {
         userDomainCacheURL.appendingPathComponent("\(type(of: self)).store")
     }
-    
-    private var coreDataFeedStoreBundle: Bundle {
-        Bundle(for: CoreDataFeedStore.self)
-    }
-    
+        
     private func cleanStore() {
         try? FileManager.default.removeItem(at: testSpecificStoreURL)
     }
