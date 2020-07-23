@@ -15,8 +15,12 @@ final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataTask {
-        let _ = fallbackLoader.loadImageData(from: url) { fallbackResult in
-            completion(fallbackResult)
+        let _ = fallbackLoader.loadImageData(from: url) {[weak self] fallbackResult in
+            if case .success = fallbackResult {
+                return completion(fallbackResult)
+            }
+            
+            let _ = self?.primaryLoader.loadImageData(from: url, completion: completion)
         }
         
         return LoadImageTask()
@@ -30,12 +34,19 @@ final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
 }
 
 final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
-    
+        
     func test_loadImageData_completesWithFallbackImageDataOnFallbackLoaderSuccees() {
         let fallbackData = "fallbackData".data(using: .utf8)!
         let sut = makeSUT(primaryResult: .failure(anyError), fallbackResult: .success(fallbackData))
         
         expect(sut, toCompleteLoadImageDataWith: .success(fallbackData), from: anyURL)
+    }
+    
+    func test_loadImageData_completesWithPrimaryImageDataOnFallbackLoaderFailsAndPrimaryLoaderSuccess() {
+        let primaryData = "primaryData".data(using: .utf8)!
+        let sut = makeSUT(primaryResult: .success(primaryData), fallbackResult: .failure(anyError))
+        
+        expect(sut, toCompleteLoadImageDataWith: .success(primaryData), from: anyURL)
     }
         
     
