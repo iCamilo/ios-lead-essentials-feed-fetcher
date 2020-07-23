@@ -34,19 +34,7 @@ final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
         let fallbackData = "fallbackData".data(using: .utf8)!
         let sut = makeSUT(primaryResult: .success(primaryData), fallbackResult: .success(fallbackData))
         
-        let exp = expectation(description: "Waiting for load image data to complete")
-        let _ = sut.loadImageData(from: anyURL) { result in
-            switch result {
-            case let .failure(error):
-                XCTFail("Expected load image data to complete but got error \(error)")
-            case let .success(resultData):
-                XCTAssertEqual(primaryData, resultData, "Expected load image data to complete with \(primaryData) but got \(resultData)")
-            }
-            
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
+        expect(sut, toCompleteLoadImageDataWith: .success(primaryData), from: anyURL)
     }
     
 }
@@ -65,6 +53,25 @@ private extension FeedImageLoaderWithFallbackCompositeTests {
         trackForMemoryLeak(instance: sut, file: file, line: line)
         
         return sut
+    }
+    
+    func expect(_ sut: FeedImageDataLoaderWithFallbackComposite, toCompleteLoadImageDataWith expected: FeedImageDataLoader.Result, from url: URL, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Waiting for load image data to complete")
+        
+        let _ = sut.loadImageData(from: url) { result in
+            switch (expected, result) {
+            case let (.failure(expectedError as NSError), .failure(resultError as NSError)):
+                XCTAssertEqual(expectedError, resultError, "Expected load image data to fail with \(expectedError) but got \(resultError)", file: file, line: line)
+            case let (.success(expectedData), .success(resultData)):
+                XCTAssertEqual(expectedData, resultData, "Expected load image data to complete with \(expectedData) but got \(resultData)", file: file, line: line)
+            default:
+                XCTFail("Expected load image data to complete with \(expected) but got \(result)")
+            }
+            
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
     }
             
 }
