@@ -72,13 +72,7 @@ private extension FeedLoaderWithFallbackCompositeTests{
             
     func uniqueFeed() -> [FeedImage] {
         return [FeedImage(id: UUID(), url: anyURL, description: "anyDescription", location:"anyLocation")]
-    }
-    
-    func trackForMemoryLeak(instance: AnyObject, file: StaticString, line: UInt) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Check For Possible Memory Leak", file: file, line: line)
-        }
-    }
+    }        
     
 }
 

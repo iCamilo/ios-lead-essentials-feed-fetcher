@@ -68,13 +68,7 @@ private extension FeedImageLoaderWithFallbackCompositeTests {
     }
     
     var anyURL: URL { return URL(string: "http://any-url.com")! }
-    
-    func trackForMemoryLeak(instance: AnyObject, file: StaticString, line: UInt) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Check For Possible Memory Leak", file: file, line: line)
-        }
-    }
-    
+            
 }
 
 // MARK:- FeedImageDataLoaderStub
