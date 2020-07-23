@@ -47,17 +47,16 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         
     // MARK:- LocalFeedImageDataLoader Tests
     
-    func test_loadImageData_deliversSavedImageDataForSavedFeed() {
-        let sut = makeImageLoader()
-        
+    func test_loadImageData_deliversSavedImageDataUsingTheSameLoaderInstance() {
         let image = uniqueImage()
-        let feedLoader = makeFeedLoader()
-        saveFeed([image], with: feedLoader)
-            
         let imageData = anyData()
-        saveImageData(imageData, for: image.url, with: sut)
+        let imageLoader = makeImageLoader()
+        let feedLoader = makeFeedLoader()
+                
+        saveFeed([image], with: feedLoader)
+        saveImageData(imageData, for: image.url, with: imageLoader)
                     
-        expect(sut, toLoad: imageData, from: image.url)
+        expect(imageLoader, toLoad: imageData, from: image.url)
     }
     
     func test_loadImageData_deliversSavedImageDataOnASeparateLoaderInstance() {
