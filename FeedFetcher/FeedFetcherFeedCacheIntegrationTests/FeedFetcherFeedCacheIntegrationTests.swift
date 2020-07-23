@@ -17,14 +17,14 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
     }
 
     func test_emptyCache_load_completesWithEmptyFeed() {
-        let sut = makeSUT()
+        let sut = makeFeedLoader()
                 
         assertLoad(sut, completeWith: [])
     }
     
     func test_noEmptyCache_load_completesWithCachedFeed() {
-        let saveSUT = makeSUT()
-        let loadSUT = makeSUT()
+        let saveSUT = makeFeedLoader()
+        let loadSUT = makeFeedLoader()
         let feed = uniqueImageFeed().model
                        
         save(saveSUT, feed: feed)
@@ -33,11 +33,11 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
     }
     
     func test_noEmptyCache_saveRecentFeed_overridesOldFeedWithNewFeed() {
-        let saveOldFeedSUT = makeSUT()
+        let saveOldFeedSUT = makeFeedLoader()
         let oldFeed = uniqueImageFeed().model
-        let saveRecentFeedSUT = makeSUT()
+        let saveRecentFeedSUT = makeFeedLoader()
         let recentFeed = uniqueImageFeed().model        
-        let loadSUT = makeSUT()
+        let loadSUT = makeFeedLoader()
         
         save(saveOldFeedSUT, feed: oldFeed)
         save(saveRecentFeedSUT, feed: recentFeed)
@@ -51,7 +51,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
         let sut = makeImageLoader()
         
         let image = uniqueImage()
-        let localFeedLoader = makeSUT()
+        let localFeedLoader = makeFeedLoader()
         save(localFeedLoader, feed: [image])
                         
         let imageData = anyData()
@@ -89,7 +89,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
 
 private extension FeedFetcherFeedCacheIntegrationTests {
         
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
+    private func makeFeedLoader(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
         let store = try! CoreDataFeedStore(storeURL: testSpecificStoreURL)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
         
