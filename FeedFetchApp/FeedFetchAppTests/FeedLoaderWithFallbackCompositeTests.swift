@@ -30,9 +30,12 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
              
         expect(sut, toCompleteFeedLoadWith: .failure(fallbackError))
     }
-    
-    // MARK:- Helpers
-    
+}
+
+// MARK:- Helpers
+
+private extension FeedLoaderWithFallbackCompositeTests{
+            
     func makeSUT(primaryResult: FeedLoader.Result, fallbackResult: FeedLoader.Result,  file: StaticString = #file, line: UInt = #line) -> FeedLoaderWithFallbackComposite {
         let primaryFeedLoader = FeedLoaderStub(result: primaryResult)
         let fallbackFeedLoader = FeedLoaderStub(result: fallbackResult)
