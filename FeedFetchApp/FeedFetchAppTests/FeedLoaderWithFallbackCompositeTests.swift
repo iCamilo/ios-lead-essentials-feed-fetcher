@@ -26,9 +26,7 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
     func test_load_completesWithPrimaryFeedOnPrimaryLoaderSuccess() {
         let primaryFeed = uniqueFeed()
         let fallbackFeed = uniqueFeed()
-        let primaryFeedLoader = FeedLoaderStub(result: .success(primaryFeed))
-        let fallbackFeedLoader = FeedLoaderStub(result: .success(fallbackFeed))
-        let sut = FeedLoaderWithFallbackComposite(primaryFeedLoader: primaryFeedLoader, fallbackFeedLoader: fallbackFeedLoader)
+        let sut = makeSUT(primaryResult: .success(primaryFeed), fallbackResult: .success(fallbackFeed))
                     
         let exp = expectation(description: "Waiting for feed load to complete")
         sut.load { result in
@@ -47,10 +45,28 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
     
     // MARK:- Helpers
     
+    func makeSUT(primaryResult: FeedLoader.Result, fallbackResult: FeedLoader.Result,  file: StaticString = #file, line: UInt = #line) -> FeedLoaderWithFallbackComposite {
+        let primaryFeedLoader = FeedLoaderStub(result: primaryResult)
+        let fallbackFeedLoader = FeedLoaderStub(result: fallbackResult)
+        let sut = FeedLoaderWithFallbackComposite(primaryFeedLoader: primaryFeedLoader, fallbackFeedLoader: fallbackFeedLoader)
+        
+        trackForMemoryLeak(instance: primaryFeedLoader, file: file, line: line)
+        trackForMemoryLeak(instance: fallbackFeedLoader, file: file, line: line)
+        trackForMemoryLeak(instance: sut, file: file, line: line)
+        
+        return sut
+    }
+    
     var anyURL: URL { return URL(string: "http://any-url.com")! }
             
     func uniqueFeed() -> [FeedImage] {
         return [FeedImage(id: UUID(), url: anyURL, description: "anyDescription", location:"anyLocation")]
+    }
+    
+    func trackForMemoryLeak(instance: AnyObject, file: StaticString, line: UInt) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Check For Possible Memory Leak", file: file, line: line)
+        }
     }
     
 }
