@@ -48,8 +48,7 @@ class FeedFetcherFeedCacheIntegrationTests: XCTestCase {
     // MARK:- LocalFeedImageDataLoader Tests
     
     func test_loadImageData_deliversSavedImageDataForSavedFeed() {
-        let store = try! CoreDataFeedStore(storeURL: testSpecificStoreURL)
-        let sut = LocalFeedImageDataLoader(store: store)
+        let sut = makeImageLoader()
         
         let image = uniqueImage()
         let localFeedLoader = makeSUT()
@@ -93,6 +92,16 @@ private extension FeedFetcherFeedCacheIntegrationTests {
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
         let store = try! CoreDataFeedStore(storeURL: testSpecificStoreURL)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
+        
+        trackForMemoryLeak(instance: store, file: file, line: line)
+        trackForMemoryLeak(instance: sut, file: file, line: line)
+        
+        return sut
+    }
+    
+    private func makeImageLoader(file: StaticString = #file, line: UInt = #line) -> LocalFeedImageDataLoader {
+        let store = try! CoreDataFeedStore(storeURL: testSpecificStoreURL)
+        let sut = LocalFeedImageDataLoader(store: store)
         
         trackForMemoryLeak(instance: store, file: file, line: line)
         trackForMemoryLeak(instance: sut, file: file, line: line)
