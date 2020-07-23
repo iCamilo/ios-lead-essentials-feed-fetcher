@@ -7,14 +7,16 @@ import FeedFetcher
 
 final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
     private let primaryLoader: FeedImageDataLoader
+    private let fallbackLoader: FeedImageDataLoader
             
     init(primaryLoader: FeedImageDataLoader, fallbackLoader: FeedImageDataLoader) {
         self.primaryLoader = primaryLoader
+        self.fallbackLoader = fallbackLoader
     }
     
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataTask {
-        let _ = primaryLoader.loadImageData(from: url) { primaryResult in
-            completion(primaryResult)
+        let _ = fallbackLoader.loadImageData(from: url) { fallbackResult in
+            completion(fallbackResult)
         }
         
         return LoadImageTask()
@@ -29,13 +31,13 @@ final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
 
 final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
     
-    func test_loadImageData_completesWithPrimaryImageDataOnPrimaryLoaderSucceed() {
-        let primaryData = "primaryData".data(using: .utf8)!
+    func test_loadImageData_completesWithFallbackImageDataOnFallbackLoaderSuccees() {
         let fallbackData = "fallbackData".data(using: .utf8)!
-        let sut = makeSUT(primaryResult: .success(primaryData), fallbackResult: .success(fallbackData))
+        let sut = makeSUT(primaryResult: .failure(anyError), fallbackResult: .success(fallbackData))
         
-        expect(sut, toCompleteLoadImageDataWith: .success(primaryData), from: anyURL)
+        expect(sut, toCompleteLoadImageDataWith: .success(fallbackData), from: anyURL)
     }
+        
     
 }
 
@@ -65,7 +67,7 @@ private extension FeedImageLoaderWithFallbackCompositeTests {
             case let (.success(expectedData), .success(resultData)):
                 XCTAssertEqual(expectedData, resultData, "Expected load image data to complete with \(expectedData) but got \(resultData)", file: file, line: line)
             default:
-                XCTFail("Expected load image data to complete with \(expected) but got \(result)")
+                XCTFail("Expected load image data to complete with \(expected) but got \(result)", file: file, line: line)
             }
             
             exp.fulfill()
