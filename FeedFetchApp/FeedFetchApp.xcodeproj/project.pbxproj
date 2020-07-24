@@ -25,6 +25,7 @@
 		5B6714DA24CA5B5800FB37AB /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714D924CA5B5800FB37AB /* FeedImageDataLoaderWithFallbackComposite.swift */; };
 		5B6714DC24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714DB24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift */; };
 		5B6714DE24CB4F8400FB37AB /* FeedLoaderStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714DD24CB4F8400FB37AB /* FeedLoaderStub.swift */; };
+		5B6714E024CB50BB00FB37AB /* XCTestCase+FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714DF24CB50BB00FB37AB /* XCTestCase+FeedLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		5B6714D924CA5B5800FB37AB /* FeedImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		5B6714DB24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderCacheDecoratorTests.swift; sourceTree = "<group>"; };
 		5B6714DD24CB4F8400FB37AB /* FeedLoaderStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderStub.swift; sourceTree = "<group>"; };
+		5B6714DF24CB50BB00FB37AB /* XCTestCase+FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FeedLoader.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				5B6714D424CA46BA00FB37AB /* XCTest+TrackMemoryLeaks.swift */,
+				5B6714DF24CB50BB00FB37AB /* XCTestCase+FeedLoader.swift */,
 				5B6714D724CA47B300FB37AB /* FeedFetchAppTestsHelpers.swift */,
 				5B6714DD24CB4F8400FB37AB /* FeedLoaderStub.swift */,
 			);
@@ -277,6 +280,7 @@
 			files = (
 				5B6714D324CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift in Sources */,
 				5B6714DC24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift in Sources */,
+				5B6714E024CB50BB00FB37AB /* XCTestCase+FeedLoader.swift in Sources */,
 				5B6714D524CA46BA00FB37AB /* XCTest+TrackMemoryLeaks.swift in Sources */,
 				5B6714D824CA47B300FB37AB /* FeedFetchAppTestsHelpers.swift in Sources */,
 				5B6714DE24CB4F8400FB37AB /* FeedLoaderStub.swift in Sources */,
