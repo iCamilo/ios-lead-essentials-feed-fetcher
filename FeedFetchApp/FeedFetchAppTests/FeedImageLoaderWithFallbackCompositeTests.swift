@@ -6,7 +6,7 @@ import XCTest
 import FeedFetcher
 import FeedFetchApp
 
-final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase {
+final class FeedImageLoaderWithFallbackCompositeTests: XCTestCase, FeedImageDataLoaderTestCase {
         
     func test_loadImageData_completesWithPrimaryImageDataOnPrimaryLoaderSuccess() {
         let primaryData = "primaryData".data(using: .utf8)!
@@ -77,45 +77,5 @@ private extension FeedImageLoaderWithFallbackCompositeTests {
         
         return (sut, primaryLoader, fallbackLoader)
     }
-    
-    func expect(_ sut: FeedImageDataLoaderWithFallbackComposite, toCompleteLoadImageDataWith expected: FeedImageDataLoader.Result, from url: URL, file: StaticString = #file, line: UInt = #line) {
-        let exp = expectation(description: "Waiting for load image data to complete")
-        
-        let _ = sut.loadImageData(from: url) { result in
-            switch (expected, result) {
-            case let (.failure(expectedError as NSError), .failure(resultError as NSError)):
-                XCTAssertEqual(expectedError, resultError, "Expected load image data to fail with \(expectedError) but got \(resultError)", file: file, line: line)
-            case let (.success(expectedData), .success(resultData)):
-                XCTAssertEqual(expectedData, resultData, "Expected load image data to complete with \(expectedData) but got \(resultData)", file: file, line: line)
-            default:
-                XCTFail("Expected load image data to complete with \(expected) but got \(result)", file: file, line: line)
-            }
-            
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
-    }
-    
-    func expect(_ sut: FeedImageDataLoaderWithFallbackComposite, toCompleteLoadImageDataWith expected: FeedImageDataLoader.Result, from url: URL, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
-        let exp = expectation(description: "Waiting for load image data to complete")
-        
-        let _ = sut.loadImageData(from: url) { result in
-            switch (expected, result) {
-            case let (.failure(expectedError as NSError), .failure(resultError as NSError)):
-                XCTAssertEqual(expectedError, resultError, "Expected load image data to fail with \(expectedError) but got \(resultError)", file: file, line: line)
-            case let (.success(expectedData), .success(resultData)):
-                XCTAssertEqual(expectedData, resultData, "Expected load image data to complete with \(expectedData) but got \(resultData)", file: file, line: line)
-            default:
-                XCTFail("Expected load image data to complete with \(expected) but got \(result)", file: file, line: line)
-            }
-            
-            exp.fulfill()
-        }
-        
-        action()
-        
-        wait(for: [exp], timeout: 1.0)
-    }
-            
+                   
 }
