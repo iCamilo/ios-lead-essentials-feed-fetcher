@@ -50,7 +50,7 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
     func test_saveImageData_completesWithFailedErrorOnInsertionError() {
         let (sut, store) = makeSUT()
                 
-        saveImageData(sut, andExpect: .failure(.failed), when: {
+        saveImageData(sut, andExpect: failure(.failed), when: {
             store.completeInsertionWithError()
         })
     }
@@ -101,7 +101,7 @@ private extension CacheFeedImageDataUseCaseTests {
             switch (expected, result) {
             case (.success, .success):
                 break
-            case let (.failure(expectedError), .failure(receivedError)):
+            case let (.failure(expectedError as LocalFeedImageDataLoader.SaveError), .failure(receivedError as LocalFeedImageDataLoader.SaveError)):
                 XCTAssertEqual(expectedError, receivedError, "Expected to fail with \(expectedError) but got \(receivedError)", file: file, line: line)
             default:
                 XCTFail("Expected to complete with \(expected) but got \(result)", file: file, line: line)
@@ -113,6 +113,10 @@ private extension CacheFeedImageDataUseCaseTests {
         action()
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    func failure(_ error: LocalFeedImageDataLoader.SaveError) -> LocalFeedImageDataLoader.SaveResult {
+        return .failure(error)
     }
     
 }
