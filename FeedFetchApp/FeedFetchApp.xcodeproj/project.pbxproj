@@ -23,6 +23,7 @@
 		5B6714D524CA46BA00FB37AB /* XCTest+TrackMemoryLeaks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714D424CA46BA00FB37AB /* XCTest+TrackMemoryLeaks.swift */; };
 		5B6714D824CA47B300FB37AB /* FeedFetchApp+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714D724CA47B300FB37AB /* FeedFetchApp+Helpers.swift */; };
 		5B6714DA24CA5B5800FB37AB /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714D924CA5B5800FB37AB /* FeedImageDataLoaderWithFallbackComposite.swift */; };
+		5B6714DC24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714DB24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		5B6714D424CA46BA00FB37AB /* XCTest+TrackMemoryLeaks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+TrackMemoryLeaks.swift"; sourceTree = "<group>"; };
 		5B6714D724CA47B300FB37AB /* FeedFetchApp+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedFetchApp+Helpers.swift"; sourceTree = "<group>"; };
 		5B6714D924CA5B5800FB37AB /* FeedImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
+		5B6714DB24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderCacheDecoratorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 				5B6714D624CA473D00FB37AB /* Helpers */,
 				5B29A99724CA1D9C007BD104 /* FeedLoaderWithFallbackCompositeTests.swift */,
 				5B6714D224CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift */,
+				5B6714DB24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift */,
 				5B29A99924CA1D9C007BD104 /* Info.plist */,
 			);
 			path = FeedFetchAppTests;
@@ -270,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B6714D324CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift in Sources */,
+				5B6714DC24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift in Sources */,
 				5B6714D524CA46BA00FB37AB /* XCTest+TrackMemoryLeaks.swift in Sources */,
 				5B6714D824CA47B300FB37AB /* FeedFetchApp+Helpers.swift in Sources */,
 				5B29A99824CA1D9C007BD104 /* FeedLoaderWithFallbackCompositeTests.swift in Sources */,
