@@ -31,7 +31,9 @@ private extension SceneDelegate {
         let (remoteFeedLoader, remoteImageDataLoader) = makeRemoteFeedLoader()
         let (localFeedLoader, localImageDataLoader) = makeLocalFeedLoader()
         
-        let feedComposite = FeedLoaderWithFallbackComposite(primaryFeedLoader: remoteFeedLoader, fallbackFeedLoader: localFeedLoader)
+        let remoteFeedLoaderWithCache = FeedLoaderCacheDecorator(decoratee: remoteFeedLoader, cache: localFeedLoader)
+        
+        let feedComposite = FeedLoaderWithFallbackComposite(primaryFeedLoader: remoteFeedLoaderWithCache, fallbackFeedLoader: localFeedLoader)
         let imageComposite = FeedImageDataLoaderWithFallbackComposite(primaryLoader: localImageDataLoader, fallbackLoader: remoteImageDataLoader)
         
         return (feedComposite, imageComposite)
