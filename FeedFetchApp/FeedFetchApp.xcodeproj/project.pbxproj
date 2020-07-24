@@ -27,6 +27,7 @@
 		5B6714DE24CB4F8400FB37AB /* FeedLoaderStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714DD24CB4F8400FB37AB /* FeedLoaderStub.swift */; };
 		5B6714E024CB50BB00FB37AB /* XCTestCase+FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6714DF24CB50BB00FB37AB /* XCTestCase+FeedLoader.swift */; };
 		5BB790FA24CB5E8E008C7CE3 /* FeedLoaderCacheDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB790F924CB5E8E008C7CE3 /* FeedLoaderCacheDecorator.swift */; };
+		5BB790FC24CB62DE008C7CE3 /* FeedImageDataLoaderCacheDecoratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB790FB24CB62DE008C7CE3 /* FeedImageDataLoaderCacheDecoratorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		5B6714DD24CB4F8400FB37AB /* FeedLoaderStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderStub.swift; sourceTree = "<group>"; };
 		5B6714DF24CB50BB00FB37AB /* XCTestCase+FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FeedLoader.swift"; sourceTree = "<group>"; };
 		5BB790F924CB5E8E008C7CE3 /* FeedLoaderCacheDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderCacheDecorator.swift; sourceTree = "<group>"; };
+		5BB790FB24CB62DE008C7CE3 /* FeedImageDataLoaderCacheDecoratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderCacheDecoratorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				5B29A99724CA1D9C007BD104 /* FeedLoaderWithFallbackCompositeTests.swift */,
 				5B6714D224CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift */,
 				5B6714DB24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift */,
+				5BB790FB24CB62DE008C7CE3 /* FeedImageDataLoaderCacheDecoratorTests.swift */,
 				5B29A99924CA1D9C007BD104 /* Info.plist */,
 			);
 			path = FeedFetchAppTests;
@@ -283,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B6714D324CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift in Sources */,
+				5BB790FC24CB62DE008C7CE3 /* FeedImageDataLoaderCacheDecoratorTests.swift in Sources */,
 				5B6714DC24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift in Sources */,
 				5B6714E024CB50BB00FB37AB /* XCTestCase+FeedLoader.swift in Sources */,
 				5B6714D524CA46BA00FB37AB /* XCTestCase+TrackMemoryLeaks.swift in Sources */,
