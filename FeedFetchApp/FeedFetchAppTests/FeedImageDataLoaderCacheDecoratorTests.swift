@@ -38,6 +38,8 @@ final class FeedImageDataLoaderCacheDecoratorTests: XCTestCase, FeedImageDataLoa
     
 }
 
+// MARK:- Helpers
+
 private extension FeedImageDataLoaderCacheDecoratorTests {
     
     func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedImageDataLoader, loader: FeedImageDataLoaderSpy) {
@@ -49,6 +51,5 @@ private extension FeedImageDataLoaderCacheDecoratorTests {
         
         return (sut, loader)
     }
-        
-    var anyData: Data { return "anydata".data(using: .utf8)! }
+    
 }
