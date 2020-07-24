@@ -4,28 +4,7 @@
 import Foundation
 import XCTest
 import FeedFetcher
-
-final class FeedLoaderCacheDecorator: FeedLoader {
-        
-    private let decoratee: FeedLoader
-    private let cache: FeedCache
-    
-    init(decoratee: FeedLoader, cache: FeedCache) {
-        self.decoratee = decoratee
-        self.cache = cache
-    }
-    
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        decoratee.load {[weak self] loadResult in
-            if let feed = try? loadResult.get() {
-                self?.cache.save(feed: feed) { _ in }
-            }
-            
-            completion(loadResult)
-        }
-    }
-        
-}
+import FeedFetchApp
 
 final class FeedLoaderCacheDecoratorTests: XCTestCase, FeedLoaderTestCase {
     
