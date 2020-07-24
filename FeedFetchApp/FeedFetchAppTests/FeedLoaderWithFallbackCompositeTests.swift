@@ -5,7 +5,7 @@ import XCTest
 import FeedFetcher
 import FeedFetchApp
 
-class FeedLoaderWithFallbackCompositeTests: XCTestCase {
+class FeedLoaderWithFallbackCompositeTests: XCTestCase, FeedLoaderTestCase {
 
     func test_load_completesWithPrimaryFeedOnPrimaryLoaderSuccess() {
         let primaryFeed = uniqueFeed()

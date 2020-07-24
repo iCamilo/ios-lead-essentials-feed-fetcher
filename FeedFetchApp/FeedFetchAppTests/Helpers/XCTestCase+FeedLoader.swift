@@ -5,7 +5,9 @@ import Foundation
 import XCTest
 import FeedFetcher
 
-extension XCTestCase {
+protocol FeedLoaderTestCase: XCTestCase {}
+
+extension FeedLoaderTestCase {
     
     func expect(_ sut: FeedLoader, toCompleteFeedLoadWith expected: FeedLoader.Result, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Waiting for load to complete")
