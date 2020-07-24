@@ -23,13 +23,10 @@ final class FeedLoaderCacheDecorator: FeedLoader {
     
     func load(completion: @escaping (FeedLoader.Result) -> Void) {
         decoratee.load {[weak self] loadResult in
-            switch loadResult {
-            case let .success(feed):
+            if let feed = try? loadResult.get() {
                 self?.cache.save(feed: feed) { _ in }
-            default:
-                break
             }
-                        
+            
             completion(loadResult)
         }
     }
@@ -63,7 +60,7 @@ final class FeedLoaderCacheDecoratorTests: XCTestCase, FeedLoaderTestCase {
     }
     
     func test_load_doesNotCacheLoadedFeedOnLoaderFailure() {
-        let cache = CacheSpy()        
+        let cache = CacheSpy()
         let sut = makeSUT(loaderResult: .failure(anyError), cache: cache)
         
         sut.load { _ in }
