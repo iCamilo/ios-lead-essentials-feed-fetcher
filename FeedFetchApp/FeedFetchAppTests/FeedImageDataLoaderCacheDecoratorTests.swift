@@ -5,12 +5,6 @@ import Foundation
 import XCTest
 import FeedFetcher
 
-protocol FeedImageDataCache {
-    typealias SaveResult = Swift.Result<Void, Error>
-    
-    func saveImageData(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void)
-}
-
 final class FeedImageDataLoaderCacheDecorator: FeedImageDataLoader {
     private let decoratee: FeedImageDataLoader
     private let cache: FeedImageDataCache
