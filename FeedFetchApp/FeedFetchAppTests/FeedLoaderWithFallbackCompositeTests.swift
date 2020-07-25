@@ -5,7 +5,7 @@ import XCTest
 import FeedFetcher
 import FeedFetchApp
 
-class FeedLoaderWithFallbackCompositeTests: XCTestCase {
+class FeedLoaderWithFallbackCompositeTests: XCTestCase, FeedLoaderTestCase {
 
     func test_load_completesWithPrimaryFeedOnPrimaryLoaderSuccess() {
         let primaryFeed = uniqueFeed()
@@ -46,44 +46,6 @@ private extension FeedLoaderWithFallbackCompositeTests{
         trackForMemoryLeak(instance: sut, file: file, line: line)
         
         return sut
-    }
-    
-    func expect(_ sut: FeedLoaderWithFallbackComposite, toCompleteFeedLoadWith expected: FeedLoader.Result,file: StaticString = #file, line: UInt = #line) {
-        let exp = expectation(description: "Waiting for feed load to complete")
-        
-        sut.load { result in
-            switch (result, expected) {
-            case let (.failure(error as NSError), .failure(expectedError as NSError)):
-                XCTAssertEqual(expectedError, error, "Expected feed load to fail with error \(expectedError) but got \(error)")
-            case let (.success(resultFeed), .success(expectedFeed)):
-                XCTAssertEqual(expectedFeed, resultFeed, "Expected feed load to complete with feed \(expectedFeed) but got \(resultFeed)")
-            default:
-                XCTFail("Expecte load feed to complete with \(expected) but got \(result)")
-            }
-                        
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
-    }
-                     
-    func uniqueFeed() -> [FeedImage] {
-        return [FeedImage(id: UUID(), url: anyURL, description: "anyDescription", location:"anyLocation")]
-    }        
-    
-}
-
-// MARK:- FeedLoaderStub
-
-private final class FeedLoaderStub: FeedLoader {
-    private let result: FeedLoader.Result
-    
-    init(result: FeedLoader.Result) {
-        self.result = result
-    }
-        
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        completion(result)
     }
     
 }

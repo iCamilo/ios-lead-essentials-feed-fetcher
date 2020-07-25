@@ -69,14 +69,14 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader {
 
 // MARK:- saveImageData
 
-public extension LocalFeedImageDataLoader {
-    typealias SaveResult = Swift.Result<Void,SaveError>
+extension LocalFeedImageDataLoader: FeedImageDataCache {
+    public typealias SaveResult = FeedImageDataCache.SaveResult
     
-    enum SaveError: Swift.Error {
+    public enum SaveError: Swift.Error {
         case failed
     }
     
-    func saveImageData(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
+    public func saveImageData(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
         store.insertImageData(data, for: url) { [weak self] insertResult in
             if self == nil { return }
             

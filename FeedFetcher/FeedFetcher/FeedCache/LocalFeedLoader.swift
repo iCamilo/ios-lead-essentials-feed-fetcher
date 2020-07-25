@@ -13,8 +13,8 @@ final public class LocalFeedLoader {
     }
 }
 
-extension LocalFeedLoader {
-    public typealias SaveResult = Result<Void, Error>
+extension LocalFeedLoader: FeedCache {
+    public typealias SaveResult = FeedCache.SaveResult
     
     public func save(feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
         store.deleteCachedFeed {[weak self] deletionResult in
