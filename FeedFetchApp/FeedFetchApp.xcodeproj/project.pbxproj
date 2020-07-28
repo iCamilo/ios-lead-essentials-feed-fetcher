@@ -48,6 +48,7 @@
 		5BB7913E24D08687008C7CE3 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7913424D08686008C7CE3 /* UIImage+TestHelpers.swift */; };
 		5BB7914624D08B05008C7CE3 /* FeedUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7914524D08B05008C7CE3 /* FeedUIIntegrationTests.swift */; };
 		5BB7914724D08B99008C7CE3 /* FeedUIIntegrationTests+Asserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7914324D08AEE008C7CE3 /* FeedUIIntegrationTests+Asserts.swift */; };
+		5BB7914924D08DEB008C7CE3 /* FeedAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7914824D08DEA008C7CE3 /* FeedAcceptanceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +130,7 @@
 		5BB7913524D08686008C7CE3 /* FeedUIIntegrationTests+LoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedUIIntegrationTests+LoaderSpy.swift"; sourceTree = "<group>"; };
 		5BB7914324D08AEE008C7CE3 /* FeedUIIntegrationTests+Asserts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedUIIntegrationTests+Asserts.swift"; sourceTree = "<group>"; };
 		5BB7914524D08B05008C7CE3 /* FeedUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIIntegrationTests.swift; sourceTree = "<group>"; };
+		5BB7914824D08DEA008C7CE3 /* FeedAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAcceptanceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +215,7 @@
 				5B6714DB24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift */,
 				5BB790FB24CB62DE008C7CE3 /* FeedImageDataLoaderCacheDecoratorTests.swift */,
 				5BB7914524D08B05008C7CE3 /* FeedUIIntegrationTests.swift */,
+				5BB7914824D08DEA008C7CE3 /* FeedAcceptanceTests.swift */,
 				5BB7911524D081DE008C7CE3 /* SceneDelegateTests.swift */,
 				5B29A99924CA1D9C007BD104 /* Info.plist */,
 			);
@@ -413,6 +416,7 @@
 			files = (
 				5B6714D324CA406500FB37AB /* FeedImageLoaderWithFallbackCompositeTests.swift in Sources */,
 				5BB7913724D08687008C7CE3 /* UIRefreshControl+TestHelpers.swift in Sources */,
+				5BB7914924D08DEB008C7CE3 /* FeedAcceptanceTests.swift in Sources */,
 				5BB790FC24CB62DE008C7CE3 /* FeedImageDataLoaderCacheDecoratorTests.swift in Sources */,
 				5BB7913E24D08687008C7CE3 /* UIImage+TestHelpers.swift in Sources */,
 				5BB7914624D08B05008C7CE3 /* FeedUIIntegrationTests.swift in Sources */,
