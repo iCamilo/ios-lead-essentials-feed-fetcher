@@ -27,6 +27,13 @@ class FeedFetchAppUIAcceptanceTests: XCTestCase {
         XCTAssertTrue(firstCachedImage.exists, "Should display images if it has connectivity")
     }
     
+    func test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache() {
+        let offlineApp = launchOfflineApp(resetLocalCache: true)
+        
+        let cachedFeedCells = feedCellsQuery(for: offlineApp)
+        XCTAssertEqual(cachedFeedCells.count, 0, "Should display empty feed if it has no connectivity and no cache")
+    }
+    
 }
 
 // MARK:- Helpers
@@ -35,16 +42,19 @@ private extension FeedFetchAppUIAcceptanceTests {
             
     @discardableResult
     func launchOnlineApp() -> XCUIApplication {
-        let onlineApp = XCUIApplication()
+        let onlineApp = XCUIApplication()        
         onlineApp.launch()
         
         return onlineApp
     }
     
     @discardableResult
-    func launchOfflineApp() -> XCUIApplication {
+    func launchOfflineApp(resetLocalCache: Bool = false) -> XCUIApplication {
         let offlineApp = XCUIApplication()
         offlineApp.launchArguments = ["-connectivity", "offline"]
+        if resetLocalCache {
+            offlineApp.launchArguments.append("-reset")
+        }
         offlineApp.launch()
         
         return offlineApp

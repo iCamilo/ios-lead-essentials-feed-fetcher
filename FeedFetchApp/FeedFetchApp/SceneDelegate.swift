@@ -12,7 +12,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
-                                
+           
+        resetLocalCacheIfRequired(storeURL: localStoreURL)
+        
         let (remoteFeedLoaderWithLocalFallback, localImageDataLoaderWithRemoteFallback) = composeFeedLoadersWithFallback()
         let feedViewController = FeedUIComposer.feedComposedWith(
             feedLoader: remoteFeedLoaderWithLocalFallback,
@@ -39,7 +41,6 @@ private extension SceneDelegate {
     }
     
     func makeLocalFeedLoader() -> (feed: LocalFeedLoader, image: LocalFeedImageDataLoader) {
-        let localStoreURL = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite")
         let feedStore = try! CoreDataFeedStore(storeURL: localStoreURL)
         
         let localFeedLoader = LocalFeedLoader(store: feedStore, currentDate: Date.init)
@@ -67,6 +68,18 @@ private extension SceneDelegate {
             
             return httpClient
         }
+    }
+    
+    func resetLocalCacheIfRequired(storeURL url: URL) {
+        if !CommandLine.arguments.contains("-reset") {
+            return
+        }
+        
+        try? FileManager.default.removeItem(at: url)
+    }
+    
+    var localStoreURL : URL {
+        NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite")
     }
     
     var remoteFeedLoaderURL: URL {
