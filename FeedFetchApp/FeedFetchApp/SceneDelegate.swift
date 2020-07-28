@@ -8,18 +8,17 @@ import CoreData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    
-    var localStoreURL : URL {
-        NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite")
-    }
-    
+            
     private lazy var httpClient: HttpClient = {
         let session = URLSession(configuration: .ephemeral)
+        
         return URLSessionHttpClient(session: session)
     }()
     
     private lazy var store: FeedStore & FeedImageDataStore = {
-        try! CoreDataFeedStore(storeURL: localStoreURL)
+        let localStoreURL = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite")
+        
+        return try! CoreDataFeedStore(storeURL: localStoreURL)
     }()
     
     convenience init(httpClient: HttpClient, store: FeedStore & FeedImageDataStore) {
@@ -43,11 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window?.rootViewController = navigationController
     }
-            
-    func makeRemoteClient() -> HttpClient {
-        return self.httpClient
-    }
-                                
+                                                
     private func composeFeedLoadersWithFallback() -> (feed: FeedLoaderWithFallbackComposite, image: FeedImageDataLoaderWithFallbackComposite) {
         let (remoteFeedLoader, remoteImageDataLoader) = makeRemoteFeedLoader()
         let (localFeedLoader, localImageDataLoader) = makeLocalFeedLoader()
@@ -69,14 +64,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
             
     private func makeRemoteFeedLoader() -> (feed: RemoteFeedLoader, image: RemoteFeedImageLoader) {
-        let httpClient = makeRemoteClient()
-        
         let remoteFeedLoader = RemoteFeedLoader(from: remoteFeedLoaderURL, httpClient: httpClient)
         let remoteImageDataLoader = RemoteFeedImageLoader(httpClient: httpClient)
         
         return (remoteFeedLoader, remoteImageDataLoader)
     }
-    
+         
     private var remoteFeedLoaderURL: URL {
         URL(string:
             "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
