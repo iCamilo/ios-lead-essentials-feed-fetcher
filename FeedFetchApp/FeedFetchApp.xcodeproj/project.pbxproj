@@ -47,6 +47,7 @@
 		5BB7914624D08B05008C7CE3 /* FeedUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7914524D08B05008C7CE3 /* FeedUIIntegrationTests.swift */; };
 		5BB7914724D08B99008C7CE3 /* FeedUIIntegrationTests+Asserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7914324D08AEE008C7CE3 /* FeedUIIntegrationTests+Asserts.swift */; };
 		5BB7914924D08DEB008C7CE3 /* FeedAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7914824D08DEA008C7CE3 /* FeedAcceptanceTests.swift */; };
+		5BB7914B24D0D8FA008C7CE3 /* HTTPClientStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7914A24D0D8F9008C7CE3 /* HTTPClientStub.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +119,7 @@
 		5BB7914324D08AEE008C7CE3 /* FeedUIIntegrationTests+Asserts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedUIIntegrationTests+Asserts.swift"; sourceTree = "<group>"; };
 		5BB7914524D08B05008C7CE3 /* FeedUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIIntegrationTests.swift; sourceTree = "<group>"; };
 		5BB7914824D08DEA008C7CE3 /* FeedAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAcceptanceTests.swift; sourceTree = "<group>"; };
+		5BB7914A24D0D8F9008C7CE3 /* HTTPClientStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientStub.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,6 +227,7 @@
 				5B6714D724CA47B300FB37AB /* FeedFetchAppTestsHelpers.swift */,
 				5B6714DD24CB4F8400FB37AB /* FeedLoaderStub.swift */,
 				5BB790FD24CB684F008C7CE3 /* FeedImageDataLoaderSpy.swift */,
+				5BB7914A24D0D8F9008C7CE3 /* HTTPClientStub.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				5BB790FC24CB62DE008C7CE3 /* FeedImageDataLoaderCacheDecoratorTests.swift in Sources */,
 				5BB7913E24D08687008C7CE3 /* UIImage+TestHelpers.swift in Sources */,
 				5BB7914624D08B05008C7CE3 /* FeedUIIntegrationTests.swift in Sources */,
+				5BB7914B24D0D8FA008C7CE3 /* HTTPClientStub.swift in Sources */,
 				5BB7913C24D08687008C7CE3 /* FeedViewController+TestHelpers.swift in Sources */,
 				5BB7914724D08B99008C7CE3 /* FeedUIIntegrationTests+Asserts.swift in Sources */,
 				5B6714DC24CB4A3E00FB37AB /* FeedLoaderCacheDecoratorTests.swift in Sources */,
