@@ -39,8 +39,7 @@ final class FeedAcceptanceTests: XCTestCase {
     func test_onEnteringBackground_deletesExpiredFeedCache() {
         let store = InMemoryFeedStore.withExpiredFeedCache
         
-        let sut = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
-        sut.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
+        enterBackground(with: store)
         
         XCTAssertNil(store.feedCache, "Expected to delete feed cache")
     }
@@ -48,8 +47,7 @@ final class FeedAcceptanceTests: XCTestCase {
     func test_onEnteringBackground_keepsNonExpiredFeedCache() {
         let store = InMemoryFeedStore.withNonExpiredFeedCache
         
-        let sut = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
-        sut.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
+        enterBackground(with: store)
         
         XCTAssertNotNil(store.feedCache, "Expected to keep feed cache")
     }
@@ -70,8 +68,9 @@ final class FeedAcceptanceTests: XCTestCase {
         return (response, makeData(for: url))
     }
     
-    private func renderFeedImageData(at index: Int) {
-        
+    private func enterBackground(with store: FeedStore & FeedImageDataStore) {
+        let sut = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
+        sut.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
     }
 
     private func makeData(for url: URL) -> Data {
