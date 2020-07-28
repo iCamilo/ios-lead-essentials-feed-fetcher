@@ -12,14 +12,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
-                          
+        
+        configureWindow()
+    }
+    
+    func configureWindow() {
         let (remoteFeedLoaderWithLocalFallback, localImageDataLoaderWithRemoteFallback) = composeFeedLoadersWithFallback()
         let feedViewController = FeedUIComposer.feedComposedWith(
             feedLoader: remoteFeedLoaderWithLocalFallback,
             imageLoader: localImageDataLoaderWithRemoteFallback)
+        let navigationController = UINavigationController(rootViewController: feedViewController)
         
-        window?.rootViewController = feedViewController                  
+        window?.rootViewController = navigationController
     }
+        
     
     func makeRemoteClient() -> HttpClient {
         let session = URLSession(configuration: .ephemeral)
