@@ -9,7 +9,7 @@ import FeedFetcher
 
 final class FeedAcceptanceTests: XCTestCase {
     
-    func test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity() {        
+    func test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity() {
         let feedController = launch(httpClient: .online(response), store: .empty)
         
         XCTAssertEqual(feedController.numberOfRenderedFeedImagesView(), 2)
@@ -18,7 +18,16 @@ final class FeedAcceptanceTests: XCTestCase {
     }
     
     func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
-
+        let sharedStore = InMemoryFeedStore.empty
+        let onlineFeedController = launch(httpClient: .online(response), store: sharedStore)
+        onlineFeedController.simulateFeedImageViewVisible(at: 0)
+        onlineFeedController.simulateFeedImageViewVisible(at: 1)
+        
+        let offlineFeedController = launch(httpClient: .offline, store: sharedStore)
+        
+        XCTAssertEqual(offlineFeedController.numberOfRenderedFeedImagesView(), 2)
+        XCTAssertEqual(offlineFeedController.renderedFeedImageData(at: 0), makeImageData())
+        XCTAssertEqual(offlineFeedController.renderedFeedImageData(at: 1), makeImageData())
     }
     
     func test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache() {
@@ -131,6 +140,7 @@ extension InMemoryFeedStore: FeedImageDataStore {
     }
     
     func insertImageData(_ data: Data, for url: URL, completion: @escaping (InsertResult) -> Void) {
+        feedImageDataCache[url] = data
         completion(.success(()))
     }
 }
