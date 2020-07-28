@@ -110,6 +110,17 @@
                ReferencedContainer = "container:FeedFetchApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5BB7910824CF9BA4008C7CE3"
+               BuildableName = "FeedFetchAppUIAcceptanceTests.xctest"
+               BlueprintName = "FeedFetchAppUIAcceptanceTests"
+               ReferencedContainer = "container:FeedFetchApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

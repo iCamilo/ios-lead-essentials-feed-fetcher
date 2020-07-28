@@ -108,6 +108,9 @@ Location</string>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F32-IB-AFR" userLabel="feedImage">
                                                             <rect key="frame" x="0.0" y="0.0" width="374" height="374"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="feed-image">
+                                                                <bool key="isElement" value="NO"/>
+                                                            </accessibility>
                                                         </imageView>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WZH-aY-d7Z" userLabel="retryButton">
                                                             <rect key="frame" x="0.0" y="0.0" width="374" height="374"/>
@@ -156,6 +159,9 @@ Location</string>
                                         <constraint firstItem="98s-30-gU6" firstAttribute="trailing" secondItem="36P-r1-BPV" secondAttribute="trailingMargin" id="tKc-IP-KYW"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <accessibility key="accessibilityConfiguration" identifier="feed-cell">
+                                    <bool key="isElement" value="NO"/>
+                                </accessibility>
                                 <connections>
                                     <outlet property="descriptionLabel" destination="3Fb-9a-Lb5" id="V19-XK-WoX"/>
                                     <outlet property="feedImageContainer" destination="kgo-ic-A1i" id="X53-a7-uXg"/>
