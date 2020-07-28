@@ -8,10 +8,10 @@ class FeedFetchAppUIAcceptanceTests: XCTestCase {
     func test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity() {
         let onlineApp = launchOnlineApp()
         
-        let feedCells = onlineApp.cells.matching(identifier: "feed-cell")
+        let feedCells = feedCellsQuery(for: onlineApp)
         XCTAssertEqual(feedCells.count, 22, "Should retrieve and display remote feed if it has connectivity")
         
-        let firstImage = onlineApp.cells.images.matching(identifier: "feed-image").firstMatch
+        let firstImage = feedImagesQuery(for: onlineApp).firstMatch
         XCTAssertTrue(firstImage.exists, "Should display images if it has connectivity")
     }
     
@@ -20,10 +20,10 @@ class FeedFetchAppUIAcceptanceTests: XCTestCase {
         
         let offlineApp = launchOfflineApp()
         
-        let cachedFeedCells = offlineApp.cells.matching(identifier: "feed-cell")
+        let cachedFeedCells = feedCellsQuery(for: offlineApp)
         XCTAssertEqual(cachedFeedCells.count, 22, "Should retrieve and display remote feed if it has connectivity")
         
-        let firstCachedImage = offlineApp.cells.images.matching(identifier: "feed-image").firstMatch
+        let firstCachedImage = feedImagesQuery(for: offlineApp).firstMatch
         XCTAssertTrue(firstCachedImage.exists, "Should display images if it has connectivity")
     }
     
@@ -32,7 +32,7 @@ class FeedFetchAppUIAcceptanceTests: XCTestCase {
 // MARK:- Helpers
 
 private extension FeedFetchAppUIAcceptanceTests {
-    
+            
     @discardableResult
     func launchOnlineApp() -> XCUIApplication {
         let onlineApp = XCUIApplication()
@@ -48,6 +48,14 @@ private extension FeedFetchAppUIAcceptanceTests {
         offlineApp.launch()
         
         return offlineApp
+    }
+    
+    func feedCellsQuery(for app: XCUIApplication) -> XCUIElementQuery {
+        return app.cells.matching(identifier: "feed-cell")
+    }
+    
+    func feedImagesQuery(for app: XCUIApplication) -> XCUIElementQuery {
+        return app.cells.images.matching(identifier: "feed-image")
     }
     
 }
