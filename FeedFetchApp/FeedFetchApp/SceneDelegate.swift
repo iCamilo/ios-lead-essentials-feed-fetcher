@@ -7,25 +7,50 @@ import FeedFetcheriOS
 import CoreData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
+            
+    private lazy var httpClient: HttpClient = {
+        let session = URLSession(configuration: .ephemeral)
+        
+        return URLSessionHttpClient(session: session)
+    }()
+    
+    private lazy var store: FeedStore & FeedImageDataStore = {
+        let localStoreURL = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite")
+        
+        return try! CoreDataFeedStore(storeURL: localStoreURL)
+    }()
+    
+    private lazy var localFeedLoader: LocalFeedLoader = {
+        LocalFeedLoader(store: store, currentDate: Date.init)
+    }()
+    
+    convenience init(httpClient: HttpClient, store: FeedStore & FeedImageDataStore) {
+        self.init()
+        self.httpClient = httpClient
+        self.store = store
+    }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
-                          
+        
+        configureWindow()
+    }
+    
+    func sceneWillResignActive(_ scene: UIScene) {
+        localFeedLoader.validateCache { _ in }
+    }
+    
+    func configureWindow() {
         let (remoteFeedLoaderWithLocalFallback, localImageDataLoaderWithRemoteFallback) = composeFeedLoadersWithFallback()
         let feedViewController = FeedUIComposer.feedComposedWith(
             feedLoader: remoteFeedLoaderWithLocalFallback,
             imageLoader: localImageDataLoaderWithRemoteFallback)
+        let navigationController = UINavigationController(rootViewController: feedViewController)
         
-        window?.rootViewController = feedViewController                  
+        window?.rootViewController = navigationController
     }
-    
-    func makeRemoteClient() -> HttpClient {
-        let session = URLSession(configuration: .ephemeral)
-        return URLSessionHttpClient(session: session)
-    }
-                                
+                                                
     private func composeFeedLoadersWithFallback() -> (feed: FeedLoaderWithFallbackComposite, image: FeedImageDataLoaderWithFallbackComposite) {
         let (remoteFeedLoader, remoteImageDataLoader) = makeRemoteFeedLoader()
         let (localFeedLoader, localImageDataLoader) = makeLocalFeedLoader()
@@ -40,27 +65,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func makeLocalFeedLoader() -> (feed: LocalFeedLoader, image: LocalFeedImageDataLoader) {
-        let feedStore = try! CoreDataFeedStore(storeURL: localStoreURL)
-        
-        let localFeedLoader = LocalFeedLoader(store: feedStore, currentDate: Date.init)
-        let localImageDataLoader = LocalFeedImageDataLoader(store: feedStore)
+        let localImageDataLoader = LocalFeedImageDataLoader(store: store)
         
         return (localFeedLoader, localImageDataLoader)
     }
             
     private func makeRemoteFeedLoader() -> (feed: RemoteFeedLoader, image: RemoteFeedImageLoader) {
-        let httpClient = makeRemoteClient()
-        
         let remoteFeedLoader = RemoteFeedLoader(from: remoteFeedLoaderURL, httpClient: httpClient)
         let remoteImageDataLoader = RemoteFeedImageLoader(httpClient: httpClient)
         
         return (remoteFeedLoader, remoteImageDataLoader)
     }
-                
-    var localStoreURL : URL {
-        NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite")
-    }
-    
+         
     private var remoteFeedLoaderURL: URL {
         URL(string:
             "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!

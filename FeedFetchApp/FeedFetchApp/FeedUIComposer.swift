@@ -1,5 +1,6 @@
 import UIKit
 import FeedFetcher
+import FeedFetcheriOS
 
 public final class FeedUIComposer {
     private init() {}

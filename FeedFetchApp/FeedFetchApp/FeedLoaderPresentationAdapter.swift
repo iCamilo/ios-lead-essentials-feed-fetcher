@@ -3,6 +3,7 @@
 
 import Foundation
 import FeedFetcher
+import FeedFetcheriOS
 
 final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
     private let feedLoader: FeedLoader

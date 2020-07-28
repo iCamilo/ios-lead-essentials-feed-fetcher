@@ -3,6 +3,7 @@
 
 import UIKit
 import XCTest
+import FeedFetchApp
 import FeedFetcher
 import FeedFetcheriOS
 
@@ -403,6 +404,16 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.errorIndicatorMessage, localized(key: errorMessageKey), message, file: file, line: line)
     }
     
+    private func localized(key: String, file: StaticString = #file, line: UInt = #line) -> String {
+        let bundle = Bundle(for: FeedPresenter.self)
+        let value = bundle.localizedString(forKey: key, value: nil, table: "Feed")
+        
+        if value == key {
+            XCTFail("Missing localization value for key \(key)", file: file, line: line)
+        }
+        
+        return value
+    }
 }
 
 
