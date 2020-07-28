@@ -13,7 +13,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
            
+        #if DEBUG
         resetLocalCacheIfRequired(storeURL: localStoreURL)
+        #endif
         
         let (remoteFeedLoaderWithLocalFallback, localImageDataLoaderWithRemoteFallback) = composeFeedLoadersWithFallback()
         let feedViewController = FeedUIComposer.feedComposedWith(
@@ -59,17 +61,17 @@ private extension SceneDelegate {
     }
     
     func makeRemoteClient() -> HttpClient {
-        switch UserDefaults.standard.string(forKey: "connectivity") {
-        case "offline":
+        #if DEBUG
+        if UserDefaults.standard.string(forKey: "connectivity") == "offline" {
             return AlwayOfflineHttpClient()
-        default:
-            let session = URLSession(configuration: .ephemeral)
-            let httpClient = URLSessionHttpClient(session: session)
-            
-            return httpClient
         }
+        #endif
+            
+        let session = URLSession(configuration: .ephemeral)
+        return URLSessionHttpClient(session: session)                
     }
     
+    #if DEBUG
     func resetLocalCacheIfRequired(storeURL url: URL) {
         if !CommandLine.arguments.contains("-reset") {
             return
@@ -77,6 +79,7 @@ private extension SceneDelegate {
         
         try? FileManager.default.removeItem(at: url)
     }
+    #endif
     
     var localStoreURL : URL {
         NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite")
@@ -89,6 +92,7 @@ private extension SceneDelegate {
     
 }
 
+#if DEBUG
 class AlwayOfflineHttpClient: HttpClient {
     private class Task: HttpClientTask {
         func cancel() { }
@@ -100,4 +104,4 @@ class AlwayOfflineHttpClient: HttpClient {
         return Task()
     }
 }
-
+#endif
