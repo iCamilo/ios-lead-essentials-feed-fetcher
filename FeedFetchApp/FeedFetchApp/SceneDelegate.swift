@@ -20,9 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window?.rootViewController = feedViewController                  
     }
-
-    
-    
+                
 }
 
 private extension SceneDelegate {
@@ -51,8 +49,7 @@ private extension SceneDelegate {
     }
             
     func makeRemoteFeedLoader() -> (feed: RemoteFeedLoader, image: RemoteFeedImageLoader) {
-        let session = URLSession(configuration: .ephemeral)
-        let httpClient = URLSessionHttpClient(session: session)
+        let httpClient = makeRemoteClient()
         
         let remoteFeedLoader = RemoteFeedLoader(from: remoteFeedLoaderURL, httpClient: httpClient)
         let remoteImageDataLoader = RemoteFeedImageLoader(httpClient: httpClient)
@@ -60,10 +57,34 @@ private extension SceneDelegate {
         return (remoteFeedLoader, remoteImageDataLoader)
     }
     
+    func makeRemoteClient() -> HttpClient {
+        switch UserDefaults.standard.string(forKey: "connectivity") {
+        case "offline":
+            return AlwayOfflineHttpClient()
+        default:
+            let session = URLSession(configuration: .ephemeral)
+            let httpClient = URLSessionHttpClient(session: session)
+            
+            return httpClient
+        }
+    }
+    
     var remoteFeedLoaderURL: URL {
         URL(string:
             "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
     }
     
+}
+
+class AlwayOfflineHttpClient: HttpClient {
+    private class Task: HttpClientTask {
+        func cancel() { }
+    }
+    
+    func get(from url: URL, completion: @escaping (HttpClient.Result) -> Void) -> HttpClientTask {
+        completion(.failure(NSError(domain: "offline", code: 0, userInfo: nil)))
+        
+        return Task()
+    }
 }
 

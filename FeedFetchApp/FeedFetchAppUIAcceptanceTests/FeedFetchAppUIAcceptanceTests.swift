@@ -17,4 +17,19 @@ class FeedFetchAppUIAcceptanceTests: XCTestCase {
         XCTAssertTrue(firstImage.exists, "Should display images if it has connectivity")
     }
     
+    func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
+        let onlineApp = XCUIApplication()
+        onlineApp.launch()
+        
+        let offlineApp = XCUIApplication()
+        offlineApp.launchArguments = ["-connectivity", "offline"]
+        offlineApp.launch()
+        
+        let cachedFeedCells = offlineApp.cells.matching(identifier: "feed-cell")
+        XCTAssertEqual(cachedFeedCells.count, 22, "Should retrieve and display remote feed if it has connectivity")
+        
+        let firstCachedImage = offlineApp.cells.images.matching(identifier: "feed-image").firstMatch
+        XCTAssertTrue(firstCachedImage.exists, "Should display images if it has connectivity")
+    }
+    
 }
