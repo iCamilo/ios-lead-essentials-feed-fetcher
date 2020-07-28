@@ -6,30 +6,48 @@ import XCTest
 class FeedFetchAppUIAcceptanceTests: XCTestCase {
 
     func test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity() {
-        let app = XCUIApplication()
+        let onlineApp = launchOnlineApp()
         
-        app.launch()
-        
-        let feedCells = app.cells.matching(identifier: "feed-cell")
+        let feedCells = onlineApp.cells.matching(identifier: "feed-cell")
         XCTAssertEqual(feedCells.count, 22, "Should retrieve and display remote feed if it has connectivity")
         
-        let firstImage = app.cells.images.matching(identifier: "feed-image").firstMatch
+        let firstImage = onlineApp.cells.images.matching(identifier: "feed-image").firstMatch
         XCTAssertTrue(firstImage.exists, "Should display images if it has connectivity")
     }
     
     func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
-        let onlineApp = XCUIApplication()
-        onlineApp.launch()
+        launchOnlineApp()
         
-        let offlineApp = XCUIApplication()
-        offlineApp.launchArguments = ["-connectivity", "offline"]
-        offlineApp.launch()
+        let offlineApp = launchOfflineApp()
         
         let cachedFeedCells = offlineApp.cells.matching(identifier: "feed-cell")
         XCTAssertEqual(cachedFeedCells.count, 22, "Should retrieve and display remote feed if it has connectivity")
         
         let firstCachedImage = offlineApp.cells.images.matching(identifier: "feed-image").firstMatch
         XCTAssertTrue(firstCachedImage.exists, "Should display images if it has connectivity")
+    }
+    
+}
+
+// MARK:- Helpers
+
+private extension FeedFetchAppUIAcceptanceTests {
+    
+    @discardableResult
+    func launchOnlineApp() -> XCUIApplication {
+        let onlineApp = XCUIApplication()
+        onlineApp.launch()
+        
+        return onlineApp
+    }
+    
+    @discardableResult
+    func launchOfflineApp() -> XCUIApplication {
+        let offlineApp = XCUIApplication()
+        offlineApp.launchArguments = ["-connectivity", "offline"]
+        offlineApp.launch()
+        
+        return offlineApp
     }
     
 }
