@@ -6,7 +6,7 @@ import XCTest
 class FeedFetchAppUIAcceptanceTests: XCTestCase {
 
     func test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity() {
-        let onlineApp = launchOnlineApp()
+        let onlineApp = launchOnlineApp(resetLocalCache: true)
         
         let feedCells = feedCellsQuery(for: onlineApp)
         XCTAssertEqual(feedCells.count, 22, "Should retrieve and display remote feed if it has connectivity")
@@ -16,7 +16,7 @@ class FeedFetchAppUIAcceptanceTests: XCTestCase {
     }
     
     func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
-        launchOnlineApp()
+        launchOnlineApp(resetLocalCache: true)
         
         let offlineApp = launchOfflineApp()
         
@@ -41,8 +41,11 @@ class FeedFetchAppUIAcceptanceTests: XCTestCase {
 private extension FeedFetchAppUIAcceptanceTests {
             
     @discardableResult
-    func launchOnlineApp() -> XCUIApplication {
-        let onlineApp = XCUIApplication()        
+    func launchOnlineApp(resetLocalCache: Bool = false) -> XCUIApplication {
+        let onlineApp = XCUIApplication()
+        if resetLocalCache {
+            onlineApp.launchArguments.append("-reset")
+        }
         onlineApp.launch()
         
         return onlineApp
