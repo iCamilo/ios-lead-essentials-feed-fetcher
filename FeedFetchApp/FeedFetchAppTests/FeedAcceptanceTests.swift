@@ -36,6 +36,15 @@ final class FeedAcceptanceTests: XCTestCase {
         XCTAssertEqual(offlineFeedController.numberOfRenderedFeedImagesView(), 0)
     }
     
+    func test_onEnteringBackground_deletesExpiredFeedCache() {
+        let store = InMemoryFeedStore.withExpiredFeedCache
+        
+        let sut = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
+        sut.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
+        
+        XCTAssertNil(store.feedCache, "Expected to delete feed cache")
+    }
+    
     // MARK:- Helpers
     
     private func launch(httpClient: HTTPClientStub = .offline, store: InMemoryFeedStore = .empty) -> FeedViewController {
