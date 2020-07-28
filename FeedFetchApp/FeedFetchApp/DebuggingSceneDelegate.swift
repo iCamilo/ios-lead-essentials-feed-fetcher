@@ -16,11 +16,16 @@ class DebuggingSceneDelegate: SceneDelegate {
     }
     
     override func makeRemoteClient() -> HttpClient {
-        guard UserDefaults.standard.string(forKey: "connectivity") == "offline" else {
+        guard let connectivity = UserDefaults.standard.string(forKey: "connectivity") else {
             return super.makeRemoteClient()
         }
         
-        return AlwayOfflineHttpClient()
+        switch  connectivity {
+        case "offline":
+            return OfflineHttpClient()
+        default:
+            return OnlineHttpClient()
+        }
     }
     
     private func resetLocalCacheIfRequired(storeURL url: URL) {
@@ -31,7 +36,7 @@ class DebuggingSceneDelegate: SceneDelegate {
     
 }
 
-private final class AlwayOfflineHttpClient: HttpClient {
+private final class OfflineHttpClient: HttpClient {
     private class Task: HttpClientTask {
         func cancel() { }
     }
@@ -41,5 +46,52 @@ private final class AlwayOfflineHttpClient: HttpClient {
         
         return Task()
     }
+}
+
+private final class OnlineHttpClient: HttpClient {
+    private class Task: HttpClientTask {
+        func cancel() { }
+    }
+    
+    func get(from url: URL, completion: @escaping (HttpClient.Result) -> Void) -> HttpClientTask {
+        let (data, response) = makeSuccessfulResponse(for: url)
+        completion(.success((response, data)))
+        
+        return Task()
+    }
+    
+    private func makeSuccessfulResponse(for url: URL) -> (Data, HTTPURLResponse) {
+        let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        return (makeData(for: url), response)
+    }
+
+    private func makeData(for url: URL) -> Data {
+        switch url.absoluteString {
+        case "http://image.com":
+            return makeImageData()
+
+        default:
+            return makeFeedData()
+        }
+    }
+
+    private func makeImageData() -> Data {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(UIColor.red.cgColor)
+        context.fill(rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img!.pngData()!
+    }
+
+    private func makeFeedData() -> Data {
+        return try! JSONSerialization.data(withJSONObject: ["items": [
+            ["id": UUID().uuidString, "image": "http://image.com"],
+            ["id": UUID().uuidString, "image": "http://image.com"]
+        ]])
+    }
+    
 }
 #endif
