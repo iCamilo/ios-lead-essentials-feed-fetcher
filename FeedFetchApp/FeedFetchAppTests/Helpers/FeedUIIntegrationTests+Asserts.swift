@@ -8,6 +8,8 @@ import FeedFetcher
 
 extension FeedUIIntegrationTests {
     func assert(_ sut: FeedViewController, isRendering feed:[FeedImage], file: StaticString = #file, line: UInt = #line) {
+        sut.view.enforceLayoutCycle()
+        
         XCTAssertEqual(sut.numberOfRenderedFeedImagesView(), feed.count, "Expected to render a total of \(feed.count) image views", file: file, line: line)
         
         feed.enumerated().forEach{ index, image in
