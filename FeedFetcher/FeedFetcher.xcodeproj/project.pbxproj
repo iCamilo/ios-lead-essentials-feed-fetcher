@@ -457,8 +457,6 @@
 			children = (
 				5B1198FE247EF16A00010566 /* Info.plist */,
 				5B1018652486D7A3003EB0A9 /* Helpers */,
-				5B3B71E9249858B300864C5D /* FeedCache */,
-				5B48A5B72483387300A0E03A /* FeedAPI */,
 				5B37C06C24B7BFD700318CBC /* FeedPresentation */,
 			);
 			path = FeedFetcherTests;
@@ -602,20 +600,6 @@
 				5B38572724A6B2C1005B9F7E /* Info.plist */,
 			);
 			path = FeedFetcherFeedCacheIntegrationTests;
-			sourceTree = "<group>";
-		};
-		5B3B71E9249858B300864C5D /* FeedCache */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = FeedCache;
-			sourceTree = "<group>";
-		};
-		5B48A5B72483387300A0E03A /* FeedAPI */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = FeedAPI;
 			sourceTree = "<group>";
 		};
 		5B8F78EF248813C000C4F6EF /* FeedFetcherApiEndToEndTests */ = {
