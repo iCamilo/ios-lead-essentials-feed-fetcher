@@ -4,6 +4,7 @@
 
 import XCTest
 import FeedFetcher
+import FeedFetcherCache
 
 extension FailableDeleteFeedStoreSpecs where Self: XCTestCase {
 	func assertThatDeleteDeliversErrorOnDeletionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {

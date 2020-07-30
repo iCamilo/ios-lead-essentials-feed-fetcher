@@ -4,6 +4,7 @@
 
 import XCTest
 import FeedFetcher
+import FeedFetcherCache
 
 class InMemoryFeedStoreTests: XCTestCase, FeedStoreSpecs {
 	

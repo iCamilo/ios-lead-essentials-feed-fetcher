@@ -35,6 +35,20 @@
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5B25FAE724D252A00091DD1A"
+               BuildableName = "FeedFetcherCache.framework"
+               BlueprintName = "FeedFetcherCache"
+               ReferencedContainer = "container:../FeedFetcher/FeedFetcher.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "NO"
             buildForProfiling = "NO"
@@ -187,6 +201,17 @@
                BuildableName = "FeedFetchAppTests.xctest"
                BlueprintName = "FeedFetchAppTests"
                ReferencedContainer = "container:FeedFetchApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5B25FAEF24D252A00091DD1A"
+               BuildableName = "FeedFetcherCacheTests.xctest"
+               BlueprintName = "FeedFetcherCacheTests"
+               ReferencedContainer = "container:../FeedFetcher/FeedFetcher.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>

@@ -3,6 +3,7 @@
 
 import XCTest
 import FeedFetcher
+import FeedFetcherCache
 
 class LoadFeedFromCacheUseCaseTests: XCTestCase {
     

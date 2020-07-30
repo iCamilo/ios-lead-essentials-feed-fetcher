@@ -3,6 +3,7 @@
 
 import Foundation
 import FeedFetcher
+import FeedFetcherCache
 
 class FeedImageDataStoreSpy: FeedImageDataStore {
     enum Message: Equatable {

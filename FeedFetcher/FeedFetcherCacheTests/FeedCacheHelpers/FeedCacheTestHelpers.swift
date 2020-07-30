@@ -3,13 +3,7 @@
 
 import Foundation
 import FeedFetcher
-
-func uniqueImage() -> FeedImage {
-    return FeedImage(id: UUID(),
-                    url: anyURL(),
-                    description: "any",
-                    location: "any")
-}
+import FeedFetcherCache
 
 func uniqueImageFeed() -> (model: [FeedImage], local: [LocalFeedImage]) {
     let imageFeed = [uniqueImage(), uniqueImage()]

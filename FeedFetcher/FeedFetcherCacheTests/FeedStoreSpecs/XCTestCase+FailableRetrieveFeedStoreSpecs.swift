@@ -4,6 +4,7 @@
 
 import XCTest
 import FeedFetcher
+import FeedFetcherCache
 
 extension FailableRetrieveFeedStoreSpecs where Self: XCTestCase {
 	func assertThatRetrieveDeliversFailureOnRetrievalError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
