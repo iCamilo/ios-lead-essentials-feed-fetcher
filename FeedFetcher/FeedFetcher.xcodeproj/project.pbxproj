@@ -414,12 +414,12 @@
 				5B1198FB247EF16A00010566 /* FeedFetcherTests */,
 				5BB7915F24D23BEC008C7CE3 /* FeedFetcherAPI */,
 				5BB7916A24D23BED008C7CE3 /* FeedFetcherAPITests */,
+				5B25FAE924D252A00091DD1A /* FeedFetcherCache */,
+				5B25FAF424D252A00091DD1A /* FeedFetcherCacheTests */,
 				5BE639A224A85D8A007ABC9F /* FeedFetcheriOS */,
 				5BE639AD24A85D8A007ABC9F /* FeedFetcheriOSTests */,
 				5B8F78EF248813C000C4F6EF /* FeedFetcherApiEndToEndTests */,
 				5B38572424A6B2C1005B9F7E /* FeedFetcherFeedCacheIntegrationTests */,
-				5B25FAE924D252A00091DD1A /* FeedFetcherCache */,
-				5B25FAF424D252A00091DD1A /* FeedFetcherCacheTests */,
 				5B1198EF247EF16A00010566 /* Products */,
 				5BE639BC24A9A05D007ABC9F /* Frameworks */,
 			);
@@ -446,9 +446,7 @@
 			isa = PBXGroup;
 			children = (
 				5B1198F2247EF16A00010566 /* Info.plist */,
-				5B3B71EC2499662E00864C5D /* FeedCache */,
 				5B11990F247F06AD00010566 /* FeedFeature */,
-				5B48A5B22483223900A0E03A /* FeedAPI */,
 				5B37C06B24B7BFB900318CBC /* FeedPresentation */,
 			);
 			path = FeedFetcher;
@@ -611,20 +609,6 @@
 			children = (
 			);
 			path = FeedCache;
-			sourceTree = "<group>";
-		};
-		5B3B71EC2499662E00864C5D /* FeedCache */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = FeedCache;
-			sourceTree = "<group>";
-		};
-		5B48A5B22483223900A0E03A /* FeedAPI */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = FeedAPI;
 			sourceTree = "<group>";
 		};
 		5B48A5B72483387300A0E03A /* FeedAPI */ = {
