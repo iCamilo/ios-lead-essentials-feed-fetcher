@@ -5,6 +5,8 @@ import UIKit
 import FeedFetcher
 import FeedFetcheriOS
 import CoreData
+import FeedFetcherAPI
+import FeedFetcherCache
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?

@@ -7,7 +7,7 @@
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
-            buildForTesting = "YES"
+            buildForTesting = "NO"
             buildForRunning = "YES"
             buildForProfiling = "YES"
             buildForArchiving = "YES"
@@ -17,6 +17,34 @@
                BlueprintIdentifier = "5B1198ED247EF16A00010566"
                BuildableName = "FeedFetcher.framework"
                BlueprintName = "FeedFetcher"
+               ReferencedContainer = "container:FeedFetcher.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5BB7915D24D23BEC008C7CE3"
+               BuildableName = "FeedFetcherAPI.framework"
+               BlueprintName = "FeedFetcherAPI"
+               ReferencedContainer = "container:FeedFetcher.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5B25FAE724D252A00091DD1A"
+               BuildableName = "FeedFetcherCache.framework"
+               BlueprintName = "FeedFetcherCache"
                ReferencedContainer = "container:FeedFetcher.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -37,6 +65,20 @@
             BlueprintIdentifier = "5B1198ED247EF16A00010566"
             BuildableName = "FeedFetcher.framework"
             BlueprintName = "FeedFetcher"
+            ReferencedContainer = "container:FeedFetcher.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "5BB7915D24D23BEC008C7CE3"
+            BuildableName = "FeedFetcherAPI.framework"
+            BlueprintName = "FeedFetcherAPI"
+            ReferencedContainer = "container:FeedFetcher.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "5B25FAE724D252A00091DD1A"
+            BuildableName = "FeedFetcherCache.framework"
+            BlueprintName = "FeedFetcherCache"
             ReferencedContainer = "container:FeedFetcher.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
@@ -71,6 +113,28 @@
                BlueprintIdentifier = "5B38572224A6B2C1005B9F7E"
                BuildableName = "FeedFetcherFeedCacheIntegrationTests.xctest"
                BlueprintName = "FeedFetcherFeedCacheIntegrationTests"
+               ReferencedContainer = "container:FeedFetcher.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5BB7916524D23BED008C7CE3"
+               BuildableName = "FeedFetcherAPITests.xctest"
+               BlueprintName = "FeedFetcherAPITests"
+               ReferencedContainer = "container:FeedFetcher.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5B25FAEF24D252A00091DD1A"
+               BuildableName = "FeedFetcherCacheTests.xctest"
+               BlueprintName = "FeedFetcherCacheTests"
                ReferencedContainer = "container:FeedFetcher.xcodeproj">
             </BuildableReference>
          </TestableReference>

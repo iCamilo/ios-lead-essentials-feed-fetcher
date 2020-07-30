@@ -3,6 +3,7 @@
 
 import Foundation
 import FeedFetcher
+import FeedFetcherCache
 
 class InMemoryFeedStore {
     private(set) var feedCache: CachedFeed?

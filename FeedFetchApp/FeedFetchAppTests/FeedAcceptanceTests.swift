@@ -5,6 +5,8 @@ import Foundation
 import XCTest
 import FeedFetcheriOS
 import FeedFetcher
+import FeedFetcherAPI
+import FeedFetcherCache
 @testable import FeedFetchApp
 
 final class FeedAcceptanceTests: XCTestCase {
