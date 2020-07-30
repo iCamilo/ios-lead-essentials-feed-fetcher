@@ -2,6 +2,20 @@
 
 [![Build Status](https://travis-ci.com/iCamilo/ios-lead-essentials-feed-fetcher.svg?branch=master)](https://travis-ci.com/iCamilo/ios-lead-essentials-feed-fetcher)
 
+## Architecture
+
+![ArchitectureDiagram](./_images/architecture.png)
+
+
+## Modules Organization
+
+![ModulesDiagram](./_images/modules.png)
+
+- **Feed API Module** Responsible of retrieving the feed from a remote location
+- **Feed Cache Module** Responsible of locally save a copy of the feed
+- **Feed Feature Module** Main use case for the app to load the feed.
+- **Feed iOS Module** UI Components
+
 ## BDD Specs
 
 ### Story: Customer requests to see their image feed
@@ -185,15 +199,3 @@ Given the customer doesn't have connectivity
 
 #### Saving error course (sad path):
 1. System delivers error.
-
----
-
-## Architecture
-
-![ArchitectureDiagram](./_images/architecture.png)
-
-**Feed API Module** Responsible of retrieving the feed from a remote location
-
-**Feed Cache Module** Responsible of locally save a copy of the feed
-
-**Feed Feature Module** Main use case for the app to load the feed.
