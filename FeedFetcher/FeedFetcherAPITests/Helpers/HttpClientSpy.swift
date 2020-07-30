@@ -3,6 +3,7 @@
 
 import Foundation
 import FeedFetcher
+import FeedFetcherAPI
 
 class HttpClientSpy: HttpClient {
     typealias Completion = (HttpClient.Result) -> Void

@@ -50,6 +50,8 @@
 		5BB7914B24D0D8FA008C7CE3 /* HTTPClientStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7914A24D0D8F9008C7CE3 /* HTTPClientStub.swift */; };
 		5BB7914D24D0D94F008C7CE3 /* InMemoryFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7914C24D0D94F008C7CE3 /* InMemoryFeedStore.swift */; };
 		5BB7915824D2074B008C7CE3 /* UIView+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB7915724D2074A008C7CE3 /* UIView+TestHelpers.swift */; };
+		5BB7919824D24570008C7CE3 /* FeedFetcherAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BB7919724D24570008C7CE3 /* FeedFetcherAPI.framework */; };
+		5BB7919924D24570008C7CE3 /* FeedFetcherAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5BB7919724D24570008C7CE3 /* FeedFetcherAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				5B29AB7E24CA1F95007BD104 /* FeedFetcheriOS.framework in Embed Frameworks */,
+				5BB7919924D24570008C7CE3 /* FeedFetcherAPI.framework in Embed Frameworks */,
 				5B29AB7C24CA1F95007BD104 /* FeedFetcher.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -124,6 +127,7 @@
 		5BB7914A24D0D8F9008C7CE3 /* HTTPClientStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientStub.swift; sourceTree = "<group>"; };
 		5BB7914C24D0D94F008C7CE3 /* InMemoryFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryFeedStore.swift; sourceTree = "<group>"; };
 		5BB7915724D2074A008C7CE3 /* UIView+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+TestHelpers.swift"; sourceTree = "<group>"; };
+		5BB7919724D24570008C7CE3 /* FeedFetcherAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeedFetcherAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +136,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B29AB7D24CA1F95007BD104 /* FeedFetcheriOS.framework in Frameworks */,
+				5BB7919824D24570008C7CE3 /* FeedFetcherAPI.framework in Frameworks */,
 				5B29AB7B24CA1F95007BD104 /* FeedFetcher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -208,6 +213,7 @@
 		5B29AB7824CA1F95007BD104 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5BB7919724D24570008C7CE3 /* FeedFetcherAPI.framework */,
 				5B29AB7924CA1F95007BD104 /* FeedFetcher.framework */,
 				5B29AB7A24CA1F95007BD104 /* FeedFetcheriOS.framework */,
 			);

@@ -2,6 +2,7 @@
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import Foundation
+import FeedFetcher
 
 public final class RemoteFeedImageLoader: FeedImageDataLoader {
     public enum Error: Swift.Error {

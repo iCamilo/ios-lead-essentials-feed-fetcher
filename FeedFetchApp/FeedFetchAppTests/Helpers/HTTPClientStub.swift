@@ -3,6 +3,7 @@
 
 import Foundation
 import FeedFetcher
+import FeedFetcherAPI
 
 class HTTPClientStub: HttpClient {
     private class Task: HttpClientTask {

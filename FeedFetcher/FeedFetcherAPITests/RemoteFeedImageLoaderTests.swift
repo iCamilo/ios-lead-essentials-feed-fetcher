@@ -4,6 +4,7 @@
 import Foundation
 import XCTest
 import FeedFetcher
+import FeedFetcherAPI
 
 class RemoteFeedImageLoaderTests: XCTestCase {
         

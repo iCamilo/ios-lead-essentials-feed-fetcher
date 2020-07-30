@@ -2,6 +2,7 @@
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import Foundation
+import FeedFetcher
 
 struct RemoteFeedItem: Codable {
     var id: UUID

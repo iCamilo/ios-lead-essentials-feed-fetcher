@@ -3,6 +3,7 @@
 
 import XCTest
 import FeedFetcher
+import FeedFetcherAPI
 
 class URLSessionHttpClientTests: XCTestCase {
     

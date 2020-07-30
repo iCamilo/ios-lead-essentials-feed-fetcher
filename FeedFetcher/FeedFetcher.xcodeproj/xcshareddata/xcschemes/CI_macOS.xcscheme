@@ -39,6 +39,13 @@
             BlueprintName = "FeedFetcher"
             ReferencedContainer = "container:FeedFetcher.xcodeproj">
          </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "5BB7915D24D23BEC008C7CE3"
+            BuildableName = "FeedFetcherAPI.framework"
+            BlueprintName = "FeedFetcherAPI"
+            ReferencedContainer = "container:FeedFetcher.xcodeproj">
+         </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
          <TestableReference
@@ -71,6 +78,17 @@
                BlueprintIdentifier = "5B38572224A6B2C1005B9F7E"
                BuildableName = "FeedFetcherFeedCacheIntegrationTests.xctest"
                BlueprintName = "FeedFetcherFeedCacheIntegrationTests"
+               ReferencedContainer = "container:FeedFetcher.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5BB7916524D23BED008C7CE3"
+               BuildableName = "FeedFetcherAPITests.xctest"
+               BlueprintName = "FeedFetcherAPITests"
                ReferencedContainer = "container:FeedFetcher.xcodeproj">
             </BuildableReference>
          </TestableReference>
