@@ -2,6 +2,7 @@
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import UIKit
+import Combine
 import FeedFetcher
 import FeedFetcheriOS
 import CoreData
@@ -45,9 +46,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func configureWindow() {
-        let (remoteFeedLoaderWithLocalFallback, localImageDataLoaderWithRemoteFallback) = composeFeedLoadersWithFallback()
+        let localImageDataLoaderWithRemoteFallback = composeFeedLoadersWithFallback()
         let feedViewController = FeedUIComposer.feedComposedWith(
-            feedLoader: remoteFeedLoaderWithLocalFallback,
+            feedLoader: makeRemoteFeedLoaderWithLocalFallback,
             imageLoader: localImageDataLoaderWithRemoteFallback)
         let navigationController = UINavigationController(rootViewController: feedViewController)
         
@@ -55,17 +56,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
                                                 
-    private func composeFeedLoadersWithFallback() -> (feed: FeedLoaderWithFallbackComposite, image: FeedImageDataLoaderWithFallbackComposite) {
-        let (remoteFeedLoader, remoteImageDataLoader) = makeRemoteFeedLoader()
-        let (localFeedLoader, localImageDataLoader) = makeLocalFeedLoader()
-        
-        let remoteFeedLoaderWithCache = FeedLoaderCacheDecorator(decoratee: remoteFeedLoader, cache: localFeedLoader)
+    private func composeFeedLoadersWithFallback() -> FeedImageDataLoaderWithFallbackComposite {
+        let (_, remoteImageDataLoader) = makeRemoteFeedLoader()
+        let (_, localImageDataLoader) = makeLocalFeedLoader()
+                
         let remoteFeedImageDataLoaderWithCache = FeedImageDataLoaderCacheDecorator(decoratee: remoteImageDataLoader, cache: localImageDataLoader)
-        
-        let feedComposite = FeedLoaderWithFallbackComposite(primaryFeedLoader: remoteFeedLoaderWithCache, fallbackFeedLoader: localFeedLoader)
+                
         let imageComposite = FeedImageDataLoaderWithFallbackComposite(primaryLoader: localImageDataLoader, fallbackLoader: remoteFeedImageDataLoaderWithCache)
         
-        return (feedComposite, imageComposite)
+        return imageComposite
     }
     
     private func makeLocalFeedLoader() -> (feed: LocalFeedLoader, image: LocalFeedImageDataLoader) {
@@ -80,6 +79,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         return (remoteFeedLoader, remoteImageDataLoader)
     }
+    
+    private func makeRemoteFeedLoaderWithLocalFallback() -> FeedLoader.Publisher {
+        let remoteFeedLoader = RemoteFeedLoader(from: remoteFeedLoaderURL, httpClient: httpClient)
+        
+        return remoteFeedLoader
+            .loadPublisher()
+            .caching(to: localFeedLoader)
+            .fallback(to: localFeedLoader.loadPublisher)
+    }
          
     private var remoteFeedLoaderURL: URL {
         URL(string:
@@ -87,3 +95,76 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
 }
+
+public extension FeedLoader {
+    typealias Publisher = AnyPublisher<[FeedImage], Error>
+    
+    func loadPublisher() -> Publisher {
+        Deferred { Future(self.load) }.eraseToAnyPublisher()
+    }
+}
+
+extension Publisher where Output == [FeedImage] {
+    func caching(to cache: FeedCache) -> AnyPublisher<Output,Failure> {
+        handleEvents(receiveOutput: cache.saveIgnoringResult).eraseToAnyPublisher()
+    }
+}
+
+extension Publisher {
+    func fallback(to fallbackPublisher: @escaping () -> AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> {
+        self.catch { _ in fallbackPublisher() }.eraseToAnyPublisher()
+    }
+}
+
+extension Publisher {
+    func dispatchOnMainQueue() -> AnyPublisher<Output, Failure> {
+        receive(on: DispatchQueue.immediateWhenOnMainQueueScheduler).eraseToAnyPublisher()
+    }
+}
+
+extension DispatchQueue {
+    
+    static var immediateWhenOnMainQueueScheduler: ImmediateWhenOnMainQueueScheduler {
+        ImmediateWhenOnMainQueueScheduler()
+    }
+    
+    struct ImmediateWhenOnMainQueueScheduler: Scheduler {
+        typealias SchedulerTimeType = DispatchQueue.SchedulerTimeType
+        typealias SchedulerOptions = DispatchQueue.SchedulerOptions
+        
+        var now: DispatchQueue.SchedulerTimeType {
+            DispatchQueue.main.now
+        }
+        
+        var minimumTolerance: DispatchQueue.SchedulerTimeType.Stride {
+            DispatchQueue.main.minimumTolerance
+        }
+        
+        func schedule(options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
+            guard Thread.isMainThread else {
+                return DispatchQueue.main.schedule(options: options, action)
+            }
+            
+            action()
+        }
+        
+        func schedule(after date: DispatchQueue.SchedulerTimeType, interval: DispatchQueue.SchedulerTimeType.Stride, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) -> Cancellable {
+            DispatchQueue.main.schedule(after: date, interval: interval, tolerance: tolerance, options: options, action)
+        }
+        
+        func schedule(after date: DispatchQueue.SchedulerTimeType, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
+            DispatchQueue.main.schedule(after: date, tolerance: tolerance, options: options, action)
+        }
+        
+    }
+    
+}
+
+private extension FeedCache {
+    func saveIgnoringResult(feed: [FeedImage]) {
+        save(feed: feed) { _ in }
+    }
+}
+
+
+
