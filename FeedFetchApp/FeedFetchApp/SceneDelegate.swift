@@ -2,6 +2,7 @@
 //  Copyright © 2020 Ivan Fuertes. All rights reserved.
 
 import UIKit
+import Combine
 import FeedFetcher
 import FeedFetcheriOS
 import CoreData
@@ -45,40 +46,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func configureWindow() {
-        let (remoteFeedLoaderWithLocalFallback, localImageDataLoaderWithRemoteFallback) = composeFeedLoadersWithFallback()
         let feedViewController = FeedUIComposer.feedComposedWith(
-            feedLoader: remoteFeedLoaderWithLocalFallback,
-            imageLoader: localImageDataLoaderWithRemoteFallback)
+            feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+            imageLoader: makeLocalFeedImageDataLoaderWithRemoteFallback)
         let navigationController = UINavigationController(rootViewController: feedViewController)
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
-                                                
-    private func composeFeedLoadersWithFallback() -> (feed: FeedLoaderWithFallbackComposite, image: FeedImageDataLoaderWithFallbackComposite) {
-        let (remoteFeedLoader, remoteImageDataLoader) = makeRemoteFeedLoader()
-        let (localFeedLoader, localImageDataLoader) = makeLocalFeedLoader()
+                                                    
+    private func makeRemoteFeedLoaderWithLocalFallback() -> FeedLoader.Publisher {
+        let remoteFeedLoader = RemoteFeedLoader(from: remoteFeedLoaderURL, httpClient: httpClient)
         
-        let remoteFeedLoaderWithCache = FeedLoaderCacheDecorator(decoratee: remoteFeedLoader, cache: localFeedLoader)
-        let remoteFeedImageDataLoaderWithCache = FeedImageDataLoaderCacheDecorator(decoratee: remoteImageDataLoader, cache: localImageDataLoader)
-        
-        let feedComposite = FeedLoaderWithFallbackComposite(primaryFeedLoader: remoteFeedLoaderWithCache, fallbackFeedLoader: localFeedLoader)
-        let imageComposite = FeedImageDataLoaderWithFallbackComposite(primaryLoader: localImageDataLoader, fallbackLoader: remoteFeedImageDataLoaderWithCache)
-        
-        return (feedComposite, imageComposite)
+        return remoteFeedLoader
+            .loadPublisher()
+            .caching(to: localFeedLoader)
+            .fallback(to: localFeedLoader.loadPublisher)
     }
     
-    private func makeLocalFeedLoader() -> (feed: LocalFeedLoader, image: LocalFeedImageDataLoader) {
+    private func makeLocalFeedImageDataLoaderWithRemoteFallback(url: URL) -> FeedImageDataLoader.Publisher {
         let localImageDataLoader = LocalFeedImageDataLoader(store: store)
-        
-        return (localFeedLoader, localImageDataLoader)
-    }
-            
-    private func makeRemoteFeedLoader() -> (feed: RemoteFeedLoader, image: RemoteFeedImageLoader) {
-        let remoteFeedLoader = RemoteFeedLoader(from: remoteFeedLoaderURL, httpClient: httpClient)
         let remoteImageDataLoader = RemoteFeedImageLoader(httpClient: httpClient)
         
-        return (remoteFeedLoader, remoteImageDataLoader)
+        return localImageDataLoader
+            .loadPublisher(from: url)
+            .fallback(to: {
+                remoteImageDataLoader
+                    .loadPublisher(from: url)
+                    .caching(to: localImageDataLoader, using: url)
+            })
     }
          
     private var remoteFeedLoaderURL: URL {
