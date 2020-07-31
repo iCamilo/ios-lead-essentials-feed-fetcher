@@ -167,10 +167,6 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(view0?.renderedImage, imageData0, "Expected image for first view as loading first image has completed")
         XCTAssertEqual(view1?.renderedImage, .none, "Expected no image for second view while loading second image")
                 
-        loader.completeImageLoadingWithError(at: 1)
-        XCTAssertEqual(view0?.renderedImage, imageData0, "Expected image for first view as loading first image has completed")
-        XCTAssertEqual(view1?.renderedImage, .none, "Expected no image for second view as loading second image has completed with an error")
-        
         let imageData1 = UIImage.make(withColor: .blue).pngData()!
         loader.completeImageLoading(withImageData: imageData1, at: 1)
         XCTAssertEqual(view0?.renderedImage, imageData0, "Expected image for first view as loading first image has completed")
@@ -396,7 +392,7 @@ class FeedUIIntegrationTests: XCTestCase {
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher, imageLoader: loader)
+        let sut = FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher, imageLoader: loader.loadPublisher)
         
         trackForMemoryLeak(instance: sut, file: file, line: line)
         trackForMemoryLeak(instance: loader, file: file, line: line)
